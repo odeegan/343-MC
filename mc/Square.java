@@ -1,6 +1,6 @@
 package mc;
 
-public abstract class Square {
+public class Square {
 
 	int position;
 	SQUARETYPE type;
