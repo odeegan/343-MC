@@ -4,6 +4,7 @@ import java.util.*;
 public class Player {
 
 	String name;
+	int index;
 	
 	int cash = 37700000;
 	int currentPosition = 0;
@@ -17,13 +18,23 @@ public class Player {
 	ArrayList<District> districts;
 	
 	//TODO: require an Image for the constructor
-	public Player(String name) {
-		this.name = name;
+	public Player(int index) {
+		this.name = "Player" + Integer.toString(index);
+		this.index = index;
 	}
 
 	
 	public int getCash() {
 		return cash;
+	}
+	
+	
+	/*
+	 * returns the index of the player in the 
+	 * GameMaster's players ArrayList
+	 */
+	public int getIndex() {
+		return index;
 	}
 	
 	public int getCurrentPosition() {
@@ -57,6 +68,14 @@ public class Player {
 		// logic to calculate a players networth
 		// cash + mortgage value of districts
 		return 0;
+	}
+	
+	public void rolledDoubles() {
+		numDoubles += 1;
+	}
+	
+	public int getNumDoubles() {
+		return numDoubles;
 	}
 	
 }

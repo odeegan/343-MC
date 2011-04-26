@@ -39,10 +39,6 @@ public class GamePlayState implements GameState {
 		mainFrame.setContentPane(layeredPane);
 		layeredPane.revalidate();
 		layeredPane.repaint();
-		
-		
-		
+		gameMaster.enterGameLoop();
 	}
-
-	
 }

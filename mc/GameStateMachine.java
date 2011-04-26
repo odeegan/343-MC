@@ -12,6 +12,9 @@ public class GameStateMachine {
 	JFrame mainFrame;
 
 	public GameStateMachine() {
+		// any class that needs to draw a gui menu requires
+		// the mainFrame be passed to it
+		gameMaster = new GameMaster(mainFrame);
 		buildMainWindow();
 		mainMenuState = new MainMenuState(this, gameMaster, mainFrame);
 		gamePlayState = new GamePlayState(this, gameMaster, mainFrame);

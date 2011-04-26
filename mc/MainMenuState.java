@@ -79,6 +79,7 @@ public class MainMenuState implements GameState{
 	                //Execute when button is pressed
 	            	JButton btn = (JButton)e.getSource();
 	            	System.out.println("Players Selected = " + btn.getText());
+	            	gameMaster.setNumPlayers(Integer.parseInt(btn.getText()));
 	            	gameStateMachine.setState(gameStateMachine.getGamePlayState());
 	            }
 			});
@@ -127,14 +128,11 @@ public class MainMenuState implements GameState{
 		mainFrame.setVisible(true);				
 	}
 
-	// null method implemented in the interface
-	// not needed in this state
-	public void enter(int i) {}
 	
 	public void selectNumberOfPlayers() {
 		System.out.println("Select the Number of Players");
 		SelectNumPlayersMenu selectNumPlayersMenu = new SelectNumPlayersMenu(); 
-		selectNumPlayersMenu.setVisible(true);
+		//selectNumPlayersMenu.setVisible(true);
 		userMessageLayer.add(selectNumPlayersMenu);
 		userMessageLayer.validate();
 		userMessageLayer.repaint();
