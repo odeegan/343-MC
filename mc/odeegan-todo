@@ -1,0 +1,23 @@
+
+select number of players
+init the game
+redraw the board
+start players turn
+prompt player to roll
+check square
+perform behavior
+
+
+
+SIMPLE
+message panel
+label
+button panel
+
+
+WHAT IS DRAWABLE?
+board
+player
+score board
+
+properties appear in the context window as they are rolled over

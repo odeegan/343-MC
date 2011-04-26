@@ -22,7 +22,7 @@ public class ChanceCardEasyMoney extends ChanceCard{
 	 * 
 	 * @param player - the current Player
 	 */
-	public void performCard(GameMaster gm) {
+	public void performCard(GameInstance gi) {
 		// the player's pay method should handle the case
 		// where the player has insufficient cash
 		gm.getNextPlayer().pay(1000000);
