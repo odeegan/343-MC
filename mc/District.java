@@ -33,6 +33,7 @@ public class District extends Square {
 	
 	public District (int position, String color, String name, int residentialCost, 
 			int industrialCost, int skyscraperCost) {
+		super();
 		this.position = position;
 		this.name = name;
 		this.color = color;

@@ -6,10 +6,13 @@ public class Square {
 	SQUARETYPE type;
 	SquareBehavior squareBehavior;
 	
-				
+	public Square(){
+	}
+	
 	public Square(SQUARETYPE type){
 		this.type = type;
 	}
+	
 	
 	public void performBehavior() {
 		squareBehavior.execute();

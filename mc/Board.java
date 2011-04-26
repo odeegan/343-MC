@@ -22,7 +22,7 @@ public class Board implements Drawable {
 		//initialize every square here
 //			 Board Ordering:
 //			 	GO
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.GO));
 		squares.get(ii++).setSquareBehavior(new GoBehavior());
 //			 	Summergate - BRN
 		squares.add(new District(ii, 
@@ -33,7 +33,7 @@ public class Board implements Drawable {
 				2000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Chance
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.CHANCE));
 		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
 //			 	Stoneside - PRP
 		squares.add(new District(ii, 
@@ -44,10 +44,10 @@ public class Board implements Drawable {
 				2000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Industry Tax
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.INDUSTRYTAX));
 		squares.get(ii++).setSquareBehavior(new IndustryTaxBehavior());
 //			 	Planning Permission - Rubbish Dump (2 Blocks) / Park
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.PLANNINGPERMISSION));
 		squares.get(ii++).setSquareBehavior(new PlanningPermissionBehavior());
 //			 	Westlands - BBY
 		squares.add(new District(ii, 
@@ -58,7 +58,7 @@ public class Board implements Drawable {
 				2000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Chance
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.CHANCE));
 		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
 //			 	Bayview Dock - BBY
 		squares.add(new District(ii, 
@@ -77,7 +77,7 @@ public class Board implements Drawable {
 				2000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Jail
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.JAIL));
 		squares.get(ii++).setSquareBehavior(new JailBehavior());
 //			 	Old Town - PRP
 		squares.add(new District(ii, 
@@ -88,7 +88,7 @@ public class Board implements Drawable {
 				3000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Auction UnOwned
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.AUCTION));
 		squares.get(ii++).setSquareBehavior(new AuctionBehavior());
 //			 	Harbor heights - PRP
 		squares.add(new District(ii, 
@@ -107,7 +107,7 @@ public class Board implements Drawable {
 				3000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Planning Permission - Prison (4 Blocks) / School
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.PLANNINGPERMISSION));
 		squares.get(ii++).setSquareBehavior(new PlanningPermissionBehavior());
 //			 	Shine Village - ORN
 		squares.add(new District(ii, 
@@ -118,7 +118,7 @@ public class Board implements Drawable {
 				3000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Chance
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.CHANCE));
 		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
 //			 	East Bank - ORN
 		squares.add(new District(ii, 
@@ -137,7 +137,7 @@ public class Board implements Drawable {
 				3000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Free Parking
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.FREEPARKING));
 		squares.get(ii++).setSquareBehavior(new FreeParkingBehavior());
 //			 	Seaview - RED
 		squares.add(new District(ii, 
@@ -147,7 +147,7 @@ public class Board implements Drawable {
 				3000000,
 				4000000));
 //			 	Chance
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.CHANCE));
 		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
 //			 	The Wharf - RED
 		squares.add(new District(ii, 
@@ -166,7 +166,7 @@ public class Board implements Drawable {
 				4000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Planning Permission - Sewage Plant (3 Blocks) / Water Tower
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.PLANNINGPERMISSION));
 		squares.get(ii++).setSquareBehavior(new PlanningPermissionBehavior());
 //			 	New Town - YLW
 		squares.add(new District(ii, 
@@ -185,7 +185,7 @@ public class Board implements Drawable {
 				4000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Change
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.CHANCE));
 		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
 //			 	Central City - YLW
 		squares.add(new District(ii, 
@@ -196,7 +196,7 @@ public class Board implements Drawable {
 				4000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	GOTOJAIL
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.GOTOJAIL));
 		squares.get(ii++).setSquareBehavior(new GoToJailBehavior());
 //			 	Royal Court - GRN
 		squares.add(new District(ii, 
@@ -215,7 +215,7 @@ public class Board implements Drawable {
 				5000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Auction UnOwned
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.AUCTION));
 		squares.get(ii++).setSquareBehavior(new AuctionBehavior());
 //			 	Riverside - GRN
 		squares.add(new District(ii, 
@@ -226,10 +226,10 @@ public class Board implements Drawable {
 				5000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Planning Permission Power Station (3 Blocks) / Wind Farm
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.PLANNINGPERMISSION));
 		squares.get(ii++).setSquareBehavior(new PlanningPermissionBehavior());
 //			 	Chance
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.CHANCE));
 		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
 //			 	Fortune Valley - BLU
 		squares.add(new District(ii, 
@@ -240,7 +240,7 @@ public class Board implements Drawable {
 				5000000));
 		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
 //			 	Industry Tax
-		squares.add(new Square());
+		squares.add(new Square(SQUARETYPE.INDUSTRYTAX));
 		squares.get(ii++).setSquareBehavior(new IndustryTaxBehavior());
 //			 	Diamond Hills - BLU
 		squares.add(new District(ii, 
