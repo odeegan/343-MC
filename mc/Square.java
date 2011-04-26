@@ -7,8 +7,8 @@ public class Square {
 	SquareBehavior squareBehavior;
 	
 				
-	public Square(){
-		// empty constructor
+	public Square(SQUARETYPE type){
+		this.type = type;
 	}
 	
 	public void performBehavior() {

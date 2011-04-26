@@ -2,11 +2,13 @@ package mc;
 
 import java.awt.*;
 import javax.swing.*;
+
 import java.awt.event.*;
 
 public class MainMenuState implements GameState{
 
 	GameStateMachine gameStateMachine;
+	GameMaster gameMaster;
 	
 	JFrame mainFrame;
 	JComponent layeredPane;
@@ -68,8 +70,6 @@ public class MainMenuState implements GameState{
 	    	}
 	       	add(buttonPanel, BorderLayout.SOUTH);
 	    	setBorder(BorderFactory.createLineBorder(Color.black, 1));
-	    	
-		
 		}
 		
 		private JButton createNumPlayersButton(int num) {
@@ -79,7 +79,8 @@ public class MainMenuState implements GameState{
 	                //Execute when button is pressed
 	            	JButton btn = (JButton)e.getSource();
 	            	System.out.println("Players Selected = " + btn.getText());
-	            	gameStateMachine.startGame(Integer.parseInt(btn.getText()));
+//	            	gameMaster.setNumPlayers(Integer.parseInt(btn.getText()));
+	            	gameStateMachine.setState(gameStateMachine.getGamePlayState());
 	            }
 			});
 			return button;
@@ -88,8 +89,9 @@ public class MainMenuState implements GameState{
 	}
 	
 	
-	public MainMenuState(GameStateMachine gsm, JFrame mf) {
+	public MainMenuState(GameStateMachine gsm, GameMaster gm, JFrame mf) {
 		gameStateMachine = gsm;
+		gameMaster = gm;
 		mainFrame = mf;
 		
 		// create the main layered pane
