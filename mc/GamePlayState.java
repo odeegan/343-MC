@@ -9,14 +9,17 @@ import java.awt.event.ActionListener;
 
 
 public class GamePlayState implements GameState {
+	
 	GameStateMachine gameStateMachine;
+	GameMaster gameMaster;
 	
 	JFrame mainFrame;
 	JComponent layeredPane;
 
 	
-	public GamePlayState(GameStateMachine gsm, JFrame mf) {
+	public GamePlayState(GameStateMachine gsm, GameMaster gm, JFrame mf) {
 		gameStateMachine = gsm;
+		gameMaster = gm;
 		mainFrame = mf;
 		
 		layeredPane = new JLayeredPane();
@@ -30,10 +33,8 @@ public class GamePlayState implements GameState {
 		layeredPane.add(background, new Integer(0), 1);
 	}
 
-	
-	public void enter() {};
-	
-	public void enter(int numPlayers) {
+		
+	public void enter() {
 		System.out.println("This is the GamePlayState");
 		mainFrame.setContentPane(layeredPane);
 		layeredPane.revalidate();

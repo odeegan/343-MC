@@ -4,26 +4,23 @@ import javax.swing.JFrame;
 
 public class GameStateMachine {
 
-	JFrame mainFrame;
+	GameMaster gameMaster;
 	GameState mainMenuState;
 	GameState gamePlayState;
 	GameState state;
 
+	JFrame mainFrame;
+
 	public GameStateMachine() {
 		buildMainWindow();
-		mainMenuState = new MainMenuState(this, mainFrame);
-		gamePlayState = new GamePlayState(this, mainFrame);
+		mainMenuState = new MainMenuState(this, gameMaster, mainFrame);
+		gamePlayState = new GamePlayState(this, gameMaster, mainFrame);
 		System.out.println("Starting the GameStateMachine.");
 	}
 
 	public void init() {
 		setState(mainMenuState);
 		
-	}
-
-	public void startGame(int numPlayers) {
-		state = gamePlayState;
-		state.enter(numPlayers);
 	}
 		
 	public void setState(GameState newState) {
