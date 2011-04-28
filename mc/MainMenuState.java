@@ -8,8 +8,7 @@ import java.awt.event.*;
 public class MainMenuState implements GameState{
 
 	GameStateMachine gameStateMachine;
-	GameMaster gameMaster;
-	
+	GameMaster gameMaster;	
 	JFrame mainFrame;
 	JComponent layeredPane;
 	JPanel userMessageLayer;
@@ -84,10 +83,8 @@ public class MainMenuState implements GameState{
 	            }
 			});
 			return button;
-		}
-		
+		}	
 	}
-	
 	
 	public MainMenuState(GameStateMachine gsm, GameMaster gm, JFrame mf) {
 		gameStateMachine = gsm;
@@ -111,7 +108,7 @@ public class MainMenuState implements GameState{
 		// it defaults to centering whatever element you place in it
 		userMessageLayer = new JPanel(new GridBagLayout());
 		
-		// make the layer the size of the entire window to ensure whatever
+		// make the JPanel the size of the entire window to ensure whatever
 		// element we place in it is centered
 		userMessageLayer.setBounds(0, 0, 1100, 768);
 		userMessageLayer.setOpaque(false);		
@@ -128,17 +125,13 @@ public class MainMenuState implements GameState{
 		mainFrame.setVisible(true);				
 	}
 
-	
 	public void selectNumberOfPlayers() {
 		System.out.println("Select the Number of Players");
 		SelectNumPlayersMenu selectNumPlayersMenu = new SelectNumPlayersMenu(); 
 		//selectNumPlayersMenu.setVisible(true);
 		userMessageLayer.add(selectNumPlayersMenu);
-		userMessageLayer.validate();
-		userMessageLayer.repaint();
+		userMessageLayer.revalidate();
 	}
-	
-
 }
 
 

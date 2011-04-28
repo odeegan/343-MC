@@ -7,20 +7,27 @@ prompt player to roll
 check square
 perform behavior
 
-
-
-SIMPLE
-message panel
-label
-button panel
-
-
 WHAT IS DRAWABLE?
 board
 player
 score board
 
-properties appear in the context window as they are rolled over
 
 
-Devil
+public class RollDiceMenu extends JPanel {
+		
+		public RollDiceMenu() {
+			setPreferredSize(new Dimension(450,200));
+			// make the background transparent
+			setOpaque(false);
+
+			JButton rollDiceButton = new JButton("Roll the Dice");
+			rollDiceButton.addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {
+							GamePane.getInstance().getMessagePanel().removeAll();
+						}
+					});
+			add(rollDiceButton);
+		}
+	}

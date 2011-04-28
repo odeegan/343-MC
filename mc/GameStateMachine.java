@@ -1,5 +1,7 @@
 package mc;
 
+import java.awt.Color;
+
 import javax.swing.JFrame;
 
 public class GameStateMachine {
@@ -12,10 +14,11 @@ public class GameStateMachine {
 	JFrame mainFrame;
 
 	public GameStateMachine() {
-		// any class that needs to draw a gui menu requires
-		// the mainFrame be passed to it
-		gameMaster = new GameMaster(mainFrame);
+		// create and set the dimensions of the main window
 		buildMainWindow();
+		// passing the mainFrame to each GameState and controller class 
+		// (i.e. GameMaster) allows them to draw to the screen
+		gameMaster = new GameMaster();
 		mainMenuState = new MainMenuState(this, gameMaster, mainFrame);
 		gamePlayState = new GamePlayState(this, gameMaster, mainFrame);
 		System.out.println("Starting the GameStateMachine.");
@@ -25,7 +28,7 @@ public class GameStateMachine {
 		setState(mainMenuState);
 		
 	}
-		
+	
 	public void setState(GameState newState) {
 		state = newState;
 		state.enter();
@@ -39,9 +42,12 @@ public class GameStateMachine {
 		return mainMenuState;
 	}
 	
+	/*
+	 * Creates and sets the dimenisions of the main game window
+	 */
 	private void buildMainWindow() {
 		mainFrame = new JFrame("Monopoly City");
-		mainFrame.setSize(1100, 800);
+		mainFrame.setSize(1200, 800);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	

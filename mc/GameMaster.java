@@ -3,36 +3,74 @@ package mc;
 import java.util.ArrayList;
 import java.util.Random;
 import java.awt.*;
-import javax.swing.*;
 
+import javax.swing.*;
+import java.awt.event.*;;
 
 public class GameMaster {
 
-	JFrame mainFrame;
-	JComponent layeredPane;
+	GamePane gamePane;
 
-	
 	ArrayList<Player> players;
 	Player currentPlayer;
 	
-
+	boolean rolled;
 	
 	public class RollDiceMenu extends JPanel {
 		
+		public RollDiceMenu() {
+			System.out.println("instantiating RollDiceMenu");
+			setLayout(new GridBagLayout());
+			setBounds(100,100,100,100);
+			setPreferredSize(new Dimension(200,100));
+			setBorder(BorderFactory.createLineBorder(Color.gray, 2));
+			setOpaque(true);
+
+			JButton rollDiceButton = new JButton("Roll Dice");
+			rollDiceButton.addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {
+							System.out.println("User clicked RollDice");
+							JOptionPane.showMessageDialog(null, "ack");
+						}
+					});
+			add(rollDiceButton);
+		}
+	}
+	
+	public class SimpleMessage extends JPanel {
 		
+		JLabel text;
 		
+		public SimpleMessage(String str) {
+			setLayout(new GridBagLayout());
+			setBounds(100,100,100,100);
+			setPreferredSize(new Dimension(200,100));
+			setBorder(BorderFactory.createLineBorder(Color.gray, 2));
+			setOpaque(true);
+			
+			text = new JLabel(str);
+			text.setFont(new Font("Serif", Font.BOLD, 24));
+			add(text);
+		}
+		
+		public void setText(String str) {
+			text.setText(str);
+		}
 	}
 	
 	
-	
-	public GameMaster(JFrame mainFrame) {
+	public GameMaster() {
 		players = new ArrayList<Player>();
+		gamePane = GamePane.getInstance();
 	}
 	
 	
 	public void enterGameLoop() {
-		
-		
+		System.out.println("This is the Game Loop");
+		rollAndMove();
+		System.out.println("Done rolling and moving");
+
 	}
 	
 	public Player getNextPlayer() {
@@ -53,6 +91,12 @@ public class GameMaster {
 		return currentPlayer;
 	}
 	
+	public void rollAndMove() {
+		System.out.println("entering rollAndMove()");
+		gamePane.setMessageLayer(new RollDiceMenu());
+
+	}
+	
 	public int rollDice() {
 		Random generator = new Random();
 		int die1 = generator.nextInt(6) + 1;
@@ -65,6 +109,8 @@ public class GameMaster {
 						currentPlayer.getIndex() + " to Jail");
 			}
 		}
+		
+		
 		return die1 + die2;
 	}
 	
