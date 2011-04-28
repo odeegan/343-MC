@@ -7,19 +7,20 @@ public class Player {
 	int index;
 	
 	int cash = 37700000;
-	int currentPosition = 0;
+	int position = 0;
 	int numDoubles = 0;
 
-	
+
+	boolean lastRollWasDoubles = false;
 	boolean isInJail = false;
 	boolean hasGetOutOfJailCard = false;
 	boolean hasRentDodgeCard = false;
+	boolean hasTaxiCard = false;
 	
 	ArrayList<District> districts;
 	
-	//TODO: require an Image for the constructor
 	public Player(int index) {
-		this.name = "Player" + Integer.toString(index);
+		this.name = "Player" + Integer.toString(index + 1);
 		this.index = index;
 	}
 
@@ -37,18 +38,18 @@ public class Player {
 		return index;
 	}
 	
-	public int getCurrentPosition() {
-		return currentPosition;
+	public int getPosition() {
+		return position;
 	}
 	
 	public int move(int delta) {
-		int newPosition = currentPosition + delta;
+		int newPosition = position + delta;
 		
 		// insert logic to check if player has passed Go
 		// deal with Chance Cards and squares that prevent
 		// the player from collecting $200
 		
-		currentPosition = newPosition;
+		position = newPosition;
 		return newPosition;
 	}
 	
@@ -63,6 +64,9 @@ public class Player {
 		cash = cash  + amount;
 	}
 		
+	public String getName() {
+		return name;
+	}
 	
 	public int getNetWorth() {
 		// logic to calculate a players networth
@@ -70,8 +74,14 @@ public class Player {
 		return 0;
 	}
 	
-	public void rolledDoubles() {
-		numDoubles += 1;
+	public void rolledDoubles(boolean bool) {
+		if (bool == false) {
+			numDoubles = 0;
+			lastRollWasDoubles = false;
+		} else {
+			numDoubles += 1;
+			lastRollWasDoubles = true;
+		}	
 	}
 	
 	public int getNumDoubles() {

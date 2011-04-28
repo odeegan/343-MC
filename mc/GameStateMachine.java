@@ -18,9 +18,8 @@ public class GameStateMachine {
 		buildMainWindow();
 		// passing the mainFrame to each GameState and controller class 
 		// (i.e. GameMaster) allows them to draw to the screen
-		gameMaster = new GameMaster();
-		mainMenuState = new MainMenuState(this, gameMaster, mainFrame);
-		gamePlayState = new GamePlayState(this, gameMaster, mainFrame);
+		mainMenuState = new MainMenuState(this, mainFrame);
+		gamePlayState = new GamePlayState(this, mainFrame);
 		System.out.println("Starting the GameStateMachine.");
 	}
 
@@ -48,6 +47,7 @@ public class GameStateMachine {
 	private void buildMainWindow() {
 		mainFrame = new JFrame("Monopoly City");
 		mainFrame.setSize(1200, 800);
+		mainFrame.setResizable(false);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	

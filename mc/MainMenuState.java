@@ -8,7 +8,6 @@ import java.awt.event.*;
 public class MainMenuState implements GameState{
 
 	GameStateMachine gameStateMachine;
-	GameMaster gameMaster;	
 	JFrame mainFrame;
 	JComponent layeredPane;
 	JPanel userMessageLayer;
@@ -78,7 +77,7 @@ public class MainMenuState implements GameState{
 	                //Execute when button is pressed
 	            	JButton btn = (JButton)e.getSource();
 	            	System.out.println("Players Selected = " + btn.getText());
-	            	gameMaster.setNumPlayers(Integer.parseInt(btn.getText()));
+	            	GameMaster.getInstance().setNumPlayers(Integer.parseInt(btn.getText()));
 	            	gameStateMachine.setState(gameStateMachine.getGamePlayState());
 	            }
 			});
@@ -86,9 +85,8 @@ public class MainMenuState implements GameState{
 		}	
 	}
 	
-	public MainMenuState(GameStateMachine gsm, GameMaster gm, JFrame mf) {
+	public MainMenuState(GameStateMachine gsm, JFrame mf) {
 		gameStateMachine = gsm;
-		gameMaster = gm;
 		mainFrame = mf;
 		
 		// create the main layered pane
@@ -99,7 +97,7 @@ public class MainMenuState implements GameState{
 		ImageIcon icon = new ImageIcon("images/mainmenu.png");
 		JLabel background = new JLabel(icon);
 		background.setOpaque(true);
-		background.setBounds(0,0, 1100, 768);
+		background.setBounds(0, 0, 1200, 768);
 		
 		layeredPane.add(background, new Integer(0), 1);
 
@@ -110,7 +108,7 @@ public class MainMenuState implements GameState{
 		
 		// make the JPanel the size of the entire window to ensure whatever
 		// element we place in it is centered
-		userMessageLayer.setBounds(0, 0, 1100, 768);
+		userMessageLayer.setBounds(0, 0, 1200, 768);
 		userMessageLayer.setOpaque(false);		
 		layeredPane.add(userMessageLayer, new Integer(1), 0);
 	}
@@ -128,7 +126,6 @@ public class MainMenuState implements GameState{
 	public void selectNumberOfPlayers() {
 		System.out.println("Select the Number of Players");
 		SelectNumPlayersMenu selectNumPlayersMenu = new SelectNumPlayersMenu(); 
-		//selectNumPlayersMenu.setVisible(true);
 		userMessageLayer.add(selectNumPlayersMenu);
 		userMessageLayer.revalidate();
 	}
