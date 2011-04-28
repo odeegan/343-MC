@@ -16,7 +16,7 @@ public class Board implements Drawable {
 	Icon image;
 	
 	public Board() {
-		ArrayList<Square> squares = new ArrayList<Square>();
+		squares = new ArrayList<Square>();
 		int ii = 0;
 		
 		//initialize every square here
