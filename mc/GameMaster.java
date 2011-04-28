@@ -27,11 +27,12 @@ public class GameMaster {
 		
 		public SimpleMessage(String str) {
 			setLayout(new BorderLayout());
-			setPreferredSize(new Dimension(300,200));
+			setPreferredSize(new Dimension(350,250));
 			setBorder(BorderFactory.createLineBorder(Color.gray, 2));
 			setOpaque(true);
 			buttonPanel = new JPanel();
 			text = new JLabel(str);
+			text.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 			text.setHorizontalAlignment(SwingConstants.CENTER);
 			add(text, BorderLayout.NORTH);
 			add(buttonPanel, BorderLayout.SOUTH);
