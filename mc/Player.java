@@ -25,6 +25,9 @@ public class Player {
 		districts = new ArrayList<District>();
 	}
 
+	public void addDistrict(District district) {
+		districts.add(district);
+	}
 	
 	public int getCash() {
 		return cash;

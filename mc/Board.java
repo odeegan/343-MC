@@ -255,6 +255,10 @@ public class Board implements Drawable {
 		return squares.get(position);
 	}
 	
+	public District getDistrict(int index) {
+		return (District)squares.get(index);
+	}
+	
 	private void addSquare(Square square) {
 		squares.add(square);
 	}
