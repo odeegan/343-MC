@@ -285,7 +285,7 @@ class GamePane extends JLayeredPane {
 		btn.setVisible(false);
 	}
 	
-	public void revealButton(JButton btn) {
+	public void showButton(JButton btn) {
 		btn.setVisible(true);
 	}
 	

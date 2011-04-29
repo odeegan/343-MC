@@ -150,7 +150,18 @@ public class GameMaster {
 	}
 	
 	public void displayPlayerChanceCards() {
-		
+		gamePane.hideButton(gamePane.getGetOutOfJailButton());
+		gamePane.hideButton(gamePane.getRentDodgeButton());
+		gamePane.hideButton(gamePane.getTaxiButton());
+		if (currentPlayer.hasGetOutOfJailCard) {
+			gamePane.showButton(gamePane.getGetOutOfJailButton());
+		}
+		if (currentPlayer.hasRentDodgeCard) {
+			gamePane.showButton(gamePane.getRentDodgeButton());
+		}
+		if (currentPlayer.hasTaxiCard) {
+			gamePane.showButton(gamePane.getTaxiButton());
+		}
 	}
 	
 	public void roll() {
