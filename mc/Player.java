@@ -12,10 +12,10 @@ public class Player {
 	int turnsInJail = 0;
 
 	boolean lastRollWasDoubles = false;
-	boolean isInJail = true;
-	boolean hasGetOutOfJailCard = true;
-	boolean hasRentDodgeCard = false;
-	boolean hasTaxiCard = false;
+	boolean isInJail = false;
+	boolean hasGetOutOfJailCard = false;
+	boolean hasRentDodgeCard = true;
+	boolean hasTaxiCard = true;
 	
 	ArrayList<District> districts;
 	

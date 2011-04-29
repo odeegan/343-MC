@@ -3,7 +3,6 @@ package mc;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 
@@ -11,13 +10,14 @@ import net.miginfocom.swing.MigLayout;
 
 class GamePane extends JLayeredPane {
 
-	
 	private static JPanel baseLayer;
 	private static JPanel playerTokensPanel;
 	private static JPanel squaresPanel;
 	private static JPanel mainHudPanel;
 	
 	private static JPanel messageLayer;
+	private static MessagePanel messagePanel;
+
 	
 	private static JPanel hudButtonPanel;
 	private static JPanel hudPanel1;
@@ -128,6 +128,7 @@ class GamePane extends JLayeredPane {
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
 							System.out.println("User clicked EndTurn");
+							GameMaster.getInstance().endTurn();				
 						}
 					});
 		}
@@ -136,18 +137,30 @@ class GamePane extends JLayeredPane {
 	
 	public class CurrentPlayerPanel extends JPanel {
 		
+		JLabel nameLabel;
+		JLabel cashLabel;
+		JLabel districtsLabel;
+		
 		public CurrentPlayerPanel() {
 			setLayout(new MigLayout());
-			setPreferredSize(new Dimension(370,190));
-			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
-			add(new JLabel(currentPlayer.getName()), "cell 0 0");			
+			setPreferredSize(new Dimension(370,170));
+			nameLabel = new JLabel();
+			cashLabel = new JLabel();
+			districtsLabel = new JLabel();
+			add(nameLabel, "cell 0 0");			
 			add(new JLabel("CASH"), "cell 0 1");
-			add(new JLabel(Integer.toString(currentPlayer.getCash())), "cell 1 1");
+			add(cashLabel, "cell 1 1");
 			add(new JLabel("DISTRICTS"), "cell 0 2");
-			add(new JLabel(currentPlayer.getDistricts().toString()), "cell 1 2");
+			add(districtsLabel, "cell 1 2");
 		}
 			
+		
+		
+		
 		public void update() {
+			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
+			cashLabel.setText(Integer.toString(currentPlayer.getCash()));
+			currentPlayer.getDistricts().toString()
 			revalidate();
 			repaint();
 		}
@@ -158,23 +171,63 @@ class GamePane extends JLayeredPane {
 		
 		public CurrentSquarePanel() {
 		setLayout(new MigLayout());
-		setPreferredSize(new Dimension(370,190));
+		setPreferredSize(new Dimension(370,170));
 		Board board = GameMaster.getInstance().getBoard();
 		Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
 		Square currentSquare = board.getSquare(currentPlayer.getPosition());
 		add(new JLabel(currentSquare.getName()), "cell 0 1");
-		//add(new JLabel(currentPlayer.getName()), "cell 0 2");			
-		//add(new JLabel("CASH"), "cell 0 3");
-		//add(new JLabel(Integer.toString(currentPlayer.getCash())), "cell 0 4");
-		//add(new JLabel("DISTRICTS"), "cell 0 5");
-		//add(new JLabel(currentPlayer.getDistricts().toString()));
 		}
 	}
 	
+	public class MessagePanel extends JPanel {
+		
+		JPanel textPanel;
+		JPanel buttonPanel;
+		String formattedString;
+		
+		public MessagePanel() {
+			setLayout(new BorderLayout());
+			setPreferredSize(new Dimension(350,250));
+			setBorder(BorderFactory.createLineBorder(Color.gray, 2));
+			setOpaque(true);
+			
+			textPanel = new JPanel(new MigLayout());
+			textPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+			textPanel.setPreferredSize(new Dimension(350, 75));
+
+			buttonPanel = new JPanel();
+			buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+
+			add(textPanel, BorderLayout.NORTH);
+			add(buttonPanel, BorderLayout.SOUTH);
+		}
+		
+		public void setText(String str) {
+			textPanel.removeAll();
+			addText(str);
+		}
+		
+		
+		public void addText(String str) {
+			JLabel newLabel = new JLabel(str);
+			newLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			textPanel.add(newLabel, "wrap");
+			redraw();
+		}
+		
+		public void addButton(JButton btn) {
+			buttonPanel.add(btn);
+			redraw();
+		}
+		
+		public void redraw() {
+			buttonPanel.revalidate();
+			buttonPanel.repaint();
+		}
+	}
 	
 	private GamePane() {
 		
-
 		baseLayer = new JPanel(new BorderLayout());
 		baseLayer.setBounds(0, 0, 1200, 800);
 		baseLayer.setOpaque(true);
@@ -202,17 +255,17 @@ class GamePane extends JLayeredPane {
 		hudPanel2.setBounds(0, 201, 382, 200);
 		hudPanel2.setBorder(BorderFactory.createTitledBorder("Current Player"));
 		
+		hudButtonPanel = new JPanel(new MigLayout());
+		hudButtonPanel.setBounds(0, 401, 388, 50);
+		
 		hudPanel3 = new JPanel();
 		hudPanel3.setBounds(0, 451, 382, 118);
 		hudPanel3.setBorder(BorderFactory.createTitledBorder("Chance Cards"));
 
-		hudButtonPanel = new JPanel(new MigLayout());
-		hudButtonPanel.setBounds(0, 401, 388, 50);
-		
 		messageLayer = new JPanel(new GridBagLayout());
 		messageLayer.setBounds(0, 0, 812, 767);
 		messageLayer.setOpaque(false);
-		
+			
 		baseLayer.add(board, BorderLayout.WEST);	
 		baseLayer.add(mainHudPanel, BorderLayout.EAST);
 			
@@ -223,7 +276,6 @@ class GamePane extends JLayeredPane {
 	public void build() {
 
 		hudPanel1.add(new CurrentSquarePanel());
-
 		hudPanel2.add(new CurrentPlayerPanel());
 		
 		getOutOfJailButton = new GetOutOfJailButton();
@@ -248,29 +300,34 @@ class GamePane extends JLayeredPane {
 		mainHudPanel.add(hudPanel2);
 		mainHudPanel.add(hudPanel3);
 		
-		update();
-
-		
+		update();	
 	}
 	
 	public static GamePane getInstance() {
 		return GAMEPANE;
 	}
 	
-	
 	public void clearMessageLayer() {
 		System.out.println("clearing messageLayer");
 		messageLayer.removeAll();
-		//messageLayer.revalidate();
-		//messageLayer.repaint();
-	}
-	
-	public void setMessageLayer(JPanel jp) {
-		clearMessageLayer();
-		System.out.println("setting messageLayer");
-		messageLayer.add(jp);
 		messageLayer.revalidate();
 		messageLayer.repaint();
+	}
+	
+	public void setMessagePanelText(String str) {
+		if (messagePanel == null) {
+			messagePanel = new MessagePanel();
+			messageLayer.add(messagePanel);
+		}
+		messagePanel.setText(str);
+	}
+	
+	public void addMessagePanelText(String str) {
+		messagePanel.addText(str);
+	}
+	
+	public void addMessagePanelButton(JButton btn) {
+		messagePanel.addButton(btn);
 	}
 	
 	public void enableButton(JButton btn) {

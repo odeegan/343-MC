@@ -23,50 +23,6 @@ public class GameMaster {
 	private static final GameMaster GAMEMASTER = new GameMaster();
 
 	
-	public class SimpleMessage extends JPanel {
-		
-		JPanel textPanel;
-		JPanel buttonPanel;
-		String formattedString;
-		
-		public SimpleMessage(String str) {
-			setLayout(new BorderLayout());
-			setPreferredSize(new Dimension(350,250));
-			setBorder(BorderFactory.createLineBorder(Color.gray, 2));
-			setOpaque(true);
-			
-			textPanel = new JPanel(new MigLayout());
-			textPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-			textPanel.setPreferredSize(new Dimension(350, 75));
-			JLabel textLabel = new JLabel("<html>" + str + "</html>");
-			textLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-			buttonPanel = new JPanel();
-			
-			textPanel.add(textLabel, "wrap");
-			add(textPanel, BorderLayout.NORTH);
-			add(buttonPanel, BorderLayout.SOUTH);
-		}
-		
-		public void addText(String str) {
-			JLabel newLabel = new JLabel(str);
-			newLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			textPanel.add(newLabel, "wrap");
-			redraw();
-		}
-		
-		public void addButton(JButton btn) {
-			buttonPanel.add(btn);
-			redraw();
-		}
-		
-		public void redraw() {
-			buttonPanel.revalidate();
-			buttonPanel.repaint();
-		}
-	}
-	
-	
 	private GameMaster() {
 		players = new ArrayList<Player>();
 		board = new Board();
@@ -80,7 +36,6 @@ public class GameMaster {
 	public void build() {
 		System.out.println("build stuff");
 	}
-	
 	
 	public void startTurn() {
 		//draw the screen
@@ -115,76 +70,47 @@ public class GameMaster {
 	
 	
 	public void checkSquare(int roll) {
-		String message;
 		System.out.println("checking square");
 		System.out.println(Integer.toString(roll));
 		System.out.println(Integer.toString(board.squares.size()));
 		Square newSquare = board.getSquare(currentPlayer.getPosition() + roll);
-		message = currentPlayer.getName() + " rolled " + Integer.toString(roll) +
-			" and landed on " + newSquare.getName();
-		SimpleMessage sm = new SimpleMessage(message);
-		gamePane.setMessageLayer(sm);
-		if (currentPlayer.hasTaxiCard) {
-			sm.addText("You have a TaxiCard. Would you like to use it?");
-			JButton useCardButton = new JButton("Use Card");
-			useCardButton.addActionListener(
-					new ActionListener() {
-						public void actionPerformed(ActionEvent event) {
-							gamePane.setMessageLayer(
-									new SimpleMessage("You used your Taxi Card!"));
-							gamePane.disableButton(gamePane.getRollDiceButton());
-						}
-					});
-			JButton keepCardButton = new JButton("Keep Card");
-			keepCardButton.addActionListener(
-					new ActionListener() {
-						public void actionPerformed(ActionEvent event) {
-							gamePane.setMessageLayer(
-									new SimpleMessage("We'll keep it for you."));
-						}
-					});
-			sm.addButton(useCardButton);
-			sm.addButton(keepCardButton);			
-		}
 		
+		gamePane.setMessagePanelText(
+				currentPlayer.getName() + " rolled "
+				+ Integer.toString(roll) 
+				+ " and landed on " + newSquare.getName());		
 	}
 	
 	public void displayPlayerChanceCards() {
 		gamePane.hideButton(gamePane.getGetOutOfJailButton());
 		gamePane.hideButton(gamePane.getRentDodgeButton());
 		gamePane.hideButton(gamePane.getTaxiButton());
-		if (currentPlayer.hasGetOutOfJailCard) {
-			gamePane.showButton(gamePane.getGetOutOfJailButton());
-		}
-		if (currentPlayer.hasRentDodgeCard) {
-			gamePane.showButton(gamePane.getRentDodgeButton());
-		}
-		if (currentPlayer.hasTaxiCard) {
-			gamePane.showButton(gamePane.getTaxiButton());
-		}
+//		if (currentPlayer.hasGetOutOfJailCard) {
+//			gamePane.showButton(gamePane.getGetOutOfJailButton());
+//		}
+//		if (currentPlayer.hasRentDodgeCard) {
+//			gamePane.showButton(gamePane.getRentDodgeButton());
+//		}
+//		if (currentPlayer.hasTaxiCard) {
+//			gamePane.showButton(gamePane.getTaxiButton());
+//		}
 	}
 	
 	public void roll() {
 		gamePane.enableButton(gamePane.getEndTurnButton());
-		String message;
 		int roll = rollDice();
 		if (currentPlayer.isInJail) {
 			if (currentPlayer.lastRollWasDoubles) {
-				message = "DOUBLES !    " + currentPlayer.getName()
-						+ " is a free man.";
-				gamePane.setMessageLayer(new SimpleMessage(message));
-
+				gamePane.setMessagePanelText("DOUBLES !    " 
+						+ currentPlayer.getName() + " is a free man.");
 			} else {
-				message = "Better luck next time.";
 				gamePane.disableButton(gamePane.getRollDiceButton());
-				gamePane.setMessageLayer(new SimpleMessage(message));
-
+				gamePane.setMessagePanelText("Better luck next time.");
 			}
 		} else if (currentPlayer.lastRollWasDoubles) {
-			message = "DOUBLES !    " + currentPlayer.getName()
-						+ " rolled " + Integer.toString(roll);
-			gamePane.setMessageLayer(new SimpleMessage(message));
-
+			gamePane.setMessagePanelText("DOUBLES !    "
+						+ currentPlayer.getName()
+						+ " rolled " + Integer.toString(roll));
 		} else {
 			checkSquare(roll);
 		}
@@ -207,6 +133,14 @@ public class GameMaster {
 		return die1 + die2;
 	}
 	
+	
+	public void endTurn() {
+		currentPlayer = getNextPlayer();
+		gamePane.clearMessageLayer();
+		startTurn();
+	}
+	
+	
 	public void setNumPlayers(int numPlayers) {
 		System.out.println("Creating " + numPlayers + " players");
 		int ii;
@@ -226,8 +160,8 @@ public class GameMaster {
 				useCardButton.addActionListener(
 						new ActionListener() {
 							public void actionPerformed(ActionEvent event) {
-								gamePane.setMessageLayer(
-										new SimpleMessage("You're a free man!"));
+								gamePane.setMessagePanelText(
+										"You're a free man!");
 								currentPlayer.hasGetOutOfJailCard = false;
 								gamePane.hideButton(gamePane.getGetOutOfJailButton());
 								gamePane.disableButton(gamePane.getRollDiceButton());
@@ -239,16 +173,14 @@ public class GameMaster {
 				keepCardButton.addActionListener(
 						new ActionListener() {
 							public void actionPerformed(ActionEvent event) {
-								gamePane.setMessageLayer(
-										new SimpleMessage("Better hope you roll doubles!"));
+								gamePane.setMessagePanelText(
+										"Better hope you roll doubles!");
 							}
 						});
-				SimpleMessage sm = new SimpleMessage("" +
-							"You're in Jail. Would you like to use" + 
-							" your Get out Of Jail Free Card?");
-				sm.addButton(useCardButton);
-				sm.addButton(keepCardButton);
-				gamePane.setMessageLayer(sm);
+				gamePane.setMessagePanelText("You're in Jail. Would you like" 
+						+ " to use your Get out Of Jail Free Card?");
+				gamePane.addMessagePanelButton(useCardButton);
+				gamePane.addMessagePanelButton(keepCardButton);
 
 			}
 		}
