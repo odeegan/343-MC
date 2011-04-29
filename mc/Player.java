@@ -9,11 +9,11 @@ public class Player {
 	int cash = 37700000;
 	int position = 0;
 	int numDoubles = 0;
-
+	int turnsInJail = 0;
 
 	boolean lastRollWasDoubles = false;
-	boolean isInJail = false;
-	boolean hasGetOutOfJailCard = false;
+	boolean isInJail = true;
+	boolean hasGetOutOfJailCard = true;
 	boolean hasRentDodgeCard = false;
 	boolean hasTaxiCard = false;
 	
@@ -22,6 +22,7 @@ public class Player {
 	public Player(int index) {
 		this.name = "Player" + Integer.toString(index + 1);
 		this.index = index;
+		districts = new ArrayList<District>();
 	}
 
 	
@@ -82,6 +83,10 @@ public class Player {
 			numDoubles += 1;
 			lastRollWasDoubles = true;
 		}	
+	}
+	
+	public ArrayList getDistricts() {
+		return districts;
 	}
 	
 	public int getNumDoubles() {

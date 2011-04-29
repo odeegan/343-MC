@@ -24,6 +24,7 @@ public class GamePlayState implements GameState {
 		System.out.println("This is the GamePlayState");
 		mainFrame.setContentPane(layeredPane);
 		layeredPane.revalidate();
+		// initialize the GameMaster singleton
 		GameMaster.getInstance().startTurn();
 	}
 }
