@@ -11,7 +11,7 @@ public class Player {
 	int numDoubles = 0;
 	int turnsInJail = 0;
 
-	boolean lastRollWasDoubles = false;
+	boolean rolledDoubles = false;
 	boolean isInJail = false;
 	boolean hasGetOutOfJailCard = false;
 	boolean hasRentDodgeCard = true;
@@ -75,17 +75,17 @@ public class Player {
 		return 0;
 	}
 	
-	public void rolledDoubles(boolean bool) {
+	public void setDoubles(boolean bool) {
 		if (bool == false) {
 			numDoubles = 0;
-			lastRollWasDoubles = false;
+			rolledDoubles = false;
 		} else {
 			numDoubles += 1;
-			lastRollWasDoubles = true;
+			rolledDoubles = true;
 		}	
 	}
 	
-	public ArrayList getDistricts() {
+	public ArrayList<District> getDistricts() {
 		return districts;
 	}
 	

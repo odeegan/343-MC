@@ -23,6 +23,8 @@ class GamePane extends JLayeredPane {
 	private static JPanel hudPanel1;
 	private static JPanel hudPanel2;
 	private static JPanel hudPanel3;
+	private static CurrentPlayerPanel currentPlayerPanel;
+	private static CurrentSquarePanel currentSquarePanel;
 	
 	private static JButton rollDiceButton;
 	private static JButton buildButton;
@@ -154,13 +156,11 @@ class GamePane extends JLayeredPane {
 			add(districtsLabel, "cell 1 2");
 		}
 			
-		
-		
-		
 		public void update() {
 			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
+			nameLabel.setText(currentPlayer.getName());
 			cashLabel.setText(Integer.toString(currentPlayer.getCash()));
-			currentPlayer.getDistricts().toString()
+			districtsLabel.setText(currentPlayer.getDistricts().toString());
 			revalidate();
 			repaint();
 		}
@@ -169,14 +169,25 @@ class GamePane extends JLayeredPane {
 	
 	public class CurrentSquarePanel extends JPanel {
 		
+		JLabel nameLabel;
+		
 		public CurrentSquarePanel() {
-		setLayout(new MigLayout());
-		setPreferredSize(new Dimension(370,170));
-		Board board = GameMaster.getInstance().getBoard();
-		Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
-		Square currentSquare = board.getSquare(currentPlayer.getPosition());
-		add(new JLabel(currentSquare.getName()), "cell 0 1");
+			nameLabel = new JLabel();
+			setLayout(new MigLayout());
+			setPreferredSize(new Dimension(370,170));
+			add(nameLabel, "cell 0 1");
+
 		}
+		
+		public void update() {
+			Board board = GameMaster.getInstance().getBoard();
+			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
+			Square currentSquare = board.getSquare(currentPlayer.getPosition());
+			nameLabel = new JLabel(currentSquare.getName());
+			revalidate();
+			repaint();
+		}
+		
 	}
 	
 	public class MessagePanel extends JPanel {
@@ -250,18 +261,44 @@ class GamePane extends JLayeredPane {
 		hudPanel1 = new JPanel();
 		hudPanel1.setBounds(0, 0, 382, 200);
 		hudPanel1.setBorder(BorderFactory.createTitledBorder("Current Square"));		
-		
+		currentSquarePanel = new CurrentSquarePanel();
+		hudPanel1.add(currentSquarePanel);
+
 		hudPanel2 = new JPanel();
 		hudPanel2.setBounds(0, 201, 382, 200);
 		hudPanel2.setBorder(BorderFactory.createTitledBorder("Current Player"));
+		currentPlayerPanel = new CurrentPlayerPanel();
+		hudPanel2.add(currentPlayerPanel);
+
+		
+		rollDiceButton = new RollDiceButton();
+		buildButton = new BuildButton();
+		endTurnButton = new EndTurnButton();
 		
 		hudButtonPanel = new JPanel(new MigLayout());
 		hudButtonPanel.setBounds(0, 401, 388, 50);
+		hudButtonPanel.add(rollDiceButton);
+		hudButtonPanel.add(buildButton);
+		hudButtonPanel.add(endTurnButton);
+
+
+		
+		getOutOfJailButton = new GetOutOfJailButton();
+		rentDodgeButton = new RentDodgeButton();
+		taxiButton = new TaxiButton();
 		
 		hudPanel3 = new JPanel();
 		hudPanel3.setBounds(0, 451, 382, 118);
 		hudPanel3.setBorder(BorderFactory.createTitledBorder("Chance Cards"));
-
+		hudPanel3.add(getOutOfJailButton);
+		hudPanel3.add(rentDodgeButton);
+		hudPanel3.add(taxiButton);
+		
+		mainHudPanel.add(hudPanel1);
+		mainHudPanel.add(hudButtonPanel);
+		mainHudPanel.add(hudPanel2);
+		mainHudPanel.add(hudPanel3);
+		
 		messageLayer = new JPanel(new GridBagLayout());
 		messageLayer.setBounds(0, 0, 812, 767);
 		messageLayer.setOpaque(false);
@@ -273,35 +310,7 @@ class GamePane extends JLayeredPane {
 		add(messageLayer, new Integer(1));	
 	}
 	
-	public void build() {
 
-		hudPanel1.add(new CurrentSquarePanel());
-		hudPanel2.add(new CurrentPlayerPanel());
-		
-		getOutOfJailButton = new GetOutOfJailButton();
-		rentDodgeButton = new RentDodgeButton();
-		taxiButton = new TaxiButton();
-		
-		
-		hudPanel3.add(getOutOfJailButton);
-		hudPanel3.add(rentDodgeButton);
-		hudPanel3.add(taxiButton);
-		
-		rollDiceButton = new RollDiceButton();
-		buildButton = new BuildButton();
-		endTurnButton = new EndTurnButton();
-				
-		hudButtonPanel.add(rollDiceButton);
-		hudButtonPanel.add(buildButton);
-		hudButtonPanel.add(endTurnButton);
-		
-		mainHudPanel.add(hudPanel1);
-		mainHudPanel.add(hudButtonPanel);
-		mainHudPanel.add(hudPanel2);
-		mainHudPanel.add(hudPanel3);
-		
-		update();	
-	}
 	
 	public static GamePane getInstance() {
 		return GAMEPANE;
@@ -315,10 +324,8 @@ class GamePane extends JLayeredPane {
 	}
 	
 	public void setMessagePanelText(String str) {
-		if (messagePanel == null) {
-			messagePanel = new MessagePanel();
-			messageLayer.add(messagePanel);
-		}
+		messagePanel = new MessagePanel();
+		messageLayer.add(messagePanel);
 		messagePanel.setText(str);
 	}
 	
@@ -371,6 +378,8 @@ class GamePane extends JLayeredPane {
 	}
 	
 	public void update() {
+		currentPlayerPanel.update();
+		currentSquarePanel.update();
 		revalidate();
 		repaint();
 	}

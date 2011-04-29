@@ -39,9 +39,13 @@ public class GameMaster {
 	
 	public void startTurn() {
 		//draw the screen
-		gamePane.build();
+		gamePane.enableButton(gamePane.getRollDiceButton());
+		gamePane.disableButton(gamePane.getEndTurnButton());
+		gamePane.update();
 		displayPlayerChanceCards();
-		System.out.println("starting " + currentPlayer.getName() + " turn");
+		System.out.println("--------------------------------");
+		System.out.println("STARTING " + currentPlayer.getName() + " turn");
+		System.out.println("--------------------------------");
 		gamePane.disableButton(gamePane.getEndTurnButton());
 		testIfPlayerIsInJail();
 	}
@@ -71,10 +75,10 @@ public class GameMaster {
 	
 	public void checkSquare(int roll) {
 		System.out.println("checking square");
-		System.out.println(Integer.toString(roll));
-		System.out.println(Integer.toString(board.squares.size()));
 		Square newSquare = board.getSquare(currentPlayer.getPosition() + roll);
-		
+		System.out.println(currentPlayer.getName() + " landed on "
+					+ newSquare.getName());
+
 		gamePane.setMessagePanelText(
 				currentPlayer.getName() + " rolled "
 				+ Integer.toString(roll) 
@@ -85,32 +89,38 @@ public class GameMaster {
 		gamePane.hideButton(gamePane.getGetOutOfJailButton());
 		gamePane.hideButton(gamePane.getRentDodgeButton());
 		gamePane.hideButton(gamePane.getTaxiButton());
-//		if (currentPlayer.hasGetOutOfJailCard) {
-//			gamePane.showButton(gamePane.getGetOutOfJailButton());
-//		}
-//		if (currentPlayer.hasRentDodgeCard) {
-//			gamePane.showButton(gamePane.getRentDodgeButton());
-//		}
-//		if (currentPlayer.hasTaxiCard) {
-//			gamePane.showButton(gamePane.getTaxiButton());
-//		}
+		if (currentPlayer.hasGetOutOfJailCard) {
+			gamePane.showButton(gamePane.getGetOutOfJailButton());
+		}
+		if (currentPlayer.hasRentDodgeCard) {
+			gamePane.showButton(gamePane.getRentDodgeButton());
+		}
+		if (currentPlayer.hasTaxiCard) {
+			gamePane.showButton(gamePane.getTaxiButton());
+		}
 	}
 	
 	public void roll() {
 		gamePane.enableButton(gamePane.getEndTurnButton());
 		int roll = rollDice();
+		
+		
+		
+		
 		if (currentPlayer.isInJail) {
-			if (currentPlayer.lastRollWasDoubles) {
+			if (currentPlayer.rolledDoubles) {
 				gamePane.setMessagePanelText("DOUBLES !    " 
 						+ currentPlayer.getName() + " is a free man.");
 			} else {
 				gamePane.disableButton(gamePane.getRollDiceButton());
 				gamePane.setMessagePanelText("Better luck next time.");
 			}
-		} else if (currentPlayer.lastRollWasDoubles) {
+		} else if (currentPlayer.rolledDoubles) {
 			gamePane.setMessagePanelText("DOUBLES !    "
 						+ currentPlayer.getName()
 						+ " rolled " + Integer.toString(roll));
+			checkSquare(roll);
+
 		} else {
 			checkSquare(roll);
 		}
@@ -118,17 +128,22 @@ public class GameMaster {
 	
 	public int rollDice() {
 		Random generator = new Random();
-		int die1 = generator.nextInt(6) + 1;
-		int die2 = generator.nextInt(6) + 1;
+		int[] dice = new int[2];
+		dice[0] = generator.nextInt(6) + 1;
+		dice[1] = generator.nextInt(6) + 1;
+		System.out.println("Player rolled " 
+				+ dice.toString());
+
 		// check for doubles and send to jail if necessary
 		if (die1 == die2) {
-			currentPlayer.rolledDoubles(true);
+			System.out.println(currentPlayer.getName() + " rolled DOUBLES");
+			currentPlayer.setDoubles(true);
 			if (currentPlayer.getNumDoubles() == 3) {
 				System.out.println("Send Player" + 
 						currentPlayer.getIndex() + " to Jail");
 			}
 		} else {
-			currentPlayer.rolledDoubles(false);
+			currentPlayer.setDoubles(false);
 		}
 		return die1 + die2;
 	}
@@ -139,7 +154,6 @@ public class GameMaster {
 		gamePane.clearMessageLayer();
 		startTurn();
 	}
-	
 	
 	public void setNumPlayers(int numPlayers) {
 		System.out.println("Creating " + numPlayers + " players");
@@ -153,8 +167,8 @@ public class GameMaster {
 	}
 	
 	public void testIfPlayerIsInJail() {
-		System.out.println("test if current user is in jail");
 		if (currentPlayer.isInJail) {
+			System.out.println(currentPlayer.getName() + " is in Jail");
 			if (currentPlayer.hasGetOutOfJailCard) {
 				JButton useCardButton = new JButton("Use Card");
 				useCardButton.addActionListener(
