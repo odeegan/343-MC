@@ -25,6 +25,8 @@ public class GamePlayState implements GameState {
 		mainFrame.setContentPane(layeredPane);
 		layeredPane.revalidate();
 		// initialize the GameMaster singleton
-		GameMaster.getInstance().startTurn();
+		//GameMaster.getInstance().startTurn();
+		GameMaster.getInstance().startAuction();
+		GameMaster.getInstance().setGameStateMachine(gameStateMachine);
 	}
 }

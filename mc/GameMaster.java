@@ -14,7 +14,9 @@ import net.miginfocom.swing.MigLayout;
 public class GameMaster {
 
 	GamePane gamePane;
-
+	
+	GameStateMachine gameStateMachine;
+	
 	private static ArrayList<Player> players;
 	private static Board board;
 	private static Player currentPlayer;
@@ -35,6 +37,23 @@ public class GameMaster {
 	
 	public void build() {
 		System.out.println("build stuff");
+	}
+	
+	public void startAuction() {
+		System.out.println(currentPlayer.getName() + " is in Jail");
+		gamePane.setMessagePanelText("Start the Auction !");
+			
+
+		JButton startAuctionButton = new JButton("START");
+		startAuctionButton.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
+						gameStateMachine.setState(gameStateMachine.getAuctionState());
+
+					}
+				});
+
+		gamePane.addMessagePanelButton(startAuctionButton);
 	}
 	
 	public void startTurn() {
@@ -214,5 +233,11 @@ public class GameMaster {
 			gamePane.addMessagePanelButton(hopeForDoublesButton);
 		}
 	}
+	
+	public void setGameStateMachine(GameStateMachine gsm) {
+		gameStateMachine = gsm;
+	}
+	
+	
 	
 }

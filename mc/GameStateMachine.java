@@ -9,6 +9,7 @@ public class GameStateMachine {
 	GameMaster gameMaster;
 	GameState mainMenuState;
 	GameState gamePlayState;
+	GameState auctionState;
 	GameState state;
 
 	JFrame mainFrame;
@@ -20,6 +21,7 @@ public class GameStateMachine {
 		// (i.e. GameMaster) allows them to draw to the screen
 		mainMenuState = new MainMenuState(this, mainFrame);
 		gamePlayState = new GamePlayState(this, mainFrame);
+		auctionState = new AuctionState(this, mainFrame);
 		System.out.println("Starting the GameStateMachine.");
 	}
 
@@ -39,6 +41,10 @@ public class GameStateMachine {
 	
 	public GameState getMainMenuState() {
 		return mainMenuState;
+	}
+	
+	public GameState getAuctionState() {
+		return auctionState;
 	}
 	
 	/*
