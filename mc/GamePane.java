@@ -11,7 +11,7 @@ import net.miginfocom.swing.MigLayout;
 class GamePane extends JLayeredPane {
 
 	private static JPanel baseLayer;
-	private static JPanel playerTokensPanel;
+	private static JPanel playerTokensLayer;
 	private static JPanel squaresPanel;
 	private static JPanel mainHudPanel;
 	
@@ -35,12 +35,16 @@ class GamePane extends JLayeredPane {
 	private static JButton taxiButton;
 	
 	
+	
 	private static final GamePane GAMEPANE = new GamePane();
 	
 	public class PlayerToken extends JLabel {
-
+		
 		public PlayerToken() {
-			
+			setPreferredSize(new Dimension(20,20));
+			setBorder(BorderFactory.createLineBorder(Color.blue));
+			setBackground(Color.blue);
+			setOpaque(true);
 		}
 	}
 	
@@ -258,8 +262,12 @@ class GamePane extends JLayeredPane {
 		board.setPreferredSize(new Dimension(812,768));
 		board.setOpaque(true);
 			
-		playerTokensPanel = new JPanel();
-		playerTokensPanel.setOpaque(false);
+		playerTokensLayer = new JPanel(new GridBagLayout());
+		//playerTokensLayer.setPreferredSize(new Dimension(812,768));
+		playerTokensLayer.setOpaque(false);
+		playerTokensLayer.setBounds(0, 0, 812, 768);
+		
+		playerTokensLayer.add(new PlayerToken());
 		
 		mainHudPanel = new JPanel();
 		mainHudPanel.setLayout(null);
@@ -315,7 +323,8 @@ class GamePane extends JLayeredPane {
 		baseLayer.add(mainHudPanel, BorderLayout.EAST);
 			
 		add(baseLayer, new Integer(0));
-		add(messageLayer, new Integer(1));	
+		add(playerTokensLayer, new Integer(1));
+		add(messageLayer, new Integer(2));	
 	}
 	
 

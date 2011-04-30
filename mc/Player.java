@@ -12,7 +12,7 @@ public class Player {
 	int turnsInJail = 0;
 
 	boolean rolledDoubles = false;
-	boolean isInJail = false;
+	boolean isInJail = true;
 	boolean hasGetOutOfJailCard = false;
 	boolean hasRentDodgeCard = false;
 	boolean hasTaxiCard = false;
