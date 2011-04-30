@@ -18,15 +18,14 @@ public class GamePlayState implements GameState {
 		
 		layeredPane = GamePane.getInstance();
 	}
-		
-		
+			
 	public void enter() {
 		System.out.println("This is the GamePlayState");
 		mainFrame.setContentPane(layeredPane);
 		layeredPane.revalidate();
 		// initialize the GameMaster singleton
-		//GameMaster.getInstance().startTurn();
-		GameMaster.getInstance().startAuction();
+		GameMaster.getInstance().startTurn();
+		//GameMaster.getInstance().startAuction();
 		GameMaster.getInstance().setGameStateMachine(gameStateMachine);
 	}
 }

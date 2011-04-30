@@ -33,7 +33,6 @@ public class Player {
 		return cash;
 	}
 	
-	
 	/*
 	 * returns the index of the player in the 
 	 * GameMaster's players ArrayList
