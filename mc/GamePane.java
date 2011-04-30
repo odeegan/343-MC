@@ -37,6 +37,13 @@ class GamePane extends JLayeredPane {
 	
 	private static final GamePane GAMEPANE = new GamePane();
 	
+	public class PlayerToken extends JLabel {
+
+		public PlayerToken() {
+			
+		}
+	}
+	
 	public class GetOutOfJailButton extends JButton {
 		
 		public GetOutOfJailButton() {
@@ -223,6 +230,7 @@ class GamePane extends JLayeredPane {
 			JLabel newLabel = new JLabel(str);
 			newLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			textPanel.add(newLabel, "wrap");
+			textPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 			redraw();
 		}
 		
@@ -324,6 +332,7 @@ class GamePane extends JLayeredPane {
 	}
 	
 	public void setMessagePanelText(String str) {
+		clearMessageLayer();
 		messagePanel = new MessagePanel();
 		messageLayer.add(messagePanel);
 		messagePanel.setText(str);

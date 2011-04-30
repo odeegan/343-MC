@@ -14,13 +14,13 @@ public class Player {
 	boolean rolledDoubles = false;
 	boolean isInJail = false;
 	boolean hasGetOutOfJailCard = false;
-	boolean hasRentDodgeCard = true;
-	boolean hasTaxiCard = true;
+	boolean hasRentDodgeCard = false;
+	boolean hasTaxiCard = false;
 	
 	ArrayList<District> districts;
 	
 	public Player(int index) {
-		this.name = "Player" + Integer.toString(index + 1);
+		this.name = "Player" + Integer.toString(index);
 		this.index = index;
 		districts = new ArrayList<District>();
 	}
@@ -86,6 +86,19 @@ public class Player {
 			numDoubles += 1;
 			rolledDoubles = true;
 		}	
+	}
+	
+	public void setIsInJail(boolean bool) {
+		isInJail = bool;
+		// set player position to jail square
+		if (bool == true) {
+			setPosition(10);
+		}
+	}
+	
+	public void setPosition(int index) {
+		System.out.println("Setting " + name + " position to " + index);
+		position = index;
 	}
 	
 	public ArrayList<District> getDistricts() {
