@@ -6,14 +6,14 @@ public class Player {
 	String name;
 	int index;
 	
-	int cash = 37700000;
+	double cash = 37.7;
 	int position = 0;
 	int numDoubles = 0;
 	int turnsInJail = 0;
 
 	boolean rolledDoubles = false;
 	boolean isInJail = true;
-	boolean hasGetOutOfJailCard = false;
+	boolean hasGetOutOfJailCard = true;
 	boolean hasRentDodgeCard = false;
 	boolean hasTaxiCard = false;
 	
@@ -29,7 +29,7 @@ public class Player {
 		districts.add(district);
 	}
 	
-	public int getCash() {
+	public double getCash() {
 		return cash;
 	}
 	
@@ -45,25 +45,24 @@ public class Player {
 		return position;
 	}
 	
+	public int getTurnsInJail() {
+		return turnsInJail;
+	}
+	
 	public int move(int delta) {
 		int newPosition = position + delta;
-		
-		// insert logic to check if player has passed Go
-		// deal with Chance Cards and squares that prevent
-		// the player from collecting $200
-		
 		position = newPosition;
 		return newPosition;
 	}
 	
-	public void pay(int amount) {
+	public void pay(double amount) {
 		cash = cash - amount;
 		// insert logic to check for bankruptcy or
 		// figure out when to check if a player can't afford something
 		// do we put it here, or in the logic before this method gets called?
 	}
 		
-	public void collect(int amount) {
+	public void collect(double amount) {
 		cash = cash  + amount;
 	}
 		
@@ -71,10 +70,16 @@ public class Player {
 		return name;
 	}
 	
-	public int getNetWorth() {
+	public Double getNetWorth() {
 		// logic to calculate a players networth
 		// cash + mortgage value of districts
-		return 0;
+		int i;
+		Double sum = 0.0;
+		for (i=0; i < districts.size(); i++) {
+			sum += districts.get(i).getRent();
+		}
+		sum += getCash();
+		return sum;
 	}
 	
 	public void setDoubles(boolean bool) {
@@ -92,6 +97,17 @@ public class Player {
 		// set player position to jail square
 		if (bool == true) {
 			setPosition(10);
+		} else {
+			stillInJail(false);
+		}
+	}
+	
+	public void stillInJail(boolean bool) {
+		if (bool = true) {
+			System.out.println("staying in Jail");
+			turnsInJail += 1;
+		} else {
+			turnsInJail = 0;
 		}
 	}
 	
@@ -106,6 +122,23 @@ public class Player {
 	
 	public int getNumDoubles() {
 		return numDoubles;
+	}
+	
+	public String getDetails() {
+		String string = new String("");
+		string += "Name: " + getName(); 
+		string += "\nCash: " + Double.toString(getCash());
+		if (getCash() != getNetWorth()) {
+			string += "\nNetworth: " + getNetWorth();
+		}
+		if (districts != null) {
+			string += "\nDistricts: " + districts.toString();
+		}
+		return string;
+	}
+	
+	public String toString() {
+		return getName();
 	}
 	
 }

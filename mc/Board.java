@@ -2,9 +2,7 @@ package mc;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.JLabel;
-import java.awt.BorderLayout;
 
-import java.io.IOException;
 
 
 public class Board implements Drawable {
@@ -17,238 +15,400 @@ public class Board implements Drawable {
 	
 	public Board() {
 		squares = new ArrayList<Square>();
-		int ii = 0;
 		
-		//initialize every square here
-//			 Board Ordering:
-//			 	GO
-		squares.add(new Square(SQUARETYPE.GO));
-		squares.get(ii++).setSquareBehavior(new GoBehavior());
-//			 	Summergate - BRN
-		squares.add(new District(ii, 
-				"BROWN",
-				"Summergate",
-				500000,
-				1000000,
-				2000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Chance
-		squares.add(new Square(SQUARETYPE.CHANCE));
-		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
-//			 	Stoneside - PRP
-		squares.add(new District(ii, 
+//GO
+		Square go = new Square(SQUARETYPE.GO);
+		go.setSquareBehavior(new GoBehavior());
+		go.setX(664);		
+		go.setY(664);
+		squares.add(go);
+
+//Summergate - BRN
+			
+		District summergate = new District("BROWN", "Summergate", .6);
+		summergate.setRents(.02, .1, .2, .4, .8, 1.6, 2.2, 3.0, 5.5);
+		summergate.setSquareBehavior(new UnownedDistrictBehavior());
+		summergate.setX(602);		
+		summergate.setY(664);
+		squares.add(summergate);
+
+//Chance
+		Square chance0 = new Square(SQUARETYPE.CHANCE);
+		chance0.setSquareBehavior(new ChanceBehavior());
+		chance0.setX(540);		
+		chance0.setY(664);
+		squares.add(chance0);
+
+//Stoneside - PRP
+		District stoneside = new District( 
 				"BROWN",
 				"Stoneside",
-				500000,
-				1000000,
-				2000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Industry Tax
-		squares.add(new Square(SQUARETYPE.INDUSTRYTAX));
-		squares.get(ii++).setSquareBehavior(new IndustryTaxBehavior());
-//			 	Planning Permission - Rubbish Dump (2 Blocks) / Park
-		squares.add(new Square(SQUARETYPE.PLANNINGPERMISSION));
-		squares.get(ii++).setSquareBehavior(new PlanningPermissionBehavior());
-//			 	Westlands - BBY
-		squares.add(new District(ii, 
+				.6);
+
+		stoneside.setRents(.04, .2, .4, .8, 1.6, 2.2, 3, 4, 7);
+		stoneside.setSquareBehavior(new UnownedDistrictBehavior());
+		stoneside.setX(478);		
+		stoneside.setY(664);
+		squares.add(stoneside);
+
+//Industry Tax
+		Square industryTax0 = new Square(SQUARETYPE.INDUSTRYTAX);
+		industryTax0.setSquareBehavior(new IndustryTaxBehavior());
+		industryTax0.setX(416);		
+		industryTax0.setY(664);
+		squares.add(industryTax0);
+
+//Planning Permission - Rubbish Dump (2 Blocks) / Park
+		Square planningPermission0 = new Square(SQUARETYPE.PLANNINGPERMISSION);
+		planningPermission0.setSquareBehavior(new PlanningPermissionBehavior());
+		planningPermission0.setX(354);		
+		planningPermission0.setY(664);
+		squares.add(planningPermission0);
+
+//Westlands - BBY
+		District westlands = new District( 
 				"SKY",
 				"Westlands",
-				500000,
-				1000000,
-				2000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Chance
-		squares.add(new Square(SQUARETYPE.CHANCE));
-		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
-//			 	Bayview Dock - BBY
-		squares.add(new District(ii, 
+				1.0);
+
+		westlands.setRents(.06, .3, .6, 1.2, 1.8, 2.5, 3.5, 5, 7.5);
+		westlands.setSquareBehavior(new UnownedDistrictBehavior());
+		westlands.setX(292);		
+		westlands.setY(664);
+		squares.add(westlands);
+
+
+//Chance
+		Square chance1 = new Square(SQUARETYPE.CHANCE);
+		chance1.setSquareBehavior(new ChanceBehavior());
+		chance1.setX(230);		
+		chance1.setY(664);
+		squares.add(chance1);
+
+//Bayview Dock - BBY
+		District bayviewDock = new District( 
 				"SKY",
 				"Bayview Dock",
-				500000,
-				1000000,
-				2000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Brightside - BBY
-		squares.add(new District(ii, 
+				1);
+
+		bayviewDock.setRents(.06, .3, .6, 1.2, 1.8, 2.5, 3.5, 5, 7.5);
+		bayviewDock.setSquareBehavior(new UnownedDistrictBehavior());
+		bayviewDock.setX(168);		
+		bayviewDock.setY(664);
+		squares.add(bayviewDock);
+
+//Brightside - BBY
+		District brightside = new District( 
 				"SKY",
-				"Stoneside",
-				500000,
-				1000000,
-				2000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Jail
-		squares.add(new Square(SQUARETYPE.JAIL));
-		squares.get(ii++).setSquareBehavior(new JailBehavior());
-//			 	Old Town - PRP
-		squares.add(new District(ii, 
+				"Brightside",
+				1.2);
+
+		brightside.setRents(.08, .4, .8, 1.5, 2.5, 3.5, 4.5, 6, 8.5);
+		brightside.setSquareBehavior(new UnownedDistrictBehavior());
+		brightside.setX(106);		
+		brightside.setY(664);
+		squares.add(brightside);
+
+//Jail
+		Square jail = new Square(SQUARETYPE.JAIL);
+		jail.setSquareBehavior(new JailBehavior());
+		jail.setX(0);		
+		jail.setY(664);
+		squares.add(jail);
+
+//Old Town - PRP
+		District oldTown = new District( 
 				"PURPLE",
 				"Old Town",
-				1000000,
-				2000000,
-				3000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Auction UnOwned
-		squares.add(new Square(SQUARETYPE.AUCTION));
-		squares.get(ii++).setSquareBehavior(new AuctionBehavior());
-//			 	Harbor heights - PRP
-		squares.add(new District(ii, 
+				1.4);
+				
+		oldTown.setRents(.1, .5, 1, 2, 3, 4, 5, 6.5, 9);
+		oldTown.setSquareBehavior(new UnownedDistrictBehavior());
+		oldTown.setX(0);		
+		oldTown.setY(602);
+		squares.add(oldTown);
+
+//Auction UnOwned
+		Square auction0 = new Square(SQUARETYPE.AUCTION);
+		auction0.setSquareBehavior(new AuctionBehavior());
+		auction0.setX(0);		
+		auction0.setY(540);
+		squares.add(auction0);
+
+//Harbor heights - PRP
+		District harborHeights = new District( 
 				"PURPLE",
 				"Harbor Heights",
-				1000000,
-				2000000,
-				3000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Central Quay - PRP
-		squares.add(new District(ii, 
+				1.4);
+
+		harborHeights.setRents(.1, .5, 1, 2, 3, 4, 5, 6.5, 9);
+		harborHeights.setSquareBehavior(new UnownedDistrictBehavior());
+		harborHeights.setX(0);		
+		harborHeights.setY(478);
+		squares.add(harborHeights);
+
+
+//Central Quay - PRP
+		District centralQuay = new District( 
 				"PURPLE",
 				"Central Quay",
-				1000000,
-				2000000,
-				3000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Planning Permission - Prison (4 Blocks) / School
-		squares.add(new Square(SQUARETYPE.PLANNINGPERMISSION));
-		squares.get(ii++).setSquareBehavior(new PlanningPermissionBehavior());
-//			 	Shine Village - ORN
-		squares.add(new District(ii, 
+				1.6);
+
+		centralQuay.setRents(.12, .6, 1.2, 2.4, 3.5, 4.5, 5.5, 7, 9.5);
+		centralQuay.setSquareBehavior(new UnownedDistrictBehavior());
+		centralQuay.setX(0);		
+		centralQuay.setY(416);
+		squares.add(centralQuay);
+
+//Planning Permission - Prison (4 Blocks) / School
+		Square planningPermission1 = new Square(SQUARETYPE.PLANNINGPERMISSION);
+		planningPermission1.setSquareBehavior(new PlanningPermissionBehavior());
+		planningPermission1.setX(0);		
+		planningPermission1.setY(354);
+		squares.add(planningPermission1);
+
+		
+//Shine Village - ORN
+		District shineVillage = new District( 
 				"ORANGE",
 				"Shine Village",
-				1000000,
-				2000000,
-				3000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Chance
-		squares.add(new Square(SQUARETYPE.CHANCE));
-		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
-//			 	East Bank - ORN
-		squares.add(new District(ii, 
+				1.8);
+
+		shineVillage.setRents(.14, .7, 1.4, 2.8, 3.8, 4.8, 6, 7.5, 10);
+		shineVillage.setSquareBehavior(new UnownedDistrictBehavior());
+		shineVillage.setX(0);		
+		shineVillage.setY(292);
+		squares.add(shineVillage);
+
+//Chance
+		Square chance2 = new Square(SQUARETYPE.CHANCE);
+		chance2.setSquareBehavior(new ChanceBehavior());
+		chance2.setX(0);		
+		chance2.setY(230);
+		squares.add(chance2);
+		
+//East Bank - ORN
+		District eastBank = new District( 
 				"ORANGE",
 				"East Bank",
-				1000000,
-				2000000,
-				3000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Treetop Park - ORN
-		squares.add(new District(ii, 
+				1.8);
+
+		eastBank.setRents(.14, .7, 1.4, 2.8, 3.8, 4.8, 6, 7.5, 10);
+		eastBank.setSquareBehavior(new UnownedDistrictBehavior());
+		eastBank.setX(0);		
+		eastBank.setY(168);
+		squares.add(eastBank);
+
+//Treetop Park - ORN
+		District treetopPark = new District( 
 				"ORANGE",
 				"Treetop Park",
-				1000000,
-				2000000,
-				3000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Free Parking
-		squares.add(new Square(SQUARETYPE.FREEPARKING));
-		squares.get(ii++).setSquareBehavior(new FreeParkingBehavior());
-//			 	Seaview - RED
-		squares.add(new District(ii, 
+				2);
+
+		treetopPark.setRents(.16, .8, 1.6, 3.0, 4.0, 5.0, 6.0, 8.0, 11.0);
+		treetopPark.setSquareBehavior(new UnownedDistrictBehavior());
+		treetopPark.setX(0);		
+		treetopPark.setY(106);
+		squares.add(treetopPark);
+
+//Free Parking
+		Square freeParking = new Square(SQUARETYPE.FREEPARKING);
+		freeParking.setSquareBehavior(new FreeParkingBehavior());
+		freeParking.setX(0);		
+		freeParking.setY(0);
+		squares.add(freeParking);
+
+//Seaview - RED
+		District seaview = new District( 
 				"RED",
 				"Seaview",
-				1500000,
-				3000000,
-				4000000));
-//			 	Chance
-		squares.add(new Square(SQUARETYPE.CHANCE));
-		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
-//			 	The Wharf - RED
-		squares.add(new District(ii, 
+				2.2);
+
+		seaview.setRents(.18, .9, 1.8, 3.5, 4.5, 5.5, 6.5, 8.5, 12);
+		seaview.setSquareBehavior(new UnownedDistrictBehavior());
+		seaview.setX(106);		
+		seaview.setY(0);
+		squares.add(seaview);
+
+//Chance
+		Square chance3 = new Square(SQUARETYPE.CHANCE);
+		chance3.setSquareBehavior(new ChanceBehavior());
+		chance3.setX(168);		
+		chance3.setY(0);
+		squares.add(chance3);
+
+//The Wharf - RED
+		District theWarf = new District( 
 				"RED",
 				"The Wharf",
-				1500000,
-				3000000,
-				4000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Middleton - RED
-		squares.add(new District(ii, 
+				2.2);
+
+		theWarf.setRents(.18, .9, 1.8, 3.5, 4.5, 5.5, 6.5, 8.5, 12);
+		theWarf.setSquareBehavior(new UnownedDistrictBehavior());
+		theWarf.setX(230);		
+		theWarf.setY(0);
+		squares.add(theWarf);
+
+		
+//Middleton - RED
+		District middleton = new District( 
 				"RED",
 				"Middleton",
-				1500000,
-				3000000,
-				4000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Planning Permission - Sewage Plant (3 Blocks) / Water Tower
-		squares.add(new Square(SQUARETYPE.PLANNINGPERMISSION));
-		squares.get(ii++).setSquareBehavior(new PlanningPermissionBehavior());
-//			 	New Town - YLW
-		squares.add(new District(ii, 
+				2.4);
+
+		middleton.setRents(.2, 1, 2, 3.8, 4.8, 5.8, 6.8, 8.8, 13.5);
+		middleton.setSquareBehavior(new UnownedDistrictBehavior());
+		middleton.setX(292);		
+		middleton.setY(0);
+		squares.add(middleton);
+
+//Planning Permission - Sewage Plant (3 Blocks) / Water Tower
+		Square planningPermission2 = new Square(SQUARETYPE.PLANNINGPERMISSION);
+		planningPermission2.setSquareBehavior(new PlanningPermissionBehavior());
+		planningPermission2.setX(354);		
+		planningPermission2.setY(0);
+		squares.add(planningPermission2);
+
+//New Town - YLW
+		District newTown = new District( 
 				"YELLOW",
 				"New Town",
-				1500000,
-				3000000,
-				4000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Silver Harbor - YLW
-		squares.add(new District(ii, 
+				2.6);
+
+		newTown.setRents(.22, 1.1, 2.2, 4, 5, 6, 7, 8, 14);
+		newTown.setSquareBehavior(new UnownedDistrictBehavior());
+		newTown.setX(416);		
+		newTown.setY(0);
+		squares.add(newTown);
+
+//Silver Harbor - YLW
+		District silverHarbor = new District( 
 				"YELLOW",
 				"Silver Harbor",
-				1500000,
-				3000000,
-				4000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Change
-		squares.add(new Square(SQUARETYPE.CHANCE));
-		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
-//			 	Central City - YLW
-		squares.add(new District(ii, 
+				2.6);
+
+		silverHarbor.setRents(.22, 1.1, 2.2, 4, 5, 6, 7, 10, 14);
+		silverHarbor.setSquareBehavior(new UnownedDistrictBehavior());
+		silverHarbor.setX(478);		
+		silverHarbor.setY(0);
+		squares.add(silverHarbor);
+
+//Chance
+		Square chance4 = new Square(SQUARETYPE.CHANCE);
+		chance4.setSquareBehavior(new ChanceBehavior());
+		chance4.setX(540);		
+		chance4.setY(0);
+		squares.add(chance4);
+
+//Central City - YLW
+		District centralCity = new District( 
 				"YELLOW",
 				"Central City",
-				1500000,
-				3000000,
-				4000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	GOTOJAIL
-		squares.add(new Square(SQUARETYPE.GOTOJAIL));
-		squares.get(ii++).setSquareBehavior(new GoToJailBehavior());
-//			 	Royal Court - GRN
-		squares.add(new District(ii, 
+				2.8);
+
+		centralCity.setRents(.24, 1.2, 2.4, 4.2, 5.2, 6.2, 8.2, 10.5, 15);
+		centralCity.setSquareBehavior(new UnownedDistrictBehavior());
+		centralCity.setX(602);		
+		centralCity.setY(0);
+		squares.add(centralCity);
+
+//GOTOJAIL
+		Square goToJail = new Square(SQUARETYPE.GOTOJAIL);
+		goToJail.setSquareBehavior(new GoToJailBehavior());
+		goToJail.setX(664);		
+		goToJail.setY(0);
+		squares.add(goToJail);
+
+//Royal Court - GRN
+		District royalCourt = new District( 
 				"GREEN",
 				"Royal Court",
-				2000000,
-				4000000,
-				5000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	The Marina - GRN
-		squares.add(new District(ii, 
+				3);
+
+		royalCourt.setRents(.26, 1.3, 2.6, 4.4, 5.3, 6.5, 8.5, 11, 15.5);
+		royalCourt.setSquareBehavior(new UnownedDistrictBehavior());
+		royalCourt.setX(664);		
+		royalCourt.setY(104);
+		squares.add(royalCourt);
+
+//The Marina - GRN
+		District theMarina = new District( 
 				"GREEN",
 				"The Marina",
-				2000000,
-				4000000,
-				5000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Auction UnOwned
-		squares.add(new Square(SQUARETYPE.AUCTION));
-		squares.get(ii++).setSquareBehavior(new AuctionBehavior());
-//			 	Riverside - GRN
-		squares.add(new District(ii, 
+				3);
+
+		theMarina.setRents(.26, 1.3, 2.6, 4.4, 5.3, 6.5, 8.5, 11, 15.5);
+		theMarina.setSquareBehavior(new UnownedDistrictBehavior());
+		theMarina.setX(664);		
+		theMarina.setY(166);
+		squares.add(theMarina);
+
+//Auction UnOwned
+		Square auction1 = new Square(SQUARETYPE.AUCTION);
+		auction1.setSquareBehavior(new AuctionBehavior());
+		auction1.setX(664);		
+		auction1.setY(228);
+		squares.add(auction1);
+
+//Riverside - GRN
+		District riverside = new District( 
 				"GREEN",
 				"Riverside",
-				2000000,
-				4000000,
-				5000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Planning Permission Power Station (3 Blocks) / Wind Farm
-		squares.add(new Square(SQUARETYPE.PLANNINGPERMISSION));
-		squares.get(ii++).setSquareBehavior(new PlanningPermissionBehavior());
-//			 	Chance
-		squares.add(new Square(SQUARETYPE.CHANCE));
-		squares.get(ii++).setSquareBehavior(new ChanceBehavior());
-//			 	Fortune Valley - BLU
-		squares.add(new District(ii, 
+				3.2);
+
+		riverside.setRents(.28, 1.5, 3, 4.5, 5.5, 7, 9, 12, 16);
+		riverside.setSquareBehavior(new UnownedDistrictBehavior());
+		riverside.setX(664);		
+		riverside.setY(290);
+		squares.add(riverside);
+
+//Planning Permission Power Station (3 Blocks) / Wind Farm
+		Square planningPermission3 = new Square(SQUARETYPE.PLANNINGPERMISSION);
+		planningPermission3.setSquareBehavior(new PlanningPermissionBehavior());
+		planningPermission3.setX(664);		
+		planningPermission3.setY(352);
+		squares.add(planningPermission3);
+
+//Chance
+		Square chance5 = new Square(SQUARETYPE.CHANCE);
+		chance5.setSquareBehavior(new ChanceBehavior());
+		chance5.setX(664);		
+		chance5.setY(414);
+		squares.add(chance5);
+
+//Fortune Valley - BLU
+		District fortuneValley = new District( 
 				"BLUE",
 				"Fortune Valley",
-				2000000,
-				4000000,
-				5000000));
-		squares.get(ii++).setSquareBehavior(new UnownedDistrictBehavior());
-//			 	Industry Tax
-		squares.add(new Square(SQUARETYPE.INDUSTRYTAX));
-		squares.get(ii++).setSquareBehavior(new IndustryTaxBehavior());
-//			 	Diamond Hills - BLU
-		squares.add(new District(ii, 
+				3.5);
+
+		fortuneValley.setRents(.35, 1.75, 4.5, 5.5, 7, 9, 11, 16, 18);
+		fortuneValley.setSquareBehavior(new UnownedDistrictBehavior());
+		fortuneValley.setX(664);		
+		fortuneValley.setY(476);
+		squares.add(fortuneValley);
+
+//Industry Tax
+		Square industryTax1 = new Square(SQUARETYPE.INDUSTRYTAX);
+		industryTax1.setSquareBehavior(new IndustryTaxBehavior());
+		industryTax1.setX(664);		
+		industryTax1.setY(538);
+		squares.add(industryTax1);
+
+//Diamond Hills - BLU
+		District diamondHills = new District( 
 				"BLUE",
 				"Diamond Hills",
-				2000000,
-				4000000,
-				5000000));
+				4);
+
+		diamondHills.setRents(.5, 3, 5, 8, 10, 12, 15, 18, 20);
+		diamondHills.setSquareBehavior(new UnownedDistrictBehavior());
+		diamondHills.setX(664);		
+		diamondHills.setY(602);
+		squares.add(diamondHills);
+
+
+		
 	}
 	
 	public Square getSquare(int position) {
@@ -259,9 +419,7 @@ public class Board implements Drawable {
 		return (District)squares.get(index);
 	}
 	
-	private void addSquare(Square square) {
-		squares.add(square);
-	}
+
 	
 	public JPanel init() {
 	

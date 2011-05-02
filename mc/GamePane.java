@@ -42,6 +42,7 @@ class GamePane extends JLayeredPane {
 		
 		public PlayerToken() {
 			setPreferredSize(new Dimension(20,20));
+			setBounds(0,0,20,20);
 			setBorder(BorderFactory.createLineBorder(Color.blue));
 			setBackground(Color.blue);
 			setOpaque(true);
@@ -150,28 +151,20 @@ class GamePane extends JLayeredPane {
 	
 	public class CurrentPlayerPanel extends JPanel {
 		
-		JLabel nameLabel;
-		JLabel cashLabel;
-		JLabel districtsLabel;
+		JTextArea playerDetails;
 		
 		public CurrentPlayerPanel() {
 			setLayout(new MigLayout());
 			setPreferredSize(new Dimension(370,170));
-			nameLabel = new JLabel();
-			cashLabel = new JLabel();
-			districtsLabel = new JLabel();
-			add(nameLabel, "cell 0 0");			
-			add(new JLabel("CASH"), "cell 0 1");
-			add(cashLabel, "cell 1 1");
-			add(new JLabel("DISTRICTS"), "cell 0 2");
-			add(districtsLabel, "cell 1 2");
+			playerDetails = new JTextArea();
+			add(playerDetails, "cell 0 0");			
 		}
 			
 		public void update() {
 			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
-			nameLabel.setText(currentPlayer.getName());
-			cashLabel.setText(Integer.toString(currentPlayer.getCash()));
-			districtsLabel.setText(currentPlayer.getDistricts().toString());
+			playerDetails.setText(currentPlayer.getDetails());
+			playerDetails.setBounds(5, 5, 360, 160);
+			playerDetails.setOpaque(false);
 			revalidate();
 			repaint();
 		}
@@ -180,13 +173,14 @@ class GamePane extends JLayeredPane {
 	
 	public class CurrentSquarePanel extends JPanel {
 		
-		JLabel nameLabel;
+		JTextArea squareDetails;
 		
 		public CurrentSquarePanel() {
-			nameLabel = new JLabel();
 			setLayout(new MigLayout());
+			squareDetails = new JTextArea();
 			setPreferredSize(new Dimension(370,170));
-			add(nameLabel, "cell 0 1");
+			setOpaque(true);
+			add(squareDetails, "cell 0 0");
 
 		}
 		
@@ -194,7 +188,9 @@ class GamePane extends JLayeredPane {
 			Board board = GameMaster.getInstance().getBoard();
 			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
 			Square currentSquare = board.getSquare(currentPlayer.getPosition());
-			nameLabel = new JLabel(currentSquare.getName());
+			squareDetails.setText(currentSquare.toString());
+			squareDetails.setBounds(5, 5, 360, 160);
+			squareDetails.setOpaque(false);
 			revalidate();
 			repaint();
 		}
@@ -259,29 +255,30 @@ class GamePane extends JLayeredPane {
 		ImageIcon icon = new ImageIcon("images/board-small.png");
 		JLabel board = new JLabel(icon);
 		board.setVerticalAlignment(SwingConstants.TOP);
-		board.setPreferredSize(new Dimension(812,768));
+		board.setPreferredSize(new Dimension(768,768));
 		board.setOpaque(true);
 			
-		playerTokensLayer = new JPanel(new GridBagLayout());
+		playerTokensLayer = new JPanel();
+		playerTokensLayer.setLayout(null);
 		//playerTokensLayer.setPreferredSize(new Dimension(812,768));
 		playerTokensLayer.setOpaque(false);
-		playerTokensLayer.setBounds(0, 0, 812, 768);
+		playerTokensLayer.setBounds(0, 0, 768, 768);
 		
-		playerTokensLayer.add(new PlayerToken());
+		playerTokensLayer.add(new PlayerToken(), BorderLayout.SOUTH);
 		
 		mainHudPanel = new JPanel();
 		mainHudPanel.setLayout(null);
-		mainHudPanel.setPreferredSize(new Dimension(388,768));
+		mainHudPanel.setPreferredSize(new Dimension(432,768));
 		mainHudPanel.setOpaque(false);
 
 		hudPanel1 = new JPanel();
-		hudPanel1.setBounds(0, 0, 382, 200);
+		hudPanel1.setBounds(0, 0, 432, 200);
 		hudPanel1.setBorder(BorderFactory.createTitledBorder("Current Square"));		
 		currentSquarePanel = new CurrentSquarePanel();
 		hudPanel1.add(currentSquarePanel);
 
 		hudPanel2 = new JPanel();
-		hudPanel2.setBounds(0, 201, 382, 200);
+		hudPanel2.setBounds(0, 201, 432, 200);
 		hudPanel2.setBorder(BorderFactory.createTitledBorder("Current Player"));
 		currentPlayerPanel = new CurrentPlayerPanel();
 		hudPanel2.add(currentPlayerPanel);
@@ -292,7 +289,7 @@ class GamePane extends JLayeredPane {
 		endTurnButton = new EndTurnButton();
 		
 		hudButtonPanel = new JPanel(new MigLayout());
-		hudButtonPanel.setBounds(0, 401, 388, 50);
+		hudButtonPanel.setBounds(0, 401, 432, 50);
 		hudButtonPanel.add(rollDiceButton);
 		hudButtonPanel.add(buildButton);
 		hudButtonPanel.add(endTurnButton);
@@ -304,7 +301,7 @@ class GamePane extends JLayeredPane {
 		taxiButton = new TaxiButton();
 		
 		hudPanel3 = new JPanel();
-		hudPanel3.setBounds(0, 451, 382, 118);
+		hudPanel3.setBounds(0, 451, 432, 118);
 		hudPanel3.setBorder(BorderFactory.createTitledBorder("Chance Cards"));
 		hudPanel3.add(getOutOfJailButton);
 		hudPanel3.add(rentDodgeButton);
@@ -316,7 +313,7 @@ class GamePane extends JLayeredPane {
 		mainHudPanel.add(hudPanel3);
 		
 		messageLayer = new JPanel(new GridBagLayout());
-		messageLayer.setBounds(0, 0, 812, 767);
+		messageLayer.setBounds(0, 0, 768, 767);
 		messageLayer.setOpaque(false);
 			
 		baseLayer.add(board, BorderLayout.WEST);	
