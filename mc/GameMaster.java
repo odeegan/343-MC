@@ -135,12 +135,18 @@ public class GameMaster {
 			if (currentPlayer.isInJail) {
 				gamePane.setMessagePanelText("DOUBLES !    " 
 						+ currentPlayer.getName() + " is a free man.");
+				// free the player
 				currentPlayer.setIsInJail(false);
+				// clear the doubles counter
+				currentPlayer.setDoubles(false);
 			}
 			if (currentPlayer.getNumDoubles() > 2) {
 				System.out.println("Send Player" + 
 						currentPlayer.getIndex() + " to Jail");
+				// send player to jail
 				currentPlayer.setIsInJail(true);
+				// disable build button when player is sent directly to jail
+				gamePane.disableButton(gamePane.getBuildButton());
 				gamePane.setMessagePanelText(
 						"You rolled doubles 3 times! You're going to JAIL!");
 				JButton button = new JButton("Cuff Me");
@@ -149,16 +155,18 @@ public class GameMaster {
 							public void actionPerformed(ActionEvent event) {
 								endTurn();
 							}
-						});
-			} else {
-				if (!currentPlayer.isInJail) {					
-					checkSquare(dice[0] + dice[1]);
-					}
+				});
 			}
+			// rolled doubles, has not rolled doubles three times
+			// and is not in jail
+			if (!currentPlayer.isInJail) {					
+				checkSquare(dice[0] + dice[1]);
+			}
+			
 		} else {
 			if (currentPlayer.isInJail) {
 				gamePane.setMessagePanelText("Better luck next time.");
-				currentPlayer.stillInJail(true);
+				currentPlayer.setIsInJail(true);
 			} else {
 			currentPlayer.setDoubles(false);
 			checkSquare(dice[0] + dice[1]);
@@ -192,9 +200,25 @@ public class GameMaster {
 		currentPlayer = players.get(0);
 	}
 	
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+	
 	public void testIfPlayerIsInJail() {
+		if (currentPlayer.turnsInJail > 2) {
+			currentPlayer.pay(.5);
+			gamePane.setMessagePanelText("You've sat in Jail long enough. "
+					+ "We're taking the bail money and kicking you out!" );
+			currentPlayer.setIsInJail(false);
+		}
+				
 		if (currentPlayer.isInJail) {
 			System.out.println(currentPlayer.getName() + " is in Jail");
+			
+			// if this is players 3rd turn in jail
+			// subtract 500K and set them free
+
+			
 			gamePane.setMessagePanelText("You're in Jail.");
 			gamePane.addMessagePanelText("You can try your luck with the dice or...");
 				
@@ -236,6 +260,7 @@ public class GameMaster {
 		}
 	}
 	
+
 	public void setGameStateMachine(GameStateMachine gsm) {
 		gameStateMachine = gsm;
 	}

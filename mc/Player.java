@@ -6,22 +6,25 @@ public class Player {
 	String name;
 	int index;
 	
+	Square currentSquare;
+	
 	double cash = 37.7;
 	int position = 0;
 	int numDoubles = 0;
 	int turnsInJail = 0;
 
 	boolean rolledDoubles = false;
-	boolean isInJail = true;
+	boolean isInJail = false;
 	boolean hasGetOutOfJailCard = true;
-	boolean hasRentDodgeCard = false;
-	boolean hasTaxiCard = false;
+	boolean hasRentDodgeCard = true;
+	boolean hasTaxiCard = true;
 	
 	ArrayList<District> districts;
 	
 	public Player(int index) {
 		this.name = "Player" + Integer.toString(index);
 		this.index = index;
+		currentSquare = GameMaster.getInstance().getBoard().getSquare(position);
 		districts = new ArrayList<District>();
 	}
 
@@ -50,8 +53,14 @@ public class Player {
 	}
 	
 	public int move(int delta) {
-		int newPosition = position + delta;
+		// use mod math to loop around the board
+		int newPosition = (getPosition() + delta) % 39;
+		// pay the player for passing Go
+		if (newPosition < position) {
+			collect(2);
+		}
 		position = newPosition;
+		currentSquare = GameMaster.getInstance().getBoard().getSquare(newPosition);
 		return newPosition;
 	}
 	
@@ -65,7 +74,11 @@ public class Player {
 	public void collect(double amount) {
 		cash = cash  + amount;
 	}
-		
+	
+	public Square getCurrentSquare() {
+		return currentSquare;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -97,17 +110,13 @@ public class Player {
 		// set player position to jail square
 		if (bool == true) {
 			setPosition(10);
-		} else {
-			stillInJail(false);
-		}
-	}
-	
-	public void stillInJail(boolean bool) {
-		if (bool = true) {
-			System.out.println("staying in Jail");
-			turnsInJail += 1;
+			turnsInJail +=1;
 		} else {
 			turnsInJail = 0;
+		}
+		
+		if (turnsInJail > 1) {
+			System.out.println("remaining in Jail");
 		}
 	}
 	
@@ -131,7 +140,7 @@ public class Player {
 		if (getCash() != getNetWorth()) {
 			string += "\nNetworth: " + getNetWorth();
 		}
-		if (districts != null) {
+		if (districts.size() > 0) {
 			string += "\nDistricts: " + districts.toString();
 		}
 		return string;

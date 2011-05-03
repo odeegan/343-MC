@@ -5,13 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
-
+import java.util.ArrayList;
 
 
 class GamePane extends JLayeredPane {
 
 	private static JPanel baseLayer;
-	private static JPanel playerTokensLayer;
+	private static PlayerTokensLayer playerTokensLayer;
 	private static JPanel squaresPanel;
 	private static JPanel mainHudPanel;
 	
@@ -38,15 +38,46 @@ class GamePane extends JLayeredPane {
 	
 	private static final GamePane GAMEPANE = new GamePane();
 	
-	public class PlayerToken extends JLabel {
+	public class PlayerTokensLayer extends JPanel {
 		
-		public PlayerToken() {
-			setPreferredSize(new Dimension(20,20));
-			setBounds(0,0,20,20);
-			setBorder(BorderFactory.createLineBorder(Color.blue));
-			setBackground(Color.blue);
-			setOpaque(true);
+		ArrayList<String> tokens;
+		
+		public class PlayerToken extends JLabel {
+			
+			public PlayerToken() {
+				tokens = new ArrayList<String>();
+				tokens.add("images/lightblueToken.png");
+				tokens.add("images/greenToken.png");
+				tokens.add("images/yellowToken.png");
+				tokens.add("images/orangeToken.png");
+				tokens.add("images/redToken.png");
+				tokens.add("images/blueToken.png");
+				setPreferredSize(new Dimension(20,20));
+				setBounds(0,0,20,20);
+				//setOpaque(true);
+			}
 		}
+		
+		public PlayerTokensLayer() {
+			setLayout(null);
+			//setPreferredSize(new Dimension(812,768));
+			setOpaque(false);
+			setBounds(0, 0, 768, 768);
+		}
+		
+		public void update() {
+			removeAll();
+			int i = 0;
+			ArrayList<Player> players = GameMaster.getInstance().getPlayers();
+			for (Player player: players) {
+				PlayerToken token = new PlayerToken();
+				token.setIcon(new ImageIcon(tokens.get(i++)));
+				token.setBounds(player.getCurrentSquare().getX(), 
+							player.getCurrentSquare().getY(), 45, 45);
+				add(token);
+			}
+		}
+		
 	}
 	
 	public class GetOutOfJailButton extends JButton {
@@ -56,7 +87,7 @@ class GamePane extends JLayeredPane {
 		    //setRolloverIcon(new ImageIcon("images/getOutOfJailFreeRollOver.png"));
 		   //setRolloverEnabled(false);
 		    setText("Get out of Jail");
-			setPreferredSize(new Dimension(118, 74));
+			setPreferredSize(new Dimension(120, 74));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
@@ -74,7 +105,7 @@ class GamePane extends JLayeredPane {
 		    //setIcon(new ImageIcon("images/rentDodge.png"));
 		    //setRolloverIcon(new ImageIcon("images/rentDodgeRollOver.png"));
 		    //setRolloverEnabled(true);
-			setPreferredSize(new Dimension(118, 74));
+			setPreferredSize(new Dimension(120, 74));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
@@ -92,7 +123,7 @@ class GamePane extends JLayeredPane {
 			//setIcon(new ImageIcon("images/taxi.png"));
 		    //setRolloverIcon(new ImageIcon("images/taxiRollOver.png"));
 		    //setRolloverEnabled(true);
-			setPreferredSize(new Dimension(118, 74));
+			setPreferredSize(new Dimension(120, 74));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
@@ -128,6 +159,7 @@ class GamePane extends JLayeredPane {
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
 							System.out.println("User clicked Build");
+							enableButton(getRollDiceButton());
 						}
 					});
 		}
@@ -163,6 +195,9 @@ class GamePane extends JLayeredPane {
 		public void update() {
 			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
 			playerDetails.setText(currentPlayer.getDetails());
+			playerDetails.setFont(new Font("Verdana", Font.BOLD, 14));
+			playerDetails.setLineWrap(true);
+			playerDetails.setWrapStyleWord(true);
 			playerDetails.setBounds(5, 5, 360, 160);
 			playerDetails.setOpaque(false);
 			revalidate();
@@ -187,8 +222,10 @@ class GamePane extends JLayeredPane {
 		public void update() {
 			Board board = GameMaster.getInstance().getBoard();
 			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
-			Square currentSquare = board.getSquare(currentPlayer.getPosition());
-			squareDetails.setText(currentSquare.toString());
+			squareDetails.setText(currentPlayer.getCurrentSquare().toString());
+			squareDetails.setFont(new Font("Verdana", Font.BOLD, 14));
+			squareDetails.setLineWrap(true);
+			squareDetails.setWrapStyleWord(true);
 			squareDetails.setBounds(5, 5, 360, 160);
 			squareDetails.setOpaque(false);
 			revalidate();
@@ -202,6 +239,7 @@ class GamePane extends JLayeredPane {
 		JPanel textPanel;
 		JPanel buttonPanel;
 		String formattedString;
+		JTextArea textArea;
 		
 		public MessagePanel() {
 			setLayout(new BorderLayout());
@@ -222,15 +260,19 @@ class GamePane extends JLayeredPane {
 		
 		public void setText(String str) {
 			textPanel.removeAll();
-			addText(str);
+			JTextArea textArea = new JTextArea(str);
+			textArea.setPreferredSize(new Dimension(350,250));
+			textArea.setFont(new Font("Verdana", Font.BOLD, 14));
+			textArea.setLineWrap(true);
+			textArea.setWrapStyleWord(true);
+			textArea.setOpaque(false);
+			textPanel.add(textArea);
+			textPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		}
 		
 		
 		public void addText(String str) {
-			JLabel newLabel = new JLabel(str);
-			newLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			textPanel.add(newLabel, "wrap");
-			textPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+			textArea.setText(textArea.getText() + "\n" + str);
 			redraw();
 		}
 		
@@ -245,6 +287,7 @@ class GamePane extends JLayeredPane {
 		}
 	}
 	
+	
 	private GamePane() {
 		
 		baseLayer = new JPanel(new BorderLayout());
@@ -258,14 +301,9 @@ class GamePane extends JLayeredPane {
 		board.setPreferredSize(new Dimension(768,768));
 		board.setOpaque(true);
 			
-		playerTokensLayer = new JPanel();
-		playerTokensLayer.setLayout(null);
-		//playerTokensLayer.setPreferredSize(new Dimension(812,768));
-		playerTokensLayer.setOpaque(false);
-		playerTokensLayer.setBounds(0, 0, 768, 768);
-		
-		playerTokensLayer.add(new PlayerToken(), BorderLayout.SOUTH);
-		
+		playerTokensLayer = new PlayerTokensLayer();
+		//playerTokensLayer = new JPanel();
+			
 		mainHudPanel = new JPanel();
 		mainHudPanel.setLayout(null);
 		mainHudPanel.setPreferredSize(new Dimension(432,768));
@@ -288,7 +326,7 @@ class GamePane extends JLayeredPane {
 		buildButton = new BuildButton();
 		endTurnButton = new EndTurnButton();
 		
-		hudButtonPanel = new JPanel(new MigLayout());
+		hudButtonPanel = new JPanel();
 		hudButtonPanel.setBounds(0, 401, 432, 50);
 		hudButtonPanel.add(rollDiceButton);
 		hudButtonPanel.add(buildButton);
@@ -395,6 +433,7 @@ class GamePane extends JLayeredPane {
 	public void update() {
 		currentPlayerPanel.update();
 		currentSquarePanel.update();
+		playerTokensLayer.update();
 		revalidate();
 		repaint();
 	}
