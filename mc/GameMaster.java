@@ -190,10 +190,18 @@ public class GameMaster {
 	}
 	
 	public void setNumPlayers(int numPlayers) {
+		ArrayList<String> tokens = new ArrayList<String>();
+		tokens.add("images/lightblueToken.png");
+		tokens.add("images/greenToken.png");
+		tokens.add("images/yellowToken.png");
+		tokens.add("images/orangeToken.png");
+		tokens.add("images/redToken.png");
+		tokens.add("images/blueToken.png");
 		System.out.println("Creating " + numPlayers + " players");
 		int ii;
 		for (ii=0; ii <= numPlayers; ii++) {
 			players.add(new Player(ii));
+			players.get(ii).setTokenFile(tokens.get(ii));
 		}
 		//set the current player to the first in the index
 		System.out.println("setting current player to 0");

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 class GamePane extends JLayeredPane {
@@ -40,18 +41,11 @@ class GamePane extends JLayeredPane {
 	
 	public class PlayerTokensLayer extends JPanel {
 		
-		ArrayList<String> tokens;
+		ArrayList<JLabel> playerTokens;
 		
 		public class PlayerToken extends JLabel {
 			
 			public PlayerToken() {
-				tokens = new ArrayList<String>();
-				tokens.add("images/lightblueToken.png");
-				tokens.add("images/greenToken.png");
-				tokens.add("images/yellowToken.png");
-				tokens.add("images/orangeToken.png");
-				tokens.add("images/redToken.png");
-				tokens.add("images/blueToken.png");
 				setPreferredSize(new Dimension(20,20));
 				setBounds(0,0,20,20);
 				//setOpaque(true);
@@ -63,18 +57,32 @@ class GamePane extends JLayeredPane {
 			//setPreferredSize(new Dimension(812,768));
 			setOpaque(false);
 			setBounds(0, 0, 768, 768);
+			playerTokens = new ArrayList<JLabel>();
+
 		}
 		
 		public void update() {
 			removeAll();
-			int i = 0;
-			ArrayList<Player> players = GameMaster.getInstance().getPlayers();
-			for (Player player: players) {
-				PlayerToken token = new PlayerToken();
-				token.setIcon(new ImageIcon(tokens.get(i++)));
-				token.setBounds(player.getCurrentSquare().getX(), 
-							player.getCurrentSquare().getY(), 45, 45);
-				add(token);
+
+			Player player = GameMaster.getInstance().getCurrentPlayer();
+			Random r = new Random();			
+
+			PlayerToken token = new PlayerToken();
+			token.setToolTipText(player.getName());
+			token.setIcon(new ImageIcon(player.getTokenFile()));
+			token.setBounds(player.getCurrentSquare().getX() + r.nextInt(20) , 
+							player.getCurrentSquare().getY() + r.nextInt(15), 45, 45);
+			if (playerTokens.size() == player.getIndex()) {
+				playerTokens.add(token);
+
+			} else {
+				playerTokens.set(player.getIndex(), token);
+
+			}
+			
+
+			for (JLabel label: playerTokens) {
+					add(label);
 			}
 		}
 		
@@ -83,9 +91,9 @@ class GamePane extends JLayeredPane {
 	public class GetOutOfJailButton extends JButton {
 		
 		public GetOutOfJailButton() {
-		    //setIcon(new ImageIcon("images/getOutOfJailFree.png"));
+			//setIcon(new ImageIcon("images/getOutOfJailFree.png"));
 		    //setRolloverIcon(new ImageIcon("images/getOutOfJailFreeRollOver.png"));
-		   //setRolloverEnabled(false);
+		    //setRolloverEnabled(false);
 		    setText("Get out of Jail");
 			setPreferredSize(new Dimension(120, 74));
 			addActionListener(
@@ -184,16 +192,20 @@ class GamePane extends JLayeredPane {
 	public class CurrentPlayerPanel extends JPanel {
 		
 		JTextArea playerDetails;
+		JLabel playerToken;
 		
 		public CurrentPlayerPanel() {
 			setLayout(new MigLayout());
 			setPreferredSize(new Dimension(370,170));
+			playerToken = new JLabel();
 			playerDetails = new JTextArea();
-			add(playerDetails, "cell 0 0");			
+			add(playerToken, "cell 0 0");
+			add(playerDetails, "cell 1 0");			
 		}
 			
 		public void update() {
 			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
+			playerToken.setIcon(new ImageIcon(currentPlayer.getTokenFile()));
 			playerDetails.setText(currentPlayer.getDetails());
 			playerDetails.setFont(new Font("Verdana", Font.BOLD, 14));
 			playerDetails.setLineWrap(true);

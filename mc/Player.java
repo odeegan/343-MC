@@ -8,6 +8,8 @@ public class Player {
 	
 	Square currentSquare;
 	
+	String tokenFile;
+	
 	double cash = 37.7;
 	int position = 0;
 	int numDoubles = 0;
@@ -123,6 +125,14 @@ public class Player {
 	public void setPosition(int index) {
 		System.out.println("Setting " + name + " position to " + index);
 		position = index;
+	}
+	
+	public void setTokenFile(String str) {
+		tokenFile = str;	
+	}
+	
+	public String getTokenFile() {
+		return tokenFile;
 	}
 	
 	public ArrayList<District> getDistricts() {
