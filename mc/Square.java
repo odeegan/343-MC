@@ -4,8 +4,10 @@ public class Square {
 
 	int position;
 	SQUARETYPE type;
-	String name;
 	SquareBehavior squareBehavior;
+	
+	int xx;
+	int yy;
 	
 	public Square(){
 	}
@@ -19,11 +21,7 @@ public class Square {
 	}
 	
 	public String getName() {
-		if(type == SQUARETYPE.DISTRICT) {
-			return name;
-		} else {
-			return type.getName();
-		}
+		return type.getName();
 	}
 	
 	public void performBehavior() {
@@ -33,4 +31,29 @@ public class Square {
 	public void setSquareBehavior(SquareBehavior sb) {
 		squareBehavior = sb;
 	}
+	
+	public void setX(int xx) {
+		this.xx = xx;
+	}
+	
+	public void setY(int yy) {
+		this.yy = yy;
+	}
+	
+	public int getX() {
+		return xx;
+	}
+	
+	public int getY() {
+		return yy;
+	}
+	
+	/*
+	 * Override the standard toString message.
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {		
+		return getName();
+	}
+	
 }

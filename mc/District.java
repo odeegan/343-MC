@@ -27,32 +27,23 @@ public class District extends Square {
 	boolean railroad = false;
 	boolean skyscraper = false;
 
-	int residentialCost;
-	int industrialCost;
-	int skyscraperCost;
+	double cost;
+	double residentialCost;
+	double industrialCost;
+	double skyscraperCost;
 	
-	public District (int position, String color, String name, int residentialCost, 
-			int industrialCost, int skyscraperCost) {
-		super();
-		this.position = position;
+	double[] rents;
+	
+	public District (String color, String name,  double cost) {
 		this.name = name;
 		this.color = color;
-		this.residentialCost = residentialCost;
-		this.industrialCost = industrialCost;
-		this.skyscraperCost = skyscraperCost;
-		// set the intial square behavior
-		// check out the super class 'Square' for more details
+		this.cost = cost;
 	}
 	
 	public String getColor() {
 		return color;
 	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	
+		
 	public void setOwner(Player owner) {
 		this.owner = owner;
 	}
@@ -61,13 +52,54 @@ public class District extends Square {
 		return owner;
 	}
 	
-	public int getRent() {
+	public void setRents(double zero, double one, double two, double three,
+						double four, double five, double six, double seven,
+						double eight) {
+
+		rents = new double[9];
+		rents[0] = zero;
+		rents[1] = one;
+		rents[2] = two;
+		rents[3] = three;
+		rents[4] = four;
+		rents[5] = five;
+		rents[6] = six;
+		rents[7] = seven;
+		rents[8] = eight;
+	}
+	
+	public void setResidentialCost(double rc) {
+		this.residentialCost = rc;
+	}
+	
+	public void setIndustrialCost(double ic) {
+		this.industrialCost = ic;
+	}
+	
+	public void setSkyScraperCost(double sc) {
+		this.skyscraperCost = sc;
+	}
+	
+	public double getCost() {
+		return cost;
+	}
+	
+	
+	public String getName() {
+		return name;
+	}
+	
+	public double getRent() {
 		// calculate rent based on buildings, hazards, etc.
-		return 0;
+		if (hazard != null) {
+			return 0;
+		} else {
+			return new Double(rents[residentialBlockCount + industrialBlockCount]);
 		}
+	}	
 	
 	
-	public int getMortgageValue() {
+	public double getMortgageValue() {
 		return getRent();
 	}
 	
@@ -86,5 +118,19 @@ public class District extends Square {
 	public boolean isSkyScrapered() {
 		return skyscraper;
 	}
+	
+	public String toString() {
+		String string = new String("");
+		string += "Name: " + getName(); 
+		if (owner != null) {
+			string += "\nOwner: " + owner;
+			string += "\nCurrent Rent: " + getRent();
+		} else {
+			string += "\nCost: " + Double.toString(getCost());
+		}
+		
+		return string;
+	}
+
 	
 }

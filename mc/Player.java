@@ -6,22 +6,27 @@ public class Player {
 	String name;
 	int index;
 	
-	int cash = 37700000;
+	Square currentSquare;
+	
+	String tokenFile;
+	
+	double cash = 37.7;
 	int position = 0;
 	int numDoubles = 0;
 	int turnsInJail = 0;
 
 	boolean rolledDoubles = false;
-	boolean isInJail = true;
-	boolean hasGetOutOfJailCard = false;
-	boolean hasRentDodgeCard = false;
-	boolean hasTaxiCard = false;
+	boolean isInJail = false;
+	boolean hasGetOutOfJailCard = true;
+	boolean hasRentDodgeCard = true;
+	boolean hasTaxiCard = true;
 	
 	ArrayList<District> districts;
 	
 	public Player(int index) {
 		this.name = "Player" + Integer.toString(index);
 		this.index = index;
+		currentSquare = GameMaster.getInstance().getBoard().getSquare(position);
 		districts = new ArrayList<District>();
 	}
 
@@ -29,10 +34,9 @@ public class Player {
 		districts.add(district);
 	}
 	
-	public int getCash() {
+	public double getCash() {
 		return cash;
 	}
-	
 	
 	/*
 	 * returns the index of the player in the 
@@ -46,36 +50,51 @@ public class Player {
 		return position;
 	}
 	
+	public int getTurnsInJail() {
+		return turnsInJail;
+	}
+	
 	public int move(int delta) {
-		int newPosition = position + delta;
-		
-		// insert logic to check if player has passed Go
-		// deal with Chance Cards and squares that prevent
-		// the player from collecting $200
-		
+		// use mod math to loop around the board
+		int newPosition = (getPosition() + delta) % 39;
+		// pay the player for passing Go
+		if (newPosition < position) {
+			collect(2);
+		}
 		position = newPosition;
+		currentSquare = GameMaster.getInstance().getBoard().getSquare(newPosition);
 		return newPosition;
 	}
 	
-	public void pay(int amount) {
+	public void pay(double amount) {
 		cash = cash - amount;
 		// insert logic to check for bankruptcy or
 		// figure out when to check if a player can't afford something
 		// do we put it here, or in the logic before this method gets called?
 	}
 		
-	public void collect(int amount) {
+	public void collect(double amount) {
 		cash = cash  + amount;
 	}
-		
+	
+	public Square getCurrentSquare() {
+		return currentSquare;
+	}
+	
 	public String getName() {
 		return name;
 	}
 	
-	public int getNetWorth() {
+	public Double getNetWorth() {
 		// logic to calculate a players networth
 		// cash + mortgage value of districts
-		return 0;
+		int i;
+		Double sum = 0.0;
+		for (i=0; i < districts.size(); i++) {
+			sum += districts.get(i).getRent();
+		}
+		sum += getCash();
+		return sum;
 	}
 	
 	public void setDoubles(boolean bool) {
@@ -93,6 +112,13 @@ public class Player {
 		// set player position to jail square
 		if (bool == true) {
 			setPosition(10);
+			turnsInJail +=1;
+		} else {
+			turnsInJail = 0;
+		}
+		
+		if (turnsInJail > 1) {
+			System.out.println("remaining in Jail");
 		}
 	}
 	
@@ -101,12 +127,37 @@ public class Player {
 		position = index;
 	}
 	
+	public void setTokenFile(String str) {
+		tokenFile = str;	
+	}
+	
+	public String getTokenFile() {
+		return tokenFile;
+	}
+	
 	public ArrayList<District> getDistricts() {
 		return districts;
 	}
 	
 	public int getNumDoubles() {
 		return numDoubles;
+	}
+	
+	public String getDetails() {
+		String string = new String("");
+		string += "Name: " + getName(); 
+		string += "\nCash: " + Double.toString(getCash());
+		if (getCash() != getNetWorth()) {
+			string += "\nNetworth: " + getNetWorth();
+		}
+		if (districts.size() > 0) {
+			string += "\nDistricts: " + districts.toString();
+		}
+		return string;
+	}
+	
+	public String toString() {
+		return getName();
 	}
 	
 }

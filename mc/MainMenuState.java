@@ -77,7 +77,8 @@ public class MainMenuState implements GameState{
 	                //Execute when button is pressed
 	            	JButton btn = (JButton)e.getSource();
 	            	System.out.println("Players Selected = " + btn.getText());
-	            	GameMaster.getInstance().setNumPlayers(Integer.parseInt(btn.getText()));
+	            	// subtract one because there is a player 0
+	            	GameMaster.getInstance().setNumPlayers(Integer.parseInt(btn.getText()) - 1);
 	            	gameStateMachine.setState(gameStateMachine.getGamePlayState());
 	            }
 			});

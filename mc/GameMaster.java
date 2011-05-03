@@ -65,6 +65,8 @@ public class GameMaster {
 		System.out.println("--------------------------------");
 		System.out.println("STARTING " + currentPlayer.getName() + " turn");
 		System.out.println("--------------------------------");
+		System.out.println("turns in jail = " 
+					+ Integer.toString(currentPlayer.getTurnsInJail()));
 		testIfPlayerIsInJail();
 	}
 	
@@ -92,7 +94,7 @@ public class GameMaster {
 	
 	public void checkSquare(int roll) {
 		System.out.println("checking square");
-		Square newSquare = board.getSquare(currentPlayer.getPosition() + roll);
+		Square newSquare = board.getSquare(currentPlayer.move(roll));
 		System.out.println(currentPlayer.getName() + " landed on "
 					+ newSquare.getName());
 
@@ -106,6 +108,7 @@ public class GameMaster {
 		gamePane.disableButton(gamePane.getTaxiButton());
 		if (currentPlayer.hasGetOutOfJailCard) {
 			gamePane.showButton(gamePane.getGetOutOfJailButton());
+			gamePane.disableButton(gamePane.getGetOutOfJailButton());
 		}
 		if (currentPlayer.hasRentDodgeCard) {
 			gamePane.showButton(gamePane.getRentDodgeButton());
@@ -131,12 +134,19 @@ public class GameMaster {
 			currentPlayer.setDoubles(true);
 			if (currentPlayer.isInJail) {
 				gamePane.setMessagePanelText("DOUBLES !    " 
-						+ currentPlayer.getName() + " is a free man.");	
+						+ currentPlayer.getName() + " is a free man.");
+				// free the player
+				currentPlayer.setIsInJail(false);
+				// clear the doubles counter
+				currentPlayer.setDoubles(false);
 			}
 			if (currentPlayer.getNumDoubles() > 2) {
 				System.out.println("Send Player" + 
 						currentPlayer.getIndex() + " to Jail");
+				// send player to jail
 				currentPlayer.setIsInJail(true);
+				// disable build button when player is sent directly to jail
+				gamePane.disableButton(gamePane.getBuildButton());
 				gamePane.setMessagePanelText(
 						"You rolled doubles 3 times! You're going to JAIL!");
 				JButton button = new JButton("Cuff Me");
@@ -145,18 +155,24 @@ public class GameMaster {
 							public void actionPerformed(ActionEvent event) {
 								endTurn();
 							}
-						});
-			} else {
+				});
+			}
+			// rolled doubles, has not rolled doubles three times
+			// and is not in jail
+			if (!currentPlayer.isInJail) {					
 				checkSquare(dice[0] + dice[1]);
 			}
+			
 		} else {
 			if (currentPlayer.isInJail) {
 				gamePane.setMessagePanelText("Better luck next time.");
+				currentPlayer.setIsInJail(true);
 			} else {
 			currentPlayer.setDoubles(false);
 			checkSquare(dice[0] + dice[1]);
 			}
 		}
+		gamePane.update();
 	}
 		
 	public int[] rollDice() {
@@ -174,21 +190,45 @@ public class GameMaster {
 	}
 	
 	public void setNumPlayers(int numPlayers) {
+		ArrayList<String> tokens = new ArrayList<String>();
+		tokens.add("images/lightblueToken.png");
+		tokens.add("images/greenToken.png");
+		tokens.add("images/yellowToken.png");
+		tokens.add("images/orangeToken.png");
+		tokens.add("images/redToken.png");
+		tokens.add("images/blueToken.png");
 		System.out.println("Creating " + numPlayers + " players");
 		int ii;
 		for (ii=0; ii <= numPlayers; ii++) {
 			players.add(new Player(ii));
+			players.get(ii).setTokenFile(tokens.get(ii));
 		}
 		//set the current player to the first in the index
 		System.out.println("setting current player to 0");
 		currentPlayer = players.get(0);
 	}
 	
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+	
 	public void testIfPlayerIsInJail() {
+		if (currentPlayer.turnsInJail > 2) {
+			currentPlayer.pay(.5);
+			gamePane.setMessagePanelText("You've sat in Jail long enough. "
+					+ "We're taking the bail money and kicking you out!" );
+			currentPlayer.setIsInJail(false);
+		}
+				
 		if (currentPlayer.isInJail) {
 			System.out.println(currentPlayer.getName() + " is in Jail");
-			gamePane.setMessagePanelText("You're in Jail. Would you like" 
-					+ " to...");
+			
+			// if this is players 3rd turn in jail
+			// subtract 500K and set them free
+
+			
+			gamePane.setMessagePanelText("You're in Jail.");
+			gamePane.addMessagePanelText("You can try your luck with the dice or...");
 				
 			JButton postBailButton = new JButton("Pay $500K");
 			postBailButton.addActionListener(
@@ -197,7 +237,8 @@ public class GameMaster {
 							gamePane.setMessagePanelText(
 									"You're a free man!");
 							currentPlayer.hasGetOutOfJailCard = false;
-							currentPlayer.pay(500000);
+							currentPlayer.pay(.5);
+							currentPlayer.setIsInJail(false);
 							gamePane.hideButton(gamePane.getGetOutOfJailButton());
 							gamePane.disableButton(gamePane.getRollDiceButton());
 							gamePane.enableButton(gamePane.getEndTurnButton());
@@ -211,29 +252,23 @@ public class GameMaster {
 						public void actionPerformed(ActionEvent event) {
 							gamePane.setMessagePanelText(
 									"You're a free man!");
+							currentPlayer.setIsInJail(false);
 							currentPlayer.hasGetOutOfJailCard = false;
 							gamePane.hideButton(gamePane.getGetOutOfJailButton());
 							gamePane.disableButton(gamePane.getRollDiceButton());
 							gamePane.enableButton(gamePane.getEndTurnButton());
+							gamePane.update();
+						}
+					});
 
-						}
-					});
-			JButton hopeForDoublesButton = new JButton("Neither");
-			hopeForDoublesButton.addActionListener(
-					new ActionListener() {
-						public void actionPerformed(ActionEvent event) {
-							gamePane.setMessagePanelText(
-									"Better hope you roll doubles!");
-						}
-					});
 			if (currentPlayer.hasGetOutOfJailCard) {
 				gamePane.addMessagePanelButton(useCardButton);
 			}
 			gamePane.addMessagePanelButton(postBailButton);
-			gamePane.addMessagePanelButton(hopeForDoublesButton);
 		}
 	}
 	
+
 	public void setGameStateMachine(GameStateMachine gsm) {
 		gameStateMachine = gsm;
 	}
