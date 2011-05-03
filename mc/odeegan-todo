@@ -1,38 +1,18 @@
 
-select number of players
-init the game
-redraw the board
-start players turn
-prompt player to roll
-check square
-perform behavior
 
-WHAT IS DRAWABLE?
-board
-player
-score board
+chance cards
+	- when to display rent dodge
+	- when to display taxi
+	- taxi card logic
+	
+[ ] enable rent dodge card when someone lands on an owned district 
 
-
-
-<<<<<<< HEAD
-public class RollDiceMenu extends JPanel {
-		
-		public RollDiceMenu() {
-			setPreferredSize(new Dimension(450,200));
-			// make the background transparent
-			setOpaque(false);
-
-			JButton rollDiceButton = new JButton("Roll the Dice");
-			rollDiceButton.addActionListener(
-					new ActionListener() {
-						public void actionPerformed(ActionEvent event) {
-							GamePane.getInstance().getMessagePanel().removeAll();
-						}
-					});
-			add(rollDiceButton);
-		}
-	}
-=======
-Devil
-GOD
->>>>>>> origin/master
+[]	AUCTION("Auction"), 
+[]	PLANNINGPERMISSION("Planning Permission"), 
+[]	CHANCE("Chance"), 
+[]	DISTRICT("District"), 
+[]	FREEPARKING("Free Parking"),
+[]	INDUSTRYTAX("Industry Tax"),
+[x]	GO("G0"), 
+[x]	GOTOJAIL("Go To Jail!"),
+[X]	JAIL("Jail");

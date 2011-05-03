@@ -70,8 +70,8 @@ class GamePane extends JLayeredPane {
 			PlayerToken token = new PlayerToken();
 			token.setToolTipText(player.getName());
 			token.setIcon(new ImageIcon(player.getTokenFile()));
-			token.setBounds(player.getCurrentSquare().getX() + r.nextInt(20) , 
-							player.getCurrentSquare().getY() + r.nextInt(15), 45, 45);
+			token.setBounds(player.getCurrentSquare().getX() + r.nextInt(24) , 
+							player.getCurrentSquare().getY() + r.nextInt(18), 45, 45);
 			if (playerTokens.size() == player.getIndex()) {
 				playerTokens.add(token);
 
@@ -248,52 +248,49 @@ class GamePane extends JLayeredPane {
 	
 	public class MessagePanel extends JPanel {
 		
-		JPanel textPanel;
+		//JPanel textPanel;
 		JPanel buttonPanel;
-		String formattedString;
 		JTextArea textArea;
 		
 		public MessagePanel() {
 			setLayout(new BorderLayout());
-			setPreferredSize(new Dimension(350,250));
-			setBorder(BorderFactory.createLineBorder(Color.gray, 2));
-			setOpaque(true);
 			
-			textPanel = new JPanel(new MigLayout());
-			textPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
-			textPanel.setPreferredSize(new Dimension(350, 75));
+			//setPreferredSize(new Dimension(350,250));
+			setBorder(BorderFactory.createLineBorder(Color.black, 2));
+			setOpaque(true);
+			textArea = new JTextArea();
 
 			buttonPanel = new JPanel();
-			buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-
-			add(textPanel, BorderLayout.NORTH);
+			buttonPanel.setPreferredSize(new Dimension(300,50));
+			
+			
+			add(textArea, BorderLayout.NORTH);
 			add(buttonPanel, BorderLayout.SOUTH);
 		}
 		
 		public void setText(String str) {
-			textPanel.removeAll();
-			JTextArea textArea = new JTextArea(str);
-			textArea.setPreferredSize(new Dimension(350,250));
+			remove(textArea);
+			textArea = new JTextArea(str);
+			textArea.setPreferredSize(new Dimension(350,200));
+			textArea.setMargin(new Insets(8,8,8,8));
 			textArea.setFont(new Font("Verdana", Font.BOLD, 14));
 			textArea.setLineWrap(true);
 			textArea.setWrapStyleWord(true);
 			textArea.setOpaque(false);
-			textPanel.add(textArea);
-			textPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+			add(textArea);
 		}
 		
 		
 		public void addText(String str) {
-			textArea.setText(textArea.getText() + "\n" + str);
-			redraw();
+			String oldString = textArea.getText();
+			textArea.setText(oldString + "\n" + str);
+			textArea.revalidate();
+			textArea.repaint();
 		}
 		
 		public void addButton(JButton btn) {
+			//btn.setPreferredSize(new Dimension(120, 30));
 			buttonPanel.add(btn);
-			redraw();
-		}
-		
-		public void redraw() {
 			buttonPanel.revalidate();
 			buttonPanel.repaint();
 		}
@@ -314,7 +311,6 @@ class GamePane extends JLayeredPane {
 		board.setOpaque(true);
 			
 		playerTokensLayer = new PlayerTokensLayer();
-		//playerTokensLayer = new JPanel();
 			
 		mainHudPanel = new JPanel();
 		mainHudPanel.setLayout(null);
@@ -390,11 +386,12 @@ class GamePane extends JLayeredPane {
 	public void setMessagePanelText(String str) {
 		clearMessageLayer();
 		messagePanel = new MessagePanel();
-		messageLayer.add(messagePanel);
 		messagePanel.setText(str);
+		messageLayer.add(messagePanel);
 	}
 	
 	public void addMessagePanelText(String str) {
+		System.out.println("adding text");
 		messagePanel.addText(str);
 	}
 	

@@ -84,6 +84,13 @@ public class District extends Square {
 		return cost;
 	}
 	
+	public int getIndustrialBlockCount() {
+		return industrialBlockCount;
+	}
+	
+	public int getResidentialBlockCount() {
+		return residentialBlockCount;
+	}
 	
 	public String getName() {
 		return name;

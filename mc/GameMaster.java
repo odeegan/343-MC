@@ -10,7 +10,6 @@ import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;
 
 
-
 public class GameMaster {
 
 	GamePane gamePane;
@@ -98,14 +97,25 @@ public class GameMaster {
 		System.out.println(currentPlayer.getName() + " landed on "
 					+ newSquare.getName());
 
-		//newSquare.performBehavior();
+	
+		if (currentPlayer.hasTaxiCard) {
+			
+			gamePane.enableButton(gamePane.getTaxiButton());
+			gamePane.setMessagePanelText("You landed on ");
+		} else {
+			newSquare.performBehavior();
+		}
+		
 	}
 	
 	public void displayPlayerChanceCards() {
 		gamePane.hideButton(gamePane.getGetOutOfJailButton());
 		gamePane.hideButton(gamePane.getRentDodgeButton());
 		gamePane.hideButton(gamePane.getTaxiButton());
+		// these buttons will be enabled when appropriate
 		gamePane.disableButton(gamePane.getTaxiButton());
+		gamePane.disableButton(gamePane.getRentDodgeButton());
+		gamePane.disableButton(gamePane.getGetOutOfJailButton());
 		if (currentPlayer.hasGetOutOfJailCard) {
 			gamePane.showButton(gamePane.getGetOutOfJailButton());
 			gamePane.disableButton(gamePane.getGetOutOfJailButton());
@@ -186,6 +196,7 @@ public class GameMaster {
 	public void endTurn() {
 		currentPlayer = getNextPlayer();
 		gamePane.clearMessageLayer();
+		gamePane.update();
 		startTurn();
 	}
 	

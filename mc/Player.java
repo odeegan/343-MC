@@ -17,7 +17,7 @@ public class Player {
 
 	boolean rolledDoubles = false;
 	boolean isInJail = false;
-	boolean hasGetOutOfJailCard = true;
+	boolean hasGetOutOfJailCard = false;
 	boolean hasRentDodgeCard = true;
 	boolean hasTaxiCard = true;
 	
@@ -26,7 +26,7 @@ public class Player {
 	public Player(int index) {
 		this.name = "Player" + Integer.toString(index);
 		this.index = index;
-		currentSquare = GameMaster.getInstance().getBoard().getSquare(position);
+		currentSquare = GameMaster.getInstance().getBoard().getSquare(0);
 		districts = new ArrayList<District>();
 	}
 
@@ -62,8 +62,8 @@ public class Player {
 			collect(2);
 		}
 		position = newPosition;
-		currentSquare = GameMaster.getInstance().getBoard().getSquare(newPosition);
-		return newPosition;
+		setCurrentSquare(position);
+		return position;
 	}
 	
 	public void pay(double amount) {
@@ -79,6 +79,10 @@ public class Player {
 	
 	public Square getCurrentSquare() {
 		return currentSquare;
+	}
+	
+	public void setCurrentSquare(int index) {
+		currentSquare = GameMaster.getInstance().getBoard().getSquare(index);
 	}
 	
 	public String getName() {
@@ -125,6 +129,8 @@ public class Player {
 	public void setPosition(int index) {
 		System.out.println("Setting " + name + " position to " + index);
 		position = index;
+		setCurrentSquare(position);
+		
 	}
 	
 	public void setTokenFile(String str) {
