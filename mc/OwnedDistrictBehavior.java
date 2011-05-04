@@ -25,7 +25,7 @@ public class OwnedDistrictBehavior implements SquareBehavior {
 					}
 				});
 		
-		gamePane.addMessagePanelText("You landed on an Owned District.");
+		gamePane.setMessagePanelText("You landed on an Owned District.");
 
 		if (district.getRent() != 0) {
 			gamePane.addMessagePanelText( 

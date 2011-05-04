@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 public class FreeParkingBehavior implements SquareBehavior {
 
-	public FreeParkingBehavior() {
-		// TODO Auto-generated constructor stub
-	}
+	public FreeParkingBehavior() {}
 
 	@Override
 	public void execute() {
@@ -16,7 +14,7 @@ public class FreeParkingBehavior implements SquareBehavior {
 		ArrayList<Player> players = GameMaster.getInstance().getPlayers();
 		
 		for (Player player : players) {
-			if (player.hasRentDodgeCard) {
+			if (player.hasRentDodgeCard == true) {
 				if (GameMaster.getInstance().getCurrentPlayer() != player) {
 					GamePane.getInstance().setMessagePanelText("Free Parking!"
 							+ " you get to take the RentDodge card from "
@@ -27,8 +25,7 @@ public class FreeParkingBehavior implements SquareBehavior {
 				}
 			} else {
 				GamePane.getInstance().setMessagePanelText("Free Parking!"
-						+ " you get to take the RentDodge card from "
-						+ player.getName());
+						+ " you get to take the Rent Dodge Card!");
 			}
 			player.hasRentDodgeCard = false;
 		}
