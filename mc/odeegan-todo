@@ -6,9 +6,10 @@
 
 
 []	PLANNINGPERMISSION("Planning Permission"), 
-[]	CHANCE("Chance"), 
-[] owned district
-	[] enable rent dodge card when someone lands on an owned district 
+[]	CHANCE("Chance")
+ 
+[X] owned district
+	[x] enable rent dodge card when someone lands on an owned district 
 [x]	unowned district
 [x]	FREEPARKING("Free Parking"),
 [x]	INDUSTRYTAX("Industry Tax"),
@@ -16,11 +17,12 @@
 [x]	GOTOJAIL("Go To Jail!"),
 [X]	JAIL("Jail");
 
-
+[ ] get "select district" working
+[ ] railroads
 [ ] display all players' networth
-[ ] only print out the names of districts I own
 [ ] create roll over for district select layer
 [ ] put a colored marker on properties that are owned (use the same color as the player)
+
 
 [ ] bankruptcy
 [ ] pay method should determine if player has enough

@@ -20,10 +20,10 @@ public class Player {
 
 	boolean rolledDoubles = false;
 	boolean isInJail = false;
-	boolean hasGetOutOfJailCard = true;
-	boolean hasRentDodgeCard = true;
+	boolean hasGetOutOfJailCard = false;
+	boolean hasRentDodgeCard = false;
 	boolean hasTaxiCard = false;
-	boolean hasTaxDodgeCard = true;
+	boolean hasTaxDodgeCard = false;
 	
 	ArrayList<District> districts;
 	

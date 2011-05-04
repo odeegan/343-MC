@@ -217,6 +217,12 @@ public class GameMaster {
 		return dice;
 	}
 	
+	public void useRentDodgeCard() {
+		currentPlayer.hasRentDodgeCard = false;
+		gamePane.hideButton(gamePane.getTaxiButton());
+		gamePane.clearMessageLayer();
+	}
+	
 	public void useTaxiCard() {
 		currentPlayer.hasTaxiCard = false;
 		gamePane.hideButton(gamePane.getTaxiButton());

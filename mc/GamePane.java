@@ -3,17 +3,21 @@ package mc;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import java.util.ArrayList;
 import java.util.Random;
+import java.awt.image.*;
 
 
 class GamePane extends JLayeredPane {
 
 	private static JPanel baseLayer;
 	private static PlayerTokensLayer playerTokensLayer;
-	private static JPanel squaresPanel;
+	private static DistrictRollOverPanel districtRollOverPanel;
 	private static JPanel mainHudPanel;
 	
 	private static JPanel messageLayer;
@@ -39,6 +43,59 @@ class GamePane extends JLayeredPane {
 	
 	
 	private static final GamePane GAMEPANE = new GamePane();
+
+	public class DistrictRollOverPanel extends JPanel {
+		
+		ArrayList<JLabel> playerTokens;
+		
+		DistrictLabel label;
+		
+		public class DistrictLabel extends JLabel {
+			
+			private class MouseHandler implements MouseListener {
+				public void mouseClicked(MouseEvent event) {}
+				public void mousePressed(MouseEvent e) {
+					label.setText(String.format("[%d, %d]", e.getX(), e.getY()));
+					setIcon(new ImageIcon("images/buttonSelect.png"));
+
+				}
+				public void mouseReleased(MouseEvent e) {
+					setIcon(new ImageIcon("images/buttonOver.png"));
+				}
+				public void mouseEntered(MouseEvent e) {
+					setIcon(new ImageIcon("images/buttonOver.png"));
+				}
+				public void mouseExited(MouseEvent e) {
+					setIcon(new ImageIcon());
+
+				}
+				
+			}
+
+
+			public DistrictLabel() {
+				setBounds(478, 664, 62, 104);
+				//setBorder(BorderFactory.createLineBorder(Color.blue));
+				setOpaque(false);
+				MouseHandler handler = new MouseHandler();
+				addMouseListener(handler);
+				
+				
+
+				
+			}
+		}
+		
+		public DistrictRollOverPanel() {
+			setLayout(null);
+			//setPreferredSize(new Dimension(812,768));
+			setOpaque(false);
+			setBounds(0, 0, 768, 768);
+			label = new DistrictLabel();
+			add(label);
+		}
+	
+	}
 	
 	public class PlayerTokensLayer extends JPanel {
 		
@@ -72,7 +129,9 @@ class GamePane extends JLayeredPane {
 			PlayerToken token = new PlayerToken();
 			token.setToolTipText(player.getName());
 			token.setIcon(new ImageIcon(player.getTokenFile()));
-			token.setBounds(currentSquare.getX() + r.nextInt(24) , 
+			// draw the player token with a random offset to allow 
+			// pieces occupying the same square to be seen
+			token.setBounds(currentSquare.getX() + r.nextInt(21) , 
 							currentSquare.getY() + r.nextInt(18), 45, 45);
 			if (playerTokens.size() == player.getIndex()) {
 				playerTokens.add(token);
@@ -138,6 +197,7 @@ class GamePane extends JLayeredPane {
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
 							System.out.println("used Rent Dodge Card");
+							GameMaster.getInstance().useRentDodgeCard();
 							//setEnabled(false);
 						}
 					});
@@ -230,7 +290,7 @@ class GamePane extends JLayeredPane {
 			playerDetails.setFont(new Font("Verdana", Font.BOLD, 14));
 			playerDetails.setLineWrap(true);
 			playerDetails.setWrapStyleWord(true);
-			playerDetails.setBounds(5, 5, 360, 160);
+			playerDetails.setBounds(0, 0, 370, 170);
 			playerDetails.setOpaque(false);
 			revalidate();
 			repaint();
@@ -292,8 +352,8 @@ class GamePane extends JLayeredPane {
 			remove(textArea);
 			textArea = new JTextArea(str);
 			textArea.setPreferredSize(new Dimension(350,200));
-			textArea.setMargin(new Insets(8,8,8,8));
-			textArea.setFont(new Font("Verdana", Font.BOLD, 14));
+			textArea.setMargin(new Insets(10,10,10,10));
+			textArea.setFont(new Font("Verdana", Font.BOLD, 16));
 			textArea.setLineWrap(true);
 			textArea.setWrapStyleWord(true);
 			textArea.setOpaque(false);
@@ -380,6 +440,8 @@ class GamePane extends JLayeredPane {
 		mainHudPanel.add(hudPanel2);
 		mainHudPanel.add(hudPanel3);
 		
+		districtRollOverPanel = new DistrictRollOverPanel();
+		
 		messageLayer = new JPanel(new GridBagLayout());
 		messageLayer.setBounds(0, 0, 768, 767);
 		messageLayer.setOpaque(false);
@@ -390,6 +452,7 @@ class GamePane extends JLayeredPane {
 		add(baseLayer, new Integer(0));
 		add(playerTokensLayer, new Integer(1));
 		add(messageLayer, new Integer(2));	
+		add(districtRollOverPanel, new Integer(3));
 	}
 	
 

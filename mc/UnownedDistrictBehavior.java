@@ -24,6 +24,7 @@ public class UnownedDistrictBehavior implements SquareBehavior{
 						currentPlayer.pay(district.getCost());
 						currentPlayer.addDistrict(district);
 						district.setOwner(currentPlayer);
+						district.setSquareBehavior(new OwnedDistrictBehavior());
 						gamePane.clearMessageLayer();
 						gamePane.update();
 					}
