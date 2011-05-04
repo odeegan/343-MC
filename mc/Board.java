@@ -415,8 +415,8 @@ public class Board implements Drawable {
 		return squares.get(position);
 	}
 	
-	public District getDistrict(int index) {
-		return (District)squares.get(index);
+	public District getDistrict(int position) {
+		return (District)squares.get(position);
 	}
 	
 

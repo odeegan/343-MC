@@ -18,8 +18,8 @@ public class GoToJailBehavior implements SquareBehavior {
 		GamePane gamePane = GamePane.getInstance();
 		gamePane.setMessagePanelText("" +
 					"You landed on Go to Jail." 
-					+ " If you have a Get Out of Jail Card or"
-					+ " a Taxi Card, use them. Otherwise.... "
+					+ " If you have a Get Out of Jail Card"
+					+ " use it. Otherwise.... "
 				);
 		
 		JButton goToJailButton = new JButton("Go To Jail");

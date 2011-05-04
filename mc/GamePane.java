@@ -34,6 +34,7 @@ class GamePane extends JLayeredPane {
 	private static JButton getOutOfJailButton;
 	private static JButton rentDodgeButton;
 	private static JButton taxiButton;
+	private static JButton taxDodgeButton;
 	
 	
 	
@@ -65,13 +66,14 @@ class GamePane extends JLayeredPane {
 			removeAll();
 
 			Player player = GameMaster.getInstance().getCurrentPlayer();
+			Square currentSquare = GameMaster.getInstance().getBoard().getSquare(player.getPosition());
 			Random r = new Random();			
 
 			PlayerToken token = new PlayerToken();
 			token.setToolTipText(player.getName());
 			token.setIcon(new ImageIcon(player.getTokenFile()));
-			token.setBounds(player.getCurrentSquare().getX() + r.nextInt(24) , 
-							player.getCurrentSquare().getY() + r.nextInt(18), 45, 45);
+			token.setBounds(currentSquare.getX() + r.nextInt(24) , 
+							currentSquare.getY() + r.nextInt(18), 45, 45);
 			if (playerTokens.size() == player.getIndex()) {
 				playerTokens.add(token);
 
@@ -95,11 +97,29 @@ class GamePane extends JLayeredPane {
 		    //setRolloverIcon(new ImageIcon("images/getOutOfJailFreeRollOver.png"));
 		    //setRolloverEnabled(false);
 		    setText("Get out of Jail");
-			setPreferredSize(new Dimension(120, 74));
+			setPreferredSize(new Dimension(100, 74));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
-							System.out.println("User used Get Out Of Jail Card");
+							System.out.println("used Get Out Of Jail Card");
+							//setEnabled(false);	
+						}
+					});
+		}
+	}
+	
+	public class TaxDodgeButton extends JButton {
+		
+		public TaxDodgeButton() {
+			//setIcon(new ImageIcon("images/getOutOfJailFree.png"));
+		    //setRolloverIcon(new ImageIcon("images/getOutOfJailFreeRollOver.png"));
+		    //setRolloverEnabled(false);
+		    setText("Tax Dodge");
+			setPreferredSize(new Dimension(100, 74));
+			addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {
+							System.out.println("used Tax Dodge Card");
 							//setEnabled(false);	
 						}
 					});
@@ -113,11 +133,11 @@ class GamePane extends JLayeredPane {
 		    //setIcon(new ImageIcon("images/rentDodge.png"));
 		    //setRolloverIcon(new ImageIcon("images/rentDodgeRollOver.png"));
 		    //setRolloverEnabled(true);
-			setPreferredSize(new Dimension(120, 74));
+			setPreferredSize(new Dimension(100, 74));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
-							System.out.println("User used Rent Dodge Card");
+							System.out.println("used Rent Dodge Card");
 							//setEnabled(false);
 						}
 					});
@@ -131,12 +151,12 @@ class GamePane extends JLayeredPane {
 			//setIcon(new ImageIcon("images/taxi.png"));
 		    //setRolloverIcon(new ImageIcon("images/taxiRollOver.png"));
 		    //setRolloverEnabled(true);
-			setPreferredSize(new Dimension(120, 74));
+			setPreferredSize(new Dimension(100, 74));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
 							System.out.println("User used Taxi Card");
-							//setEnabled(false);
+							GameMaster.getInstance().useTaxiCard();
 						}
 					});
 		}
@@ -234,7 +254,7 @@ class GamePane extends JLayeredPane {
 		public void update() {
 			Board board = GameMaster.getInstance().getBoard();
 			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
-			squareDetails.setText(currentPlayer.getCurrentSquare().toString());
+			squareDetails.setText(board.getSquare(currentPlayer.getPosition()).toString());
 			squareDetails.setFont(new Font("Verdana", Font.BOLD, 14));
 			squareDetails.setLineWrap(true);
 			squareDetails.setWrapStyleWord(true);
@@ -261,7 +281,7 @@ class GamePane extends JLayeredPane {
 			textArea = new JTextArea();
 
 			buttonPanel = new JPanel();
-			buttonPanel.setPreferredSize(new Dimension(300,50));
+			buttonPanel.setPreferredSize(new Dimension(300,100));
 			
 			
 			add(textArea, BorderLayout.NORTH);
@@ -345,12 +365,14 @@ class GamePane extends JLayeredPane {
 		getOutOfJailButton = new GetOutOfJailButton();
 		rentDodgeButton = new RentDodgeButton();
 		taxiButton = new TaxiButton();
+		taxDodgeButton = new TaxDodgeButton();
 		
 		hudPanel3 = new JPanel();
 		hudPanel3.setBounds(0, 451, 432, 118);
 		hudPanel3.setBorder(BorderFactory.createTitledBorder("Chance Cards"));
 		hudPanel3.add(getOutOfJailButton);
 		hudPanel3.add(rentDodgeButton);
+		hudPanel3.add(taxDodgeButton);
 		hudPanel3.add(taxiButton);
 		
 		mainHudPanel.add(hudPanel1);
@@ -433,6 +455,10 @@ class GamePane extends JLayeredPane {
 	
 	public JButton getRentDodgeButton() {
 		return rentDodgeButton;
+	}
+	
+	public JButton getTaxDodgeButton() {
+		return taxDodgeButton;
 	}
 	
 	public JButton getTaxiButton() {
