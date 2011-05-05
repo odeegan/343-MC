@@ -26,6 +26,8 @@ public class District extends Square {
 		
 	boolean railroad = false;
 	boolean skyscraper = false;
+	boolean stadium = false;
+	boolean monopolyTower = false;
 
 	double cost;
 	double residentialCost;
@@ -94,6 +96,30 @@ public class District extends Square {
 		return residentialBlockCount;
 	}
 	
+	public int getTotalBlockCount() {
+		return residentialBlockCount + industrialBlockCount;
+	}
+	
+	public void addIndustrialBlock(int amount) {
+		industrialBlockCount = industrialBlockCount + amount;
+	}
+	
+	public void addResidentialBlock(int amount) {
+		residentialBlockCount = residentialBlockCount + amount;
+	}
+	
+	public void addStadium() {
+		stadium = true;
+	}
+	
+	public void addSkyscraper() {
+		skyscraper = true;
+	}
+	
+	public void addMonopolyTower() {
+		monopolyTower = true;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -129,6 +155,14 @@ public class District extends Square {
 
 	public boolean isSkyScrapered() {
 		return skyscraper;
+	}
+	
+	public boolean isStadiumed() {
+		return stadium;
+	}
+	
+	public boolean isMonopolyTowered() {
+		return monopolyTower;
 	}
 	
 	public String toString() {

@@ -209,10 +209,13 @@ class BuildPane extends JLayeredPane {
 								industrialRadioButton.setEnabled(true);
 							}
 							
-							if(allowanceRemaining == -1 && player1.getCash() > selectedDistrict.industrialCost){
-								industrialRadioButton.setVisible(false);
-								industrialTypeLabel.setVisible(false);
-							}
+							//Allowance is railroad
+//							if(allowanceRemaining == -1 &&  ){
+//								industrialRadioButton.setVisible(false);
+//								industrialTypeLabel.setVisible(false);
+//							}
+							
+							//if()
 							
 							
 							//buildShopPanel.add(buildTypeAmountSpinner, "cell 1 3 1 1");
