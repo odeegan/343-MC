@@ -20,7 +20,8 @@ public class GameMaster {
 	private static Board board;
 	private static Player currentPlayer;
 	
-	
+	private boolean isPaused = false;
+		
 	private static final GameMaster GAMEMASTER = new GameMaster();
 
 	
@@ -47,6 +48,8 @@ public class GameMaster {
 		startAuctionButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
+						GameMaster.getInstance().isPaused = true;
+						GamePane.getInstance().clearMessageLayer();
 						gameStateMachine.setState(gameStateMachine.getAuctionState());
 
 					}
@@ -56,7 +59,10 @@ public class GameMaster {
 	}
 	
 	public void startTurn() {
-		//draw the screen
+		if (isPaused) {
+			resumeTurn();
+		}
+		
 		gamePane.enableButton(gamePane.getRollDiceButton());
 		gamePane.disableButton(gamePane.getEndTurnButton());
 		gamePane.update();
@@ -68,6 +74,11 @@ public class GameMaster {
 					+ Integer.toString(currentPlayer.getTurnsInJail()));
 		testIfPlayerIsInJail();
 	}
+	
+	public void resumeTurn() {
+	//TODO: resume the players turn after the GameState is handed back to us
+	}
+	
 	
 	public Board getBoard() {
 		return board;
@@ -86,34 +97,51 @@ public class GameMaster {
 		index = (currentPlayer.getIndex() - 1) % players.size();
 		return players.get(index);
 	}
-	
+		
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
 	
 	public void checkSquare(int roll) {
 		System.out.println("checking square");
-		Square newSquare = board.getSquare(currentPlayer.move(roll));
-		System.out.println(currentPlayer.getName() + " landed on "
-					+ newSquare.getName());
-
-	
-		if (currentPlayer.hasTaxiCard) {
-			
-			gamePane.enableButton(gamePane.getTaxiButton());
-			gamePane.setMessagePanelText("You landed on ");
-		} else {
-			newSquare.performBehavior();
-		}
+		currentPlayer.testMove(roll);
+		final Square newSquare = board.getSquare(currentPlayer.position);
 		
+		if (currentPlayer.hasTaxiCard) {
+			gamePane.enableButton(gamePane.getTaxiButton());
+
+			gamePane.setMessagePanelText("You landed on "
+						+ newSquare.getName()
+						+ " You may use your Taxi Card or ....");
+
+			JButton stayPutButton = new JButton("Stay Put");
+			stayPutButton.addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {						
+							System.out.println(currentPlayer.getName() + " is staying put on "
+									+ newSquare.getName());
+							currentPlayer.doMove();
+							newSquare.performBehavior();
+							gamePane.update();
+						}
+					});
+			
+			gamePane.addMessagePanelButton(stayPutButton);
+		} else {
+			currentPlayer.doMove();
+			newSquare.performBehavior();
+			gamePane.update();	
+		}
 	}
 	
 	public void displayPlayerChanceCards() {
 		gamePane.hideButton(gamePane.getGetOutOfJailButton());
 		gamePane.hideButton(gamePane.getRentDodgeButton());
 		gamePane.hideButton(gamePane.getTaxiButton());
+		gamePane.hideButton(gamePane.getTaxDodgeButton());
 		// these buttons will be enabled when appropriate
 		gamePane.disableButton(gamePane.getTaxiButton());
+		gamePane.disableButton(gamePane.getTaxDodgeButton());
 		gamePane.disableButton(gamePane.getRentDodgeButton());
 		gamePane.disableButton(gamePane.getGetOutOfJailButton());
 		if (currentPlayer.hasGetOutOfJailCard) {
@@ -126,7 +154,9 @@ public class GameMaster {
 		if (currentPlayer.hasTaxiCard) {
 			gamePane.showButton(gamePane.getTaxiButton());
 		}
-	}
+		if (currentPlayer.hasTaxDodgeCard) {
+			gamePane.showButton(gamePane.getTaxDodgeButton());
+		}}
 	
 	public void roll() {
 		gamePane.enableButton(gamePane.getEndTurnButton());
@@ -192,6 +222,39 @@ public class GameMaster {
 		dice[1] = generator.nextInt(6) + 1;
 		return dice;
 	}
+	
+	public void useRentDodgeCard() {
+		currentPlayer.hasRentDodgeCard = false;
+		gamePane.hideButton(gamePane.getRentDodgeButton());
+		gamePane.clearMessageLayer();
+		gamePane.update();
+	}
+	
+	public void useTaxiCard() {
+		currentPlayer.hasTaxiCard = false;
+		gamePane.hideButton(gamePane.getTaxiButton());
+		
+		gamePane.setMessagePanelText("Take a Taxi to...");		
+		int[] positions = {-2, -1, 1, 2};
+		int i = 0;
+		for (i=0; i < positions.length; i++) {
+			final int delta = positions[i];
+			final Square square = board.getSquare(currentPlayer.getPosition() + delta);
+			JButton button = new JButton(square.getName());
+			button.addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {
+							System.out.println("taking a taxi");
+							currentPlayer.testMove(delta);
+							currentPlayer.doMove();
+							square.performBehavior();
+							gamePane.update();
+						}
+					});
+			gamePane.addMessagePanelButton(button);	
+		}
+	}
+	
 	
 	public void endTurn() {
 		currentPlayer = getNextPlayer();

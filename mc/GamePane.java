@@ -1,19 +1,36 @@
 package mc;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
-import net.miginfocom.swing.MigLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+
+import net.miginfocom.swing.MigLayout;
 
 
 class GamePane extends JLayeredPane {
 
 	private static JPanel baseLayer;
 	private static PlayerTokensLayer playerTokensLayer;
-	private static JPanel squaresPanel;
+	private static DistrictRollOverPanel districtRollOverPanel;
 	private static JPanel mainHudPanel;
 	
 	private static JPanel messageLayer;
@@ -34,10 +51,91 @@ class GamePane extends JLayeredPane {
 	private static JButton getOutOfJailButton;
 	private static JButton rentDodgeButton;
 	private static JButton taxiButton;
+	private static JButton taxDodgeButton;
 	
+	public int selectedDistrict;
 	
 	
 	private static final GamePane GAMEPANE = new GamePane();
+
+	public class DistrictRollOverPanel extends JPanel {
+		
+		ArrayList<Square> squares;		
+		DistrictLabel label;
+		
+		public class DistrictLabel extends JLabel {
+			
+			String name;
+			int position;			
+			
+			private class MouseHandler implements MouseListener {
+				public void mouseClicked(MouseEvent event) {}
+				public void mousePressed(MouseEvent e) {
+					setIcon(new ImageIcon("images/buttonSelect.png"));
+					setMessagePanelText(getText());
+					
+					setSelectedDistrict(Integer.parseInt(getText()));
+				}
+				
+				public void mouseReleased(MouseEvent e) {
+					setIcon(new ImageIcon("images/buttonOver.png"));
+				}
+				
+				public void mouseEntered(MouseEvent e) {
+					setIcon(new ImageIcon("images/buttonOver.png"));
+				}
+				
+				public void mouseExited(MouseEvent e) {
+					setIcon(new ImageIcon());
+				}
+			}
+
+			public DistrictLabel() {
+				setOpaque(false);
+				MouseHandler handler = new MouseHandler();
+				addMouseListener(handler);	
+			}
+
+			public void setName(String name) {
+				 this.name = name;
+			}
+			
+			public void setIndex(int index) {
+				this.position = index;
+			}
+		}
+		
+		public DistrictRollOverPanel() {
+			setLayout(null);
+			setOpaque(false);
+			setBounds(0, 0, 768, 768);
+			
+			squares = GameMaster.getInstance().getBoard().getSquares();
+			for (int i=0; i < squares.size(); i++) {
+				if (squares.get(i).getType() == null) {
+					District district = (District)squares.get(i);
+					label = new DistrictLabel();
+					label.setFont(new Font("Verdana", Font.ITALIC, 2));
+					label.setText(Integer.toString(i));
+					label.setForeground(Color.white);
+					if (i > 0 && i < 10) {
+						label.setBounds(district.getX(), district.getY()-40, 62, 104);
+					}
+					if (i > 10 && i < 20) {
+						label.setBounds(district.getX(), district.getY()+20, 104, 62);
+					}
+					if (i > 20 && i < 30) {
+						label.setBounds(district.getX(), district.getY(), 62, 104);
+					}
+					if (i > 30 && i <= 39) {
+						label.setBounds(district.getX()-20, district.getY()+20, 104, 62);
+					}
+					add(label);
+				}
+			}
+		}
+	
+	}
 	
 	public class PlayerTokensLayer extends JPanel {
 		
@@ -65,13 +163,16 @@ class GamePane extends JLayeredPane {
 			removeAll();
 
 			Player player = GameMaster.getInstance().getCurrentPlayer();
+			Square currentSquare = GameMaster.getInstance().getBoard().getSquare(player.getPosition());
 			Random r = new Random();			
 
 			PlayerToken token = new PlayerToken();
 			token.setToolTipText(player.getName());
 			token.setIcon(new ImageIcon(player.getTokenFile()));
-			token.setBounds(player.getCurrentSquare().getX() + r.nextInt(24) , 
-							player.getCurrentSquare().getY() + r.nextInt(18), 45, 45);
+			// draw the player token with a random offset to allow 
+			// pieces occupying the same square to be seen
+			token.setBounds(currentSquare.getX() + r.nextInt(21) , 
+							currentSquare.getY() + r.nextInt(18), 45, 45);
 			if (playerTokens.size() == player.getIndex()) {
 				playerTokens.add(token);
 
@@ -95,12 +196,31 @@ class GamePane extends JLayeredPane {
 		    //setRolloverIcon(new ImageIcon("images/getOutOfJailFreeRollOver.png"));
 		    //setRolloverEnabled(false);
 		    setText("Get out of Jail");
-			setPreferredSize(new Dimension(120, 74));
+			setPreferredSize(new Dimension(100, 74));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
-							System.out.println("User used Get Out Of Jail Card");
+							System.out.println("used Get Out Of Jail Card");
 							//setEnabled(false);	
+						}
+					});
+		}
+	}
+	
+	public class TaxDodgeButton extends JButton {
+		
+		public TaxDodgeButton() {
+			//setIcon(new ImageIcon("images/getOutOfJailFree.png"));
+		    //setRolloverIcon(new ImageIcon("images/getOutOfJailFreeRollOver.png"));
+		    //setRolloverEnabled(false);
+		    setText("Tax Dodge");
+			setPreferredSize(new Dimension(100, 74));
+			addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {
+							System.out.println("used Tax Dodge Card");
+							//setEnabled(false);	
+							//TODO: create logic for this
 						}
 					});
 		}
@@ -113,11 +233,12 @@ class GamePane extends JLayeredPane {
 		    //setIcon(new ImageIcon("images/rentDodge.png"));
 		    //setRolloverIcon(new ImageIcon("images/rentDodgeRollOver.png"));
 		    //setRolloverEnabled(true);
-			setPreferredSize(new Dimension(120, 74));
+			setPreferredSize(new Dimension(100, 74));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
-							System.out.println("User used Rent Dodge Card");
+							System.out.println("used Rent Dodge Card");
+							GameMaster.getInstance().useRentDodgeCard();
 							//setEnabled(false);
 						}
 					});
@@ -131,12 +252,12 @@ class GamePane extends JLayeredPane {
 			//setIcon(new ImageIcon("images/taxi.png"));
 		    //setRolloverIcon(new ImageIcon("images/taxiRollOver.png"));
 		    //setRolloverEnabled(true);
-			setPreferredSize(new Dimension(120, 74));
+			setPreferredSize(new Dimension(100, 74));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
 							System.out.println("User used Taxi Card");
-							//setEnabled(false);
+							GameMaster.getInstance().useTaxiCard();
 						}
 					});
 		}
@@ -210,7 +331,7 @@ class GamePane extends JLayeredPane {
 			playerDetails.setFont(new Font("Verdana", Font.BOLD, 14));
 			playerDetails.setLineWrap(true);
 			playerDetails.setWrapStyleWord(true);
-			playerDetails.setBounds(5, 5, 360, 160);
+			playerDetails.setBounds(0, 0, 370, 170);
 			playerDetails.setOpaque(false);
 			revalidate();
 			repaint();
@@ -234,7 +355,7 @@ class GamePane extends JLayeredPane {
 		public void update() {
 			Board board = GameMaster.getInstance().getBoard();
 			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
-			squareDetails.setText(currentPlayer.getCurrentSquare().toString());
+			squareDetails.setText(board.getSquare(currentPlayer.getPosition()).toString());
 			squareDetails.setFont(new Font("Verdana", Font.BOLD, 14));
 			squareDetails.setLineWrap(true);
 			squareDetails.setWrapStyleWord(true);
@@ -248,36 +369,38 @@ class GamePane extends JLayeredPane {
 	
 	public class MessagePanel extends JPanel {
 		
-		//JPanel textPanel;
-		JPanel buttonPanel;
 		JTextArea textArea;
+		JPanel checkBoxPanel;
+		JPanel buttonPanel;
 		
 		public MessagePanel() {
-			setLayout(new BorderLayout());
+			setLayout(new MigLayout());
 			
-			//setPreferredSize(new Dimension(350,250));
+			setPreferredSize(new Dimension(400,300));
 			setBorder(BorderFactory.createLineBorder(Color.black, 2));
-			setOpaque(true);
 			textArea = new JTextArea();
-
-			buttonPanel = new JPanel();
-			buttonPanel.setPreferredSize(new Dimension(300,50));
-			
-			
-			add(textArea, BorderLayout.NORTH);
-			add(buttonPanel, BorderLayout.SOUTH);
-		}
-		
-		public void setText(String str) {
-			remove(textArea);
-			textArea = new JTextArea(str);
-			textArea.setPreferredSize(new Dimension(350,200));
-			textArea.setMargin(new Insets(8,8,8,8));
-			textArea.setFont(new Font("Verdana", Font.BOLD, 14));
+			textArea.setPreferredSize(new Dimension(400,100));
+			textArea.setMargin(new Insets(10,10,10,10));
+			textArea.setFont(new Font("Verdana", Font.BOLD, 16));
 			textArea.setLineWrap(true);
 			textArea.setWrapStyleWord(true);
 			textArea.setOpaque(false);
-			add(textArea);
+
+			buttonPanel = new JPanel();
+			buttonPanel.setPreferredSize(new Dimension(400,100));
+
+			checkBoxPanel = new JPanel();
+			checkBoxPanel.setPreferredSize(new Dimension(400, 100));
+			
+			add(textArea, "cell 0 0");
+			add(checkBoxPanel, "cell 0 1");
+			add(buttonPanel, "cell 0 2");
+		}
+		
+		public void setText(String str) {
+			textArea.setText(str);
+			textArea.revalidate();
+			textArea.repaint();
 		}
 		
 		
@@ -289,10 +412,17 @@ class GamePane extends JLayeredPane {
 		}
 		
 		public void addButton(JButton btn) {
-			//btn.setPreferredSize(new Dimension(120, 30));
 			buttonPanel.add(btn);
 			buttonPanel.revalidate();
 			buttonPanel.repaint();
+		}
+			
+		public void addCheckBox(JCheckBox checkBox) {
+			checkBox.setFont(new Font("Verdana", Font.BOLD, 16));
+			checkBoxPanel.add(checkBox);
+			checkBoxPanel.revalidate();
+			checkBoxPanel.repaint();
+		
 		}
 	}
 	
@@ -345,18 +475,21 @@ class GamePane extends JLayeredPane {
 		getOutOfJailButton = new GetOutOfJailButton();
 		rentDodgeButton = new RentDodgeButton();
 		taxiButton = new TaxiButton();
+		taxDodgeButton = new TaxDodgeButton();
 		
 		hudPanel3 = new JPanel();
 		hudPanel3.setBounds(0, 451, 432, 118);
 		hudPanel3.setBorder(BorderFactory.createTitledBorder("Chance Cards"));
 		hudPanel3.add(getOutOfJailButton);
 		hudPanel3.add(rentDodgeButton);
+		hudPanel3.add(taxDodgeButton);
 		hudPanel3.add(taxiButton);
 		
 		mainHudPanel.add(hudPanel1);
 		mainHudPanel.add(hudButtonPanel);
 		mainHudPanel.add(hudPanel2);
 		mainHudPanel.add(hudPanel3);
+		
 		
 		messageLayer = new JPanel(new GridBagLayout());
 		messageLayer.setBounds(0, 0, 768, 767);
@@ -399,6 +532,11 @@ class GamePane extends JLayeredPane {
 		messagePanel.addButton(btn);
 	}
 	
+	public void addMessagePanelCheckBox(JCheckBox checkBox) {
+		
+		messagePanel.addCheckBox(checkBox);
+	}
+	
 	public void enableButton(JButton btn) {
 		btn.setEnabled(true);
 	}
@@ -435,8 +573,28 @@ class GamePane extends JLayeredPane {
 		return rentDodgeButton;
 	}
 	
+	public JButton getTaxDodgeButton() {
+		return taxDodgeButton;
+	}
+	
 	public JButton getTaxiButton() {
 		return taxiButton;
+	}
+	
+	public void addSelectionLayer() {
+		districtRollOverPanel = new DistrictRollOverPanel();
+		add(districtRollOverPanel, new Integer(3));
+		System.out.println("adding selcetion layer");
+		revalidate();
+		repaint();
+	}
+	
+	public void setSelectedDistrict(int index) {
+		selectedDistrict = index;
+	}
+	
+	public int getSelectedDistrict() {
+		return selectedDistrict;
 	}
 	
 	public void update() {

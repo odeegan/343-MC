@@ -6,6 +6,9 @@ public class Square {
 	SQUARETYPE type;
 	SquareBehavior squareBehavior;
 	
+	int x;
+	int y;
+	
 	int xx;
 	int yy;
 	
@@ -32,19 +35,35 @@ public class Square {
 		squareBehavior = sb;
 	}
 	
-	public void setX(int xx) {
+	public void setX(int x) {
+		this.x = x;
+	}
+	
+	public void setY(int y) {
+		this.y = y;
+	}
+	
+	public void setXX(int xx) {
 		this.xx = xx;
 	}
 	
-	public void setY(int yy) {
+	public void setYY(int yy) {
 		this.yy = yy;
 	}
 	
 	public int getX() {
-		return xx;
+		return x;
 	}
 	
 	public int getY() {
+		return y;
+	}
+	
+	public int getXX() {
+		return xx;
+	}
+	
+	public int getYY() {
 		return yy;
 	}
 	

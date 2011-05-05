@@ -37,8 +37,14 @@ public class IndustryTaxBehavior implements SquareBehavior {
 							}
 					});
 			gamePane.addMessagePanelButton(payFineButton);
+			if(currentPlayer.hasTaxDodgeCard) {
+				gamePane.addMessagePanelText("\n"
+							+ "Use your Tax Dodge Card or...");
+				gamePane.enableButton(gamePane.getTaxDodgeButton());
+			}
 		} else {
-			gamePane.setMessagePanelText("You do not have industrial buildings");
+			gamePane.setMessagePanelText("You do not have industrial buildings."
+						+ " Pay nothing.");
 		}
 		
 		
