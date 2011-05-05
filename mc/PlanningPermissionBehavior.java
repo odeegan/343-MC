@@ -9,6 +9,8 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 	@Override
 	public void execute() {
 		GamePane.getInstance().setMessagePanelText("You landed on Planning Permission");
+		GamePane.getInstance().addSelectionLayer();
+
 
 	}
 

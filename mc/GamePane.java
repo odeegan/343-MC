@@ -87,7 +87,6 @@ class GamePane extends JLayeredPane {
 			public void setIndex(int index) {
 				this.position = index;
 			}
-
 		}
 		
 		public DistrictRollOverPanel() {
@@ -100,10 +99,19 @@ class GamePane extends JLayeredPane {
 				if (squares.get(i).getType() == null) {
 					District district = (District)squares.get(i);
 					label = new DistrictLabel();
-				
-					label.setBounds(district.getX(), district.getY(), 62, 104);
-					label.setBackground(Color.black);
-					label.setOpaque(true);
+					//label.setBackground(Color.black);
+					if (i > 0 && i < 10) {
+						label.setBounds(district.getX(), district.getY()-40, 62, 104);
+					}
+					if (i > 10 && i < 20) {
+						label.setBounds(district.getX(), district.getY()+20, 104, 62);
+					}
+					if (i > 20 && i < 30) {
+						label.setBounds(district.getX(), district.getY(), 62, 104);
+					}
+					if (i > 30 && i <= 39) {
+						label.setBounds(district.getX()-20, district.getY()+20, 104, 62);
+					}
 					add(label);
 				}
 			}
@@ -542,11 +550,11 @@ class GamePane extends JLayeredPane {
 	}
 	
 	public void addSelectionLayer() {
-//		districtRollOverPanel = new DistrictRollOverPanel();
-//		add(districtRollOverPanel, new Integer(3));
-//		System.out.println("adding selcetion layer");
-//		revalidate();
-//		repaint();
+		districtRollOverPanel = new DistrictRollOverPanel();
+		add(districtRollOverPanel, new Integer(3));
+		System.out.println("adding selcetion layer");
+		revalidate();
+		repaint();
 	}
 	
 	public void update() {

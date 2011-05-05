@@ -58,7 +58,7 @@ public class GameMaster {
 	
 	public void startTurn() {
 		//draw the screen
-		gamePane.addSelectionLayer();
+		//gamePane.addSelectionLayer();
 		gamePane.enableButton(gamePane.getRollDiceButton());
 		gamePane.disableButton(gamePane.getEndTurnButton());
 		gamePane.update();
