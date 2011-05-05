@@ -14,12 +14,13 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
@@ -72,7 +73,7 @@ class GamePane extends JLayeredPane {
 				public void mouseClicked(MouseEvent event) {}
 				public void mousePressed(MouseEvent e) {
 					setIcon(new ImageIcon("images/buttonSelect.png"));
-					setMessagePanelText(getText());
+					addMessagePanelText(getText());
 					
 					setSelectedDistrict(Integer.parseInt(getText()));
 				}
@@ -288,7 +289,9 @@ class GamePane extends JLayeredPane {
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
 							System.out.println("User clicked Build");
-							enableButton(getRollDiceButton());
+							disableButton(getBuildButton());
+							GameMaster.getInstance().startBuild();
+							
 						}
 					});
 		}
@@ -417,9 +420,9 @@ class GamePane extends JLayeredPane {
 			buttonPanel.repaint();
 		}
 			
-		public void addCheckBox(JCheckBox checkBox) {
-			checkBox.setFont(new Font("Verdana", Font.BOLD, 16));
-			checkBoxPanel.add(checkBox);
+		public void addButtonGroup(JRadioButton radioButton) {
+			radioButton.setFont(new Font("Verdana", Font.BOLD, 16));
+			checkBoxPanel.add(radioButton);
 			checkBoxPanel.revalidate();
 			checkBoxPanel.repaint();
 		
@@ -532,9 +535,8 @@ class GamePane extends JLayeredPane {
 		messagePanel.addButton(btn);
 	}
 	
-	public void addMessagePanelCheckBox(JCheckBox checkBox) {
-		
-		messagePanel.addCheckBox(checkBox);
+	public void addMessagePanelRadioButton(JRadioButton radioButton) {
+		messagePanel.addButtonGroup(radioButton);
 	}
 	
 	public void enableButton(JButton btn) {

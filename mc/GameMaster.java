@@ -58,6 +58,11 @@ public class GameMaster {
 		gamePane.addMessagePanelButton(startAuctionButton);
 	}
 	
+	public void startBuild() {
+		GameMaster.getInstance().isPaused = true;
+		gameStateMachine.setState(gameStateMachine.getBuildState());
+	}
+	
 	public void startTurn() {
 		if (isPaused) {
 			resumeTurn();
@@ -77,6 +82,7 @@ public class GameMaster {
 	
 	public void resumeTurn() {
 	//TODO: resume the players turn after the GameState is handed back to us
+		
 	}
 	
 	

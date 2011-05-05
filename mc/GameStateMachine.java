@@ -10,6 +10,7 @@ public class GameStateMachine {
 	GameState mainMenuState;
 	GameState gamePlayState;
 	GameState auctionState;
+	GameState buildState;
 	GameState state;
 
 	JFrame mainFrame;
@@ -22,6 +23,7 @@ public class GameStateMachine {
 		mainMenuState = new MainMenuState(this, mainFrame);
 		gamePlayState = new GamePlayState(this, mainFrame);
 		auctionState = new AuctionState(this, mainFrame);
+		buildState = new BuildState(this, mainFrame);
 		System.out.println("Starting the GameStateMachine.");
 	}
 
@@ -46,6 +48,11 @@ public class GameStateMachine {
 	public GameState getAuctionState() {
 		return auctionState;
 	}
+	
+	public GameState getBuildState() {
+		return buildState;
+	}
+	
 	
 	/*
 	 * Creates and sets the dimenisions of the main game window
