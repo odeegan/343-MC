@@ -25,6 +25,7 @@ import net.miginfocom.swing.MigLayout;
 public class AuctionState implements GameState {
 
 	GameStateMachine gameStateMachine;
+	GameMaster gameMaster;
 	int playerCount, moneyMaximum, timerValue, currentBid;
 	int bidArray[];
 	Player currentPlayer;
@@ -62,6 +63,7 @@ public class AuctionState implements GameState {
 	private static final Font counterFont = new Font("Impact", Font.BOLD, 50);
 
 	public AuctionState(GameStateMachine gsm, JFrame mf) {
+		gameMaster = GameMaster.getInstance();
 		gameStateMachine = gsm;
 		mainFrame = mf;
 		isAuctioning = false;
@@ -271,6 +273,10 @@ public class AuctionState implements GameState {
 				winningPlayer = ii;
 			}
 		winnerLabel.setText("Player " + (winningPlayer + 1) + " has won with a bid of: " + winningBid);
+		Player winner = gameMaster.getPlayers().get(winningPlayer);
+		winner.pay((double)((double)winningBid / (double)1000000));
+		//winner.addDistrict(gameMaster.getBoard().getDistrict(gameMaster.getSelectedDistrict()));
+		gameStateMachine.setState(gameStateMachine.getGamePlayState());
 		
 	}
 
@@ -288,7 +294,7 @@ public class AuctionState implements GameState {
 	}
 
 	private void auctionMode() {
-		for(int ii = 0; ii <GameMaster.getInstance().getNumPlayers();ii++)
+		for(int ii = 0; ii <gameMaster.getNumPlayers();ii++)
 			if(ii != 2)
 				playersPanel.add(playerPanels[ii],"span 1");
 			else playersPanel.add(playerPanels[ii],"wrap");
@@ -316,8 +322,8 @@ public class AuctionState implements GameState {
 
 	public void enter() {
 		System.out.println("This is the Auction.");
-		playerCount = GameMaster.getInstance().getNumPlayers();
-		currentPlayer = GameMaster.getInstance().getCurrentPlayer();
+		playerCount = gameMaster.getNumPlayers();
+		currentPlayer = gameMaster.getCurrentPlayer();
 		auctionStartSlider.setMaximum((int)(currentPlayer.getCash()*1000000));
 
 		mainFrame.setContentPane(layeredPane);
