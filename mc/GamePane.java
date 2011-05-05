@@ -46,53 +46,67 @@ class GamePane extends JLayeredPane {
 
 	public class DistrictRollOverPanel extends JPanel {
 		
-		ArrayList<JLabel> playerTokens;
-		
+		ArrayList<Square> squares;		
 		DistrictLabel label;
 		
 		public class DistrictLabel extends JLabel {
+			
+			String name;
+			int position;			
 			
 			private class MouseHandler implements MouseListener {
 				public void mouseClicked(MouseEvent event) {}
 				public void mousePressed(MouseEvent e) {
 					label.setText(String.format("[%d, %d]", e.getX(), e.getY()));
 					setIcon(new ImageIcon("images/buttonSelect.png"));
-
 				}
+				
 				public void mouseReleased(MouseEvent e) {
 					setIcon(new ImageIcon("images/buttonOver.png"));
 				}
+				
 				public void mouseEntered(MouseEvent e) {
 					setIcon(new ImageIcon("images/buttonOver.png"));
 				}
+				
 				public void mouseExited(MouseEvent e) {
 					setIcon(new ImageIcon());
-
 				}
-				
 			}
-
 
 			public DistrictLabel() {
-				setBounds(478, 664, 62, 104);
-				//setBorder(BorderFactory.createLineBorder(Color.blue));
 				setOpaque(false);
 				MouseHandler handler = new MouseHandler();
-				addMouseListener(handler);
-				
-				
-
-				
+				addMouseListener(handler);	
 			}
+
+			public void setName(String name) {
+				 this.name = name;
+			}
+			
+			public void setIndex(int index) {
+				this.position = index;
+			}
+
 		}
 		
 		public DistrictRollOverPanel() {
 			setLayout(null);
-			//setPreferredSize(new Dimension(812,768));
 			setOpaque(false);
 			setBounds(0, 0, 768, 768);
-			label = new DistrictLabel();
-			add(label);
+			
+			squares = GameMaster.getInstance().getBoard().getSquares();
+			for (int i=0; i < squares.size(); i++) {
+				if (squares.get(i).getType() == null) {
+					District district = (District)squares.get(i);
+					label = new DistrictLabel();
+				
+					label.setBounds(district.getX(), district.getY(), 62, 104);
+					label.setBackground(Color.black);
+					label.setOpaque(true);
+					add(label);
+				}
+			}
 		}
 	
 	}
@@ -180,6 +194,7 @@ class GamePane extends JLayeredPane {
 						public void actionPerformed(ActionEvent event) {
 							System.out.println("used Tax Dodge Card");
 							//setEnabled(false);	
+							//TODO: create logic for this
 						}
 					});
 		}
@@ -440,7 +455,6 @@ class GamePane extends JLayeredPane {
 		mainHudPanel.add(hudPanel2);
 		mainHudPanel.add(hudPanel3);
 		
-		districtRollOverPanel = new DistrictRollOverPanel();
 		
 		messageLayer = new JPanel(new GridBagLayout());
 		messageLayer.setBounds(0, 0, 768, 767);
@@ -452,7 +466,6 @@ class GamePane extends JLayeredPane {
 		add(baseLayer, new Integer(0));
 		add(playerTokensLayer, new Integer(1));
 		add(messageLayer, new Integer(2));	
-		add(districtRollOverPanel, new Integer(3));
 	}
 	
 
@@ -526,6 +539,14 @@ class GamePane extends JLayeredPane {
 	
 	public JButton getTaxiButton() {
 		return taxiButton;
+	}
+	
+	public void addSelectionLayer() {
+//		districtRollOverPanel = new DistrictRollOverPanel();
+//		add(districtRollOverPanel, new Integer(3));
+//		System.out.println("adding selcetion layer");
+//		revalidate();
+//		repaint();
 	}
 	
 	public void update() {

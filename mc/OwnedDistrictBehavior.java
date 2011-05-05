@@ -27,18 +27,13 @@ public class OwnedDistrictBehavior implements SquareBehavior {
 		
 		gamePane.setMessagePanelText("You landed on an Owned District.");
 
-		if (district.getRent() != 0) {
-			gamePane.addMessagePanelText( 
+		gamePane.addMessagePanelText( 
 						"\nThe current rent is " + district.getRent());
-			if (currentPlayer.hasRentDodgeCard) {
-				gamePane.addMessagePanelText(
+		if (currentPlayer.hasRentDodgeCard) {
+			gamePane.addMessagePanelText(
 						"\nUse your Rent Dodge card or... ");
-				gamePane.enableButton(gamePane.getRentDodgeButton());
-			}
-			gamePane.addMessagePanelButton(payRentButton);
-		} else {
-			gamePane.addMessagePanelText("A hazard is preventing"
-						+ " the landlord from collecting rent");
-		}		
+			gamePane.enableButton(gamePane.getRentDodgeButton());
+		}
+		gamePane.addMessagePanelButton(payRentButton);
 	}
 }

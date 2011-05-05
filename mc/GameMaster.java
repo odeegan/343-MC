@@ -58,6 +58,7 @@ public class GameMaster {
 	
 	public void startTurn() {
 		//draw the screen
+		gamePane.addSelectionLayer();
 		gamePane.enableButton(gamePane.getRollDiceButton());
 		gamePane.disableButton(gamePane.getEndTurnButton());
 		gamePane.update();
@@ -219,8 +220,9 @@ public class GameMaster {
 	
 	public void useRentDodgeCard() {
 		currentPlayer.hasRentDodgeCard = false;
-		gamePane.hideButton(gamePane.getTaxiButton());
+		gamePane.hideButton(gamePane.getRentDodgeButton());
 		gamePane.clearMessageLayer();
+		gamePane.update();
 	}
 	
 	public void useTaxiCard() {

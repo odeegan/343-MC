@@ -25,7 +25,11 @@ public class Board implements Drawable {
 
 //Summergate - BRN
 			
-		District summergate = new District("BROWN", "Summergate", .6);
+		District summergate = new District(
+				SQUARETYPE.DISTRICT,
+				"BROWN",
+				"Summergate",
+				.6);
 		summergate.setRents(.02, .1, .2, .4, .8, 1.6, 2.2, 3.0, 5.5);
 		summergate.setSquareBehavior(new UnownedDistrictBehavior());
 		summergate.setX(602);		
@@ -43,6 +47,7 @@ public class Board implements Drawable {
 
 //Stoneside - PRP
 		District stoneside = new District( 
+				SQUARETYPE.DISTRICT,
 				"BROWN",
 				"Stoneside",
 				.6);
@@ -71,6 +76,7 @@ public class Board implements Drawable {
 
 //Westlands - BBY
 		District westlands = new District( 
+				SQUARETYPE.DISTRICT,
 				"SKY",
 				"Westlands",
 				1.0);
@@ -93,6 +99,7 @@ public class Board implements Drawable {
 
 //Bayview Dock - BBY
 		District bayviewDock = new District( 
+				SQUARETYPE.DISTRICT,
 				"SKY",
 				"Bayview Dock",
 				1);
@@ -107,6 +114,7 @@ public class Board implements Drawable {
 
 //Brightside - BBY
 		District brightside = new District( 
+				SQUARETYPE.DISTRICT,
 				"SKY",
 				"Brightside",
 				1.2);
@@ -128,6 +136,7 @@ public class Board implements Drawable {
 
 //Old Town - PRP
 		District oldTown = new District( 
+				SQUARETYPE.DISTRICT,
 				"PURPLE",
 				"Old Town",
 				1.4);
@@ -149,6 +158,7 @@ public class Board implements Drawable {
 
 //Harbor heights - PRP
 		District harborHeights = new District( 
+				SQUARETYPE.DISTRICT,
 				"PURPLE",
 				"Harbor Heights",
 				1.4);
@@ -164,6 +174,7 @@ public class Board implements Drawable {
 
 //Central Quay - PRP
 		District centralQuay = new District( 
+				SQUARETYPE.DISTRICT,
 				"PURPLE",
 				"Central Quay",
 				1.6);
@@ -186,6 +197,7 @@ public class Board implements Drawable {
 		
 //Shine Village - ORN
 		District shineVillage = new District( 
+				SQUARETYPE.DISTRICT,
 				"ORANGE",
 				"Shine Village",
 				1.8);
@@ -207,6 +219,7 @@ public class Board implements Drawable {
 		
 //East Bank - ORN
 		District eastBank = new District( 
+				SQUARETYPE.DISTRICT,
 				"ORANGE",
 				"East Bank",
 				1.8);
@@ -221,6 +234,7 @@ public class Board implements Drawable {
 
 //Treetop Park - ORN
 		District treetopPark = new District( 
+				SQUARETYPE.DISTRICT,
 				"ORANGE",
 				"Treetop Park",
 				2);
@@ -242,6 +256,7 @@ public class Board implements Drawable {
 
 //Seaview - RED
 		District seaview = new District( 
+				SQUARETYPE.DISTRICT,
 				"RED",
 				"Seaview",
 				2.2);
@@ -263,6 +278,7 @@ public class Board implements Drawable {
 
 //The Wharf - RED
 		District theWarf = new District( 
+				SQUARETYPE.DISTRICT,
 				"RED",
 				"The Wharf",
 				2.2);
@@ -278,6 +294,7 @@ public class Board implements Drawable {
 		
 //Middleton - RED
 		District middleton = new District( 
+				SQUARETYPE.DISTRICT,
 				"RED",
 				"Middleton",
 				2.4);
@@ -299,6 +316,7 @@ public class Board implements Drawable {
 
 //New Town - YLW
 		District newTown = new District( 
+				SQUARETYPE.DISTRICT,
 				"YELLOW",
 				"New Town",
 				2.6);
@@ -313,6 +331,7 @@ public class Board implements Drawable {
 
 //Silver Harbor - YLW
 		District silverHarbor = new District( 
+				SQUARETYPE.DISTRICT,
 				"YELLOW",
 				"Silver Harbor",
 				2.6);
@@ -334,6 +353,7 @@ public class Board implements Drawable {
 
 //Central City - YLW
 		District centralCity = new District( 
+				SQUARETYPE.DISTRICT,
 				"YELLOW",
 				"Central City",
 				2.8);
@@ -355,6 +375,7 @@ public class Board implements Drawable {
 
 //Royal Court - GRN
 		District royalCourt = new District( 
+				SQUARETYPE.DISTRICT,
 				"GREEN",
 				"Royal Court",
 				3);
@@ -369,6 +390,7 @@ public class Board implements Drawable {
 
 //The Marina - GRN
 		District theMarina = new District( 
+				SQUARETYPE.DISTRICT,
 				"GREEN",
 				"The Marina",
 				3);
@@ -390,6 +412,7 @@ public class Board implements Drawable {
 
 //Riverside - GRN
 		District riverside = new District( 
+				SQUARETYPE.DISTRICT,
 				"GREEN",
 				"Riverside",
 				3.2);
@@ -418,6 +441,7 @@ public class Board implements Drawable {
 
 //Fortune Valley - BLU
 		District fortuneValley = new District( 
+				SQUARETYPE.DISTRICT,
 				"BLUE",
 				"Fortune Valley",
 				3.5);
@@ -439,6 +463,7 @@ public class Board implements Drawable {
 
 //Diamond Hills - BLU
 		District diamondHills = new District( 
+				SQUARETYPE.DISTRICT,
 				"BLUE",
 				"Diamond Hills",
 				4);
@@ -463,7 +488,19 @@ public class Board implements Drawable {
 		return (District)squares.get(position);
 	}
 	
-
+	public ArrayList<Square> getSquares() {
+		return squares;
+	}
+	
+	public ArrayList<District> getDistricts() {
+		ArrayList<District> districtList = new ArrayList<District>();
+		for (int i=0; i < squares.size(); i++) {
+			if (getSquare(i).getType() == null) {
+				districtList.add(getDistrict(i));
+			}
+		}
+		return districtList;
+	}
 	
 	public JPanel init() {
 	

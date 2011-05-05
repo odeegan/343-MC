@@ -28,3 +28,8 @@
 [ ] pay method should determine if player has enough
 [ ] mortgage
 
+
+HAVE HAZARD...still collect on industrial
+if hazard and no industrial, pay land value only
+if mortgaged, don't pay
+

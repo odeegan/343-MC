@@ -8,24 +8,24 @@ public class FreeParkingBehavior implements SquareBehavior {
 
 	@Override
 	public void execute() {
-		GamePane.getInstance().setMessagePanelText("Free Parking! You are now"
-					+ " the proud owner of the Rent Dodge Card.");
+		GamePane.getInstance().setMessagePanelText("Free Parking!");
 		
 		ArrayList<Player> players = GameMaster.getInstance().getPlayers();
 		
 		for (Player player : players) {
 			if (player.hasRentDodgeCard == true) {
-				if (GameMaster.getInstance().getCurrentPlayer() != player) {
-					GamePane.getInstance().setMessagePanelText("Free Parking!"
-							+ " you get to take the RentDodge card from "
-							+ player.getName());
+				if (player == GameMaster.getInstance().getCurrentPlayer()) {
+					GamePane.getInstance().addMessagePanelText(
+						"\nUnfortunately, you already have the Rent Dodge Card");
 				} else {
-					GamePane.getInstance().setMessagePanelText("Free Parking!"
-							+ " Unforunatley, you already have the Rent Dodge Card");
+					GamePane.getInstance().setMessagePanelText(
+							" you get to take the RentDodge card from "
+							+ player.getName());
+					player.hasRentDodgeCard = false;
 				}
 			} else {
-				GamePane.getInstance().setMessagePanelText("Free Parking!"
-						+ " you get to take the Rent Dodge Card!");
+				GamePane.getInstance().setMessagePanelText(
+						"\nYou get to take the Rent Dodge Card!");
 			}
 			player.hasRentDodgeCard = false;
 		}
