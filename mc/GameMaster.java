@@ -21,9 +21,7 @@ public class GameMaster {
 	private static Player currentPlayer;
 	
 	private boolean isPaused = false;
-	
-	private static int selectedDistrict;
-	
+		
 	private static final GameMaster GAMEMASTER = new GameMaster();
 
 	
@@ -98,11 +96,7 @@ public class GameMaster {
 		index = (currentPlayer.getIndex() - 1) % players.size();
 		return players.get(index);
 	}
-	
-	public int getSelectedDistrict() {
-		return selectedDistrict;
-	}
-	
+		
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
@@ -285,10 +279,6 @@ public class GameMaster {
 		//set the current player to the first in the index
 		System.out.println("setting current player to 0");
 		currentPlayer = players.get(0);
-	}
-	
-	public void setSelectedDistrict(int index) {
-		selectedDistrict = index;
 	}
 	
 	public ArrayList<Player> getPlayers() {
