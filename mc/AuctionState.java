@@ -40,14 +40,9 @@ public class AuctionState implements GameState {
 	JLabel player4Label;
 	JLabel player5Label;
 	JLabel player6Label;
-//	JLabel player1Bid;
-//	JLabel player2Bid;
-//	JLabel player3Bid;
-//	JLabel player4Bid;
-//	JLabel player5Bid;
-//	JLabel player6Bid;
 	JSlider auctionStartSlider;
 	JButton auctionStartButton;
+	JButton backToGamePlayStateButton;
 	JPanel counterPanel;
 	JPanel playersPanel;
 	Timer auctionTimer;
@@ -69,11 +64,6 @@ public class AuctionState implements GameState {
 		isAuctioning = false;
 
 		bidArray = new int[6];
-		for (int ii = 0; ii < 6; ii++)
-			bidArray[ii] = 0;
-
-		// timerValue = (int)((Math.random()*100)%40 + 10);
-		timerValue = 15;
 
 		initComponents();
 
@@ -88,6 +78,7 @@ public class AuctionState implements GameState {
 		playersPanel = new JPanel();
 		auctionStartSlider = new JSlider();
 		auctionStartButton = new JButton();
+		backToGamePlayStateButton = new JButton();
 		winnerPanel = new JPanel();
 		winnerLabel = new JLabel();
 		playerBids = new JLabel[6];
@@ -184,12 +175,12 @@ public class AuctionState implements GameState {
 		playersPanel
 				.setBorder(BorderFactory.createTitledBorder("Players Bids"));
 		playersPanel.setPreferredSize(new Dimension(370, 200));
-		playerPanels[0].setBorder(BorderFactory.createTitledBorder("Player 1: (Q)"));
-		playerPanels[1].setBorder(BorderFactory.createTitledBorder("Player 2: (])"));
-		playerPanels[2].setBorder(BorderFactory.createTitledBorder("Player 3: (Z)"));
-		playerPanels[3].setBorder(BorderFactory.createTitledBorder("Player 4: (/)"));
-		playerPanels[4].setBorder(BorderFactory.createTitledBorder("Player 5: (V)"));
-		playerPanels[5].setBorder(BorderFactory.createTitledBorder("Player 6: (M)"));
+		playerPanels[0].setBorder(BorderFactory.createTitledBorder("Player 0: (Q)"));
+		playerPanels[1].setBorder(BorderFactory.createTitledBorder("Player 1: (])"));
+		playerPanels[2].setBorder(BorderFactory.createTitledBorder("Player 2: (Z)"));
+		playerPanels[3].setBorder(BorderFactory.createTitledBorder("Player 3: (/)"));
+		playerPanels[4].setBorder(BorderFactory.createTitledBorder("Player 4: (V)"));
+		playerPanels[5].setBorder(BorderFactory.createTitledBorder("Player 5: (M)"));
 		winnerPanel.setBorder(BorderFactory.createTitledBorder("Congratulations!"));
 
 		counterLabel.setText("");
@@ -217,6 +208,14 @@ public class AuctionState implements GameState {
 						auctionStartButtonActionPerformed(evt);
 					}
 				});
+		
+		backToGamePlayStateButton.setText("Finished");
+		backToGamePlayStateButton
+				.addActionListener(new java.awt.event.ActionListener(){
+					public void actionPerformed(ActionEvent evt){
+						backToGamePlayStateButtonActionPerformed(evt);
+					}
+				});
 		auctionStartSlider.setPreferredSize(new Dimension(600,40));
 		auctionStartSlider.setMinimum(0);
 
@@ -236,8 +235,15 @@ public class AuctionState implements GameState {
 		auctionStartSliderPanel.add(auctionStartSlider);
 		auctionStartSliderPanel.add(auctionStartButton);
 		
-		winnerPanel.add(winnerLabel);
+		winnerPanel.add(winnerLabel,"wrap");
+		winnerPanel.add(backToGamePlayStateButton);
 		
+	}
+
+	protected void backToGamePlayStateButtonActionPerformed(ActionEvent evt) {
+		winnerPanel.setVisible(false);
+		layeredPane.removeAll();
+		gameStateMachine.setState(gameStateMachine.getGamePlayState());
 	}
 
 	protected void auctionTimerActionPerformed() {
@@ -261,6 +267,7 @@ public class AuctionState implements GameState {
 		playersPanel.setVisible(false);
 		layeredPane.removeAll();
 		layeredPane.add(winnerPanel);
+		winnerPanel.setVisible(true);
 		
 		layeredPane.revalidate();
 		//layeredPane.updateUI();
@@ -272,12 +279,10 @@ public class AuctionState implements GameState {
 				winningBid = bidArray[ii];
 				winningPlayer = ii;
 			}
-		winnerLabel.setText("Player " + (winningPlayer + 1) + " has won with a bid of: " + winningBid);
+		winnerLabel.setText("Player " + (winningPlayer) + " has won with a bid of: " + winningBid);
 		Player winner = gameMaster.getPlayers().get(winningPlayer);
 		winner.pay((double)((double)winningBid / (double)1000000));
-		//winner.addDistrict(gameMaster.getBoard().getDistrict(gameMaster.getSelectedDistrict()));
-		gameStateMachine.setState(gameStateMachine.getGamePlayState());
-		
+		//winner.addDistrict(gameMaster.getBoard().getDistrict(gameMaster.getSelectedDistrict()));		
 	}
 
 	protected void auctionStartSliderChanged() {
@@ -294,10 +299,15 @@ public class AuctionState implements GameState {
 	}
 
 	private void auctionMode() {
-		for(int ii = 0; ii <gameMaster.getNumPlayers();ii++)
+		for(int ii = 0; ii <gameMaster.getNumPlayers();ii++){
 			if(ii != 2)
 				playersPanel.add(playerPanels[ii],"span 1");
 			else playersPanel.add(playerPanels[ii],"wrap");
+			
+			playerBids[ii].setText(Integer.toString(bidArray[ii]));
+			playerBids[ii].setPreferredSize(new Dimension(130,30));
+		}
+
 		
 		auctionStartSliderPanel.setVisible(false);
 		layeredPane.removeAll();
@@ -310,9 +320,9 @@ public class AuctionState implements GameState {
 				"10000 dollars higher than the previous highest bid. You may only bid the amount\n" +
 				"of money you currently have in your inventory. No last minute Mortgages punks!\n" +
 				"Bid Keys:\n" +
-				"	Player 1: Q	        Player 2: ]\n" +
-				"	Player 3: Z	        Player 4: /\n" +
-				"	Player 5: V	        Player 6: M\n" +
+				"	Player 0: Q	        Player 1: ]\n" +
+				"	Player 2: Z	        Player 3: /\n" +
+				"	Player 4: V	        Player 5: M\n" +
 				"Once you're ready. Hit the OK Button!", "Welcome to The Auction!", JOptionPane.INFORMATION_MESSAGE);
 		auctionTimer.start();
 		counterLabel.setText("Get Ready!");
@@ -325,6 +335,12 @@ public class AuctionState implements GameState {
 		playerCount = gameMaster.getNumPlayers();
 		currentPlayer = gameMaster.getCurrentPlayer();
 		auctionStartSlider.setMaximum((int)(currentPlayer.getCash()*1000000));
+		
+		for (int ii = 0; ii < 6; ii++)
+			bidArray[ii] = 0;
+
+		//timerValue = (int)((Math.random()*100)%40 + 10);
+		timerValue = 3;
 
 		mainFrame.setContentPane(layeredPane);
 		layeredPane.revalidate();
