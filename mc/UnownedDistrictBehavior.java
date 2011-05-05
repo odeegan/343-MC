@@ -42,6 +42,7 @@ public class UnownedDistrictBehavior implements SquareBehavior{
 		
 		if (currentPlayer.getCash() > district.getCost()) {
 			gamePane.addMessagePanelButton(purchaseButton);
+			gamePane.addMessagePanelButton(auctionButton);
 		} else {
 			gamePane.setMessagePanelText("You do not have"
 						+ " enough cash to purchase it.");	
