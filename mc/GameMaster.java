@@ -20,6 +20,8 @@ public class GameMaster {
 	private static Board board;
 	private static Player currentPlayer;
 	
+	private boolean isPaused = false;
+	
 	private static int selectedDistrict;
 	
 	private static final GameMaster GAMEMASTER = new GameMaster();
@@ -48,6 +50,7 @@ public class GameMaster {
 		startAuctionButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
+						GameMaster.getInstance().isPaused = false;
 						gameStateMachine.setState(gameStateMachine.getAuctionState());
 
 					}
@@ -57,8 +60,10 @@ public class GameMaster {
 	}
 	
 	public void startTurn() {
-		//draw the screen
-		gamePane.addSelectionLayer();
+		if (isPaused) {
+			resumeTurn();
+		}
+		
 		gamePane.enableButton(gamePane.getRollDiceButton());
 		gamePane.disableButton(gamePane.getEndTurnButton());
 		gamePane.update();
@@ -70,6 +75,11 @@ public class GameMaster {
 					+ Integer.toString(currentPlayer.getTurnsInJail()));
 		testIfPlayerIsInJail();
 	}
+	
+	public void resumeTurn() {
+	//TODO: resume the players turn after the GameState is handed back to us
+	}
+	
 	
 	public Board getBoard() {
 		return board;
