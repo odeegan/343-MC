@@ -488,6 +488,16 @@ public class Board implements Drawable {
 		return (District)squares.get(position);
 	}
 	
+	
+	public District getDistrictByName(String name) {
+		for(int jj = 0; jj < squares.size(); jj++){
+			if(name.equals((squares.get(jj).getName()))){
+					return (District)squares.get(jj);
+			}
+		}
+		return null;
+	}
+	
 	public ArrayList<Square> getSquares() {
 		return squares;
 	}
