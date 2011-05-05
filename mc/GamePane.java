@@ -1,16 +1,29 @@
 package mc;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
-import javax.swing.*;
-import net.miginfocom.swing.MigLayout;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Random;
-import java.awt.image.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+
+import net.miginfocom.swing.MigLayout;
 
 
 class GamePane extends JLayeredPane {
@@ -40,7 +53,7 @@ class GamePane extends JLayeredPane {
 	private static JButton taxiButton;
 	private static JButton taxDodgeButton;
 	
-	public int SelectedDistrict;
+	public int selectedDistrict;
 	
 	
 	private static final GamePane GAMEPANE = new GamePane();
@@ -58,13 +71,14 @@ class GamePane extends JLayeredPane {
 			private class MouseHandler implements MouseListener {
 				public void mouseClicked(MouseEvent event) {}
 				public void mousePressed(MouseEvent e) {
-					label.setText(String.format("[%d, %d]", e.getX(), e.getY()));
 					setIcon(new ImageIcon("images/buttonSelect.png"));
+					setMessagePanelText(getText());
+					
+					setSelectedDistrict(Integer.parseInt(getText()));
 				}
 				
 				public void mouseReleased(MouseEvent e) {
 					setIcon(new ImageIcon("images/buttonOver.png"));
-					GamePane.getInstance().setMessagePanelText(self.getText());
 				}
 				
 				public void mouseEntered(MouseEvent e) {
@@ -101,9 +115,9 @@ class GamePane extends JLayeredPane {
 				if (squares.get(i).getType() == null) {
 					District district = (District)squares.get(i);
 					label = new DistrictLabel();
+					label.setFont(new Font("Verdana", Font.ITALIC, 2));
 					label.setText(Integer.toString(i));
 					label.setForeground(Color.white);
-					//label.setBackground(Color.black);
 					if (i > 0 && i < 10) {
 						label.setBounds(district.getX(), district.getY()-40, 62, 104);
 					}
@@ -355,36 +369,38 @@ class GamePane extends JLayeredPane {
 	
 	public class MessagePanel extends JPanel {
 		
-		//JPanel textPanel;
-		JPanel buttonPanel;
 		JTextArea textArea;
+		JPanel checkBoxPanel;
+		JPanel buttonPanel;
 		
 		public MessagePanel() {
-			setLayout(new BorderLayout());
+			setLayout(new MigLayout());
 			
-			//setPreferredSize(new Dimension(350,250));
+			setPreferredSize(new Dimension(400,300));
 			setBorder(BorderFactory.createLineBorder(Color.black, 2));
-			setOpaque(true);
 			textArea = new JTextArea();
-
-			buttonPanel = new JPanel();
-			buttonPanel.setPreferredSize(new Dimension(300,100));
-			
-			
-			add(textArea, BorderLayout.NORTH);
-			add(buttonPanel, BorderLayout.SOUTH);
-		}
-		
-		public void setText(String str) {
-			remove(textArea);
-			textArea = new JTextArea(str);
-			textArea.setPreferredSize(new Dimension(350,200));
+			textArea.setPreferredSize(new Dimension(400,100));
 			textArea.setMargin(new Insets(10,10,10,10));
 			textArea.setFont(new Font("Verdana", Font.BOLD, 16));
 			textArea.setLineWrap(true);
 			textArea.setWrapStyleWord(true);
 			textArea.setOpaque(false);
-			add(textArea);
+
+			buttonPanel = new JPanel();
+			buttonPanel.setPreferredSize(new Dimension(400,100));
+
+			checkBoxPanel = new JPanel();
+			checkBoxPanel.setPreferredSize(new Dimension(400, 100));
+			
+			add(textArea, "cell 0 0");
+			add(checkBoxPanel, "cell 0 1");
+			add(buttonPanel, "cell 0 2");
+		}
+		
+		public void setText(String str) {
+			textArea.setText(str);
+			textArea.revalidate();
+			textArea.repaint();
 		}
 		
 		
@@ -396,10 +412,17 @@ class GamePane extends JLayeredPane {
 		}
 		
 		public void addButton(JButton btn) {
-			//btn.setPreferredSize(new Dimension(120, 30));
 			buttonPanel.add(btn);
 			buttonPanel.revalidate();
 			buttonPanel.repaint();
+		}
+			
+		public void addCheckBox(JCheckBox checkBox) {
+			checkBox.setFont(new Font("Verdana", Font.BOLD, 16));
+			checkBoxPanel.add(checkBox);
+			checkBoxPanel.revalidate();
+			checkBoxPanel.repaint();
+		
 		}
 	}
 	
@@ -509,6 +532,11 @@ class GamePane extends JLayeredPane {
 		messagePanel.addButton(btn);
 	}
 	
+	public void addMessagePanelCheckBox(JCheckBox checkBox) {
+		
+		messagePanel.addCheckBox(checkBox);
+	}
+	
 	public void enableButton(JButton btn) {
 		btn.setEnabled(true);
 	}
@@ -559,6 +587,14 @@ class GamePane extends JLayeredPane {
 		System.out.println("adding selcetion layer");
 		revalidate();
 		repaint();
+	}
+	
+	public void setSelectedDistrict(int index) {
+		selectedDistrict = index;
+	}
+	
+	public int getSelectedDistrict() {
+		return selectedDistrict;
 	}
 	
 	public void update() {
