@@ -40,6 +40,7 @@ class GamePane extends JLayeredPane {
 	private static JButton taxiButton;
 	private static JButton taxDodgeButton;
 	
+	public int SelectedDistrict;
 	
 	
 	private static final GamePane GAMEPANE = new GamePane();
@@ -63,6 +64,7 @@ class GamePane extends JLayeredPane {
 				
 				public void mouseReleased(MouseEvent e) {
 					setIcon(new ImageIcon("images/buttonOver.png"));
+					GamePane.getInstance().setMessagePanelText(self.getText());
 				}
 				
 				public void mouseEntered(MouseEvent e) {
@@ -99,6 +101,8 @@ class GamePane extends JLayeredPane {
 				if (squares.get(i).getType() == null) {
 					District district = (District)squares.get(i);
 					label = new DistrictLabel();
+					label.setText(Integer.toString(i));
+					label.setForeground(Color.white);
 					//label.setBackground(Color.black);
 					if (i > 0 && i < 10) {
 						label.setBounds(district.getX(), district.getY()-40, 62, 104);
