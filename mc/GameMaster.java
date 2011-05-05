@@ -10,7 +10,6 @@ import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;
 
 
-
 public class GameMaster {
 
 	GamePane gamePane;
@@ -21,6 +20,7 @@ public class GameMaster {
 	private static Board board;
 	private static Player currentPlayer;
 	
+	private static int selectedDistrict;
 	
 	private static final GameMaster GAMEMASTER = new GameMaster();
 
@@ -58,6 +58,7 @@ public class GameMaster {
 	
 	public void startTurn() {
 		//draw the screen
+		gamePane.addSelectionLayer();
 		gamePane.enableButton(gamePane.getRollDiceButton());
 		gamePane.disableButton(gamePane.getEndTurnButton());
 		gamePane.update();
@@ -88,24 +89,56 @@ public class GameMaster {
 		return players.get(index);
 	}
 	
+	public int getSelectedDistrict() {
+		return selectedDistrict;
+	}
+	
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
 	
 	public void checkSquare(int roll) {
 		System.out.println("checking square");
-		Square newSquare = board.getSquare(currentPlayer.move(roll));
-		System.out.println(currentPlayer.getName() + " landed on "
-					+ newSquare.getName());
+		currentPlayer.testMove(roll);
+		final Square newSquare = board.getSquare(currentPlayer.position);
+		
+		if (currentPlayer.hasTaxiCard) {
+			gamePane.enableButton(gamePane.getTaxiButton());
 
-		//newSquare.performBehavior();
+			gamePane.setMessagePanelText("You landed on "
+						+ newSquare.getName()
+						+ " You may use your Taxi Card or ....");
+
+			JButton stayPutButton = new JButton("Stay Put");
+			stayPutButton.addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {						
+							System.out.println(currentPlayer.getName() + " is staying put on "
+									+ newSquare.getName());
+							currentPlayer.doMove();
+							newSquare.performBehavior();
+							gamePane.update();
+						}
+					});
+			
+			gamePane.addMessagePanelButton(stayPutButton);
+		} else {
+			currentPlayer.doMove();
+			newSquare.performBehavior();
+			gamePane.update();	
+		}
 	}
 	
 	public void displayPlayerChanceCards() {
 		gamePane.hideButton(gamePane.getGetOutOfJailButton());
 		gamePane.hideButton(gamePane.getRentDodgeButton());
 		gamePane.hideButton(gamePane.getTaxiButton());
+		gamePane.hideButton(gamePane.getTaxDodgeButton());
+		// these buttons will be enabled when appropriate
 		gamePane.disableButton(gamePane.getTaxiButton());
+		gamePane.disableButton(gamePane.getTaxDodgeButton());
+		gamePane.disableButton(gamePane.getRentDodgeButton());
+		gamePane.disableButton(gamePane.getGetOutOfJailButton());
 		if (currentPlayer.hasGetOutOfJailCard) {
 			gamePane.showButton(gamePane.getGetOutOfJailButton());
 			gamePane.disableButton(gamePane.getGetOutOfJailButton());
@@ -116,7 +149,9 @@ public class GameMaster {
 		if (currentPlayer.hasTaxiCard) {
 			gamePane.showButton(gamePane.getTaxiButton());
 		}
-	}
+		if (currentPlayer.hasTaxDodgeCard) {
+			gamePane.showButton(gamePane.getTaxDodgeButton());
+		}}
 	
 	public void roll() {
 		gamePane.enableButton(gamePane.getEndTurnButton());
@@ -183,9 +218,43 @@ public class GameMaster {
 		return dice;
 	}
 	
+	public void useRentDodgeCard() {
+		currentPlayer.hasRentDodgeCard = false;
+		gamePane.hideButton(gamePane.getRentDodgeButton());
+		gamePane.clearMessageLayer();
+		gamePane.update();
+	}
+	
+	public void useTaxiCard() {
+		currentPlayer.hasTaxiCard = false;
+		gamePane.hideButton(gamePane.getTaxiButton());
+		
+		gamePane.setMessagePanelText("Take a Taxi to...");		
+		int[] positions = {-2, -1, 1, 2};
+		int i = 0;
+		for (i=0; i < positions.length; i++) {
+			final int delta = positions[i];
+			final Square square = board.getSquare(currentPlayer.getPosition() + delta);
+			JButton button = new JButton(square.getName());
+			button.addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {
+							System.out.println("taking a taxi");
+							currentPlayer.testMove(delta);
+							currentPlayer.doMove();
+							square.performBehavior();
+							gamePane.update();
+						}
+					});
+			gamePane.addMessagePanelButton(button);	
+		}
+	}
+	
+	
 	public void endTurn() {
 		currentPlayer = getNextPlayer();
 		gamePane.clearMessageLayer();
+		gamePane.update();
 		startTurn();
 	}
 	
@@ -206,6 +275,10 @@ public class GameMaster {
 		//set the current player to the first in the index
 		System.out.println("setting current player to 0");
 		currentPlayer = players.get(0);
+	}
+	
+	public void setSelectedDistrict(int index) {
+		selectedDistrict = index;
 	}
 	
 	public ArrayList<Player> getPlayers() {

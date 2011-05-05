@@ -1,5 +1,7 @@
 package mc;
 import java.util.*;
+import java.text.DecimalFormat;
+
 
 public class Player {
 
@@ -12,21 +14,22 @@ public class Player {
 	
 	double cash = 37.7;
 	int position = 0;
+	int previousPosition;
 	int numDoubles = 0;
 	int turnsInJail = 0;
 
 	boolean rolledDoubles = false;
 	boolean isInJail = false;
-	boolean hasGetOutOfJailCard = true;
-	boolean hasRentDodgeCard = true;
-	boolean hasTaxiCard = true;
+	boolean hasGetOutOfJailCard = false;
+	boolean hasRentDodgeCard = false;
+	boolean hasTaxiCard = false;
+	boolean hasTaxDodgeCard = false;
 	
 	ArrayList<District> districts;
 	
 	public Player(int index) {
 		this.name = "Player" + Integer.toString(index);
 		this.index = index;
-		currentSquare = GameMaster.getInstance().getBoard().getSquare(position);
 		districts = new ArrayList<District>();
 	}
 
@@ -35,7 +38,8 @@ public class Player {
 	}
 	
 	public double getCash() {
-		return cash;
+		DecimalFormat df = new DecimalFormat("###.##");
+		return Double.valueOf(df.format(cash));
 	}
 	
 	/*
@@ -54,16 +58,19 @@ public class Player {
 		return turnsInJail;
 	}
 	
-	public int move(int delta) {
-		// use mod math to loop around the board
+	public int testMove(int delta) {
 		int newPosition = (getPosition() + delta) % 39;
+		previousPosition = position;
+		position = newPosition;
+		return position;
+	}
+	
+	public void doMove() {
+		// use mod math to loop around the board
 		// pay the player for passing Go
-		if (newPosition < position) {
+		if (position < previousPosition) {
 			collect(2);
 		}
-		position = newPosition;
-		currentSquare = GameMaster.getInstance().getBoard().getSquare(newPosition);
-		return newPosition;
 	}
 	
 	public void pay(double amount) {
@@ -77,10 +84,6 @@ public class Player {
 		cash = cash  + amount;
 	}
 	
-	public Square getCurrentSquare() {
-		return currentSquare;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -88,13 +91,15 @@ public class Player {
 	public Double getNetWorth() {
 		// logic to calculate a players networth
 		// cash + mortgage value of districts
+		DecimalFormat df = new DecimalFormat("###.##");
+		
 		int i;
 		Double sum = 0.0;
 		for (i=0; i < districts.size(); i++) {
 			sum += districts.get(i).getRent();
 		}
 		sum += getCash();
-		return sum;
+		return Double.valueOf(df.format(sum));
 	}
 	
 	public void setDoubles(boolean bool) {
@@ -124,7 +129,7 @@ public class Player {
 	
 	public void setPosition(int index) {
 		System.out.println("Setting " + name + " position to " + index);
-		position = index;
+		position = index;		
 	}
 	
 	public void setTokenFile(String str) {
@@ -150,9 +155,16 @@ public class Player {
 		if (getCash() != getNetWorth()) {
 			string += "\nNetworth: " + getNetWorth();
 		}
+		
 		if (districts.size() > 0) {
-			string += "\nDistricts: " + districts.toString();
+			string += "\nDistricts: ";
 		}
+		
+		for (District district: districts) {
+			string += district.getName() + ",  ";
+		}
+		
+		
 		return string;
 	}
 	

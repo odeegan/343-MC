@@ -3,7 +3,7 @@ package mc;
 
 public class District extends Square {
 
-	SQUARETYPE type = SQUARETYPE.DISTRICT;
+	SQUARETYPE type;
 	
 	SquareBehavior squareBehavior = new UnownedDistrictBehavior();
 	
@@ -32,9 +32,11 @@ public class District extends Square {
 	double industrialCost;
 	double skyscraperCost;
 	
+	boolean isMortgaged = false;
+	
 	double[] rents;
 	
-	public District (String color, String name,  double cost) {
+	public District (SQUARETYPE type, String color, String name,  double cost) {
 		this.name = name;
 		this.color = color;
 		this.cost = cost;
@@ -84,6 +86,13 @@ public class District extends Square {
 		return cost;
 	}
 	
+	public int getIndustrialBlockCount() {
+		return industrialBlockCount;
+	}
+	
+	public int getResidentialBlockCount() {
+		return residentialBlockCount;
+	}
 	
 	public String getName() {
 		return name;
@@ -91,13 +100,16 @@ public class District extends Square {
 	
 	public double getRent() {
 		// calculate rent based on buildings, hazards, etc.
+		if (isMortgaged) {
+			return getCost();
+		}
+		
 		if (hazard != null) {
-			return 0;
+			return new Double(rents[industrialBlockCount]);
 		} else {
 			return new Double(rents[residentialBlockCount + industrialBlockCount]);
 		}
 	}	
-	
 	
 	public double getMortgageValue() {
 		return getRent();

@@ -1,38 +1,35 @@
 
-select number of players
-init the game
-redraw the board
-start players turn
-prompt player to roll
-check square
-perform behavior
 
-WHAT IS DRAWABLE?
-board
-player
-score board
+	
+[] build
+[]	AUCTION("Auction"), 
 
 
+[]	PLANNINGPERMISSION("Planning Permission"), 
+[]	CHANCE("Chance")
+ 
+[X] owned district
+	[x] enable rent dodge card when someone lands on an owned district 
+[x]	unowned district
+[x]	FREEPARKING("Free Parking"),
+[x]	INDUSTRYTAX("Industry Tax"),
+[x]	GO("G0"), 
+[x]	GOTOJAIL("Go To Jail!"),
+[X]	JAIL("Jail");
 
-<<<<<<< HEAD
-public class RollDiceMenu extends JPanel {
-		
-		public RollDiceMenu() {
-			setPreferredSize(new Dimension(450,200));
-			// make the background transparent
-			setOpaque(false);
+[ ] get "select district" working
+[ ] railroads
+[ ] display all players' networth
+[ ] create roll over for district select layer
+[ ] put a colored marker on properties that are owned (use the same color as the player)
 
-			JButton rollDiceButton = new JButton("Roll the Dice");
-			rollDiceButton.addActionListener(
-					new ActionListener() {
-						public void actionPerformed(ActionEvent event) {
-							GamePane.getInstance().getMessagePanel().removeAll();
-						}
-					});
-			add(rollDiceButton);
-		}
-	}
-=======
-Devil
-GOD
->>>>>>> origin/master
+
+[ ] bankruptcy
+[ ] pay method should determine if player has enough
+[ ] mortgage
+
+
+HAVE HAZARD...still collect on industrial
+if hazard and no industrial, pay land value only
+if mortgaged, don't pay
+

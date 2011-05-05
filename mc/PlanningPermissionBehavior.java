@@ -8,7 +8,7 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		GamePane.getInstance().setMessagePanelText("You landed on Planning Permission");
 
 	}
 

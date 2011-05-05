@@ -25,11 +25,17 @@ public class Board implements Drawable {
 
 //Summergate - BRN
 			
-		District summergate = new District("BROWN", "Summergate", .6);
+		District summergate = new District(
+				SQUARETYPE.DISTRICT,
+				"BROWN",
+				"Summergate",
+				.6);
 		summergate.setRents(.02, .1, .2, .4, .8, 1.6, 2.2, 3.0, 5.5);
 		summergate.setSquareBehavior(new UnownedDistrictBehavior());
 		summergate.setX(602);		
 		summergate.setY(708);
+		go.setXX(664);
+		go.setYY(768);
 		squares.add(summergate);
 
 //Chance
@@ -41,6 +47,7 @@ public class Board implements Drawable {
 
 //Stoneside - PRP
 		District stoneside = new District( 
+				SQUARETYPE.DISTRICT,
 				"BROWN",
 				"Stoneside",
 				.6);
@@ -49,6 +56,8 @@ public class Board implements Drawable {
 		stoneside.setSquareBehavior(new UnownedDistrictBehavior());
 		stoneside.setX(478);		
 		stoneside.setY(708);
+		go.setXX(540);
+		go.setYY(768);
 		squares.add(stoneside);
 
 //Industry Tax
@@ -67,6 +76,7 @@ public class Board implements Drawable {
 
 //Westlands - BBY
 		District westlands = new District( 
+				SQUARETYPE.DISTRICT,
 				"SKY",
 				"Westlands",
 				1.0);
@@ -75,6 +85,8 @@ public class Board implements Drawable {
 		westlands.setSquareBehavior(new UnownedDistrictBehavior());
 		westlands.setX(292);		
 		westlands.setY(708);
+		go.setXX(354);
+		go.setYY(768);
 		squares.add(westlands);
 
 
@@ -87,6 +99,7 @@ public class Board implements Drawable {
 
 //Bayview Dock - BBY
 		District bayviewDock = new District( 
+				SQUARETYPE.DISTRICT,
 				"SKY",
 				"Bayview Dock",
 				1);
@@ -95,10 +108,13 @@ public class Board implements Drawable {
 		bayviewDock.setSquareBehavior(new UnownedDistrictBehavior());
 		bayviewDock.setX(168);		
 		bayviewDock.setY(708);
+		go.setXX(230);
+		go.setYY(768);
 		squares.add(bayviewDock);
 
 //Brightside - BBY
 		District brightside = new District( 
+				SQUARETYPE.DISTRICT,
 				"SKY",
 				"Brightside",
 				1.2);
@@ -107,6 +123,8 @@ public class Board implements Drawable {
 		brightside.setSquareBehavior(new UnownedDistrictBehavior());
 		brightside.setX(106);		
 		brightside.setY(708);
+		go.setXX(168);
+		go.setYY(768);
 		squares.add(brightside);
 
 //Jail
@@ -118,6 +136,7 @@ public class Board implements Drawable {
 
 //Old Town - PRP
 		District oldTown = new District( 
+				SQUARETYPE.DISTRICT,
 				"PURPLE",
 				"Old Town",
 				1.4);
@@ -126,6 +145,8 @@ public class Board implements Drawable {
 		oldTown.setSquareBehavior(new UnownedDistrictBehavior());
 		oldTown.setX(4);		
 		oldTown.setY(602);
+		go.setXX(106);
+		go.setYY(664);
 		squares.add(oldTown);
 
 //Auction UnOwned
@@ -137,6 +158,7 @@ public class Board implements Drawable {
 
 //Harbor heights - PRP
 		District harborHeights = new District( 
+				SQUARETYPE.DISTRICT,
 				"PURPLE",
 				"Harbor Heights",
 				1.4);
@@ -145,11 +167,14 @@ public class Board implements Drawable {
 		harborHeights.setSquareBehavior(new UnownedDistrictBehavior());
 		harborHeights.setX(4);		
 		harborHeights.setY(478);
+		go.setXX(106);
+		go.setYY(540);
 		squares.add(harborHeights);
 
 
 //Central Quay - PRP
 		District centralQuay = new District( 
+				SQUARETYPE.DISTRICT,
 				"PURPLE",
 				"Central Quay",
 				1.6);
@@ -158,6 +183,8 @@ public class Board implements Drawable {
 		centralQuay.setSquareBehavior(new UnownedDistrictBehavior());
 		centralQuay.setX(4);		
 		centralQuay.setY(416);
+		go.setXX(106);
+		go.setYY(478);
 		squares.add(centralQuay);
 
 //Planning Permission - Prison (4 Blocks) / School
@@ -170,6 +197,7 @@ public class Board implements Drawable {
 		
 //Shine Village - ORN
 		District shineVillage = new District( 
+				SQUARETYPE.DISTRICT,
 				"ORANGE",
 				"Shine Village",
 				1.8);
@@ -178,6 +206,8 @@ public class Board implements Drawable {
 		shineVillage.setSquareBehavior(new UnownedDistrictBehavior());
 		shineVillage.setX(4);		
 		shineVillage.setY(292);
+		go.setXX(106);
+		go.setYY(354);
 		squares.add(shineVillage);
 
 //Chance
@@ -189,6 +219,7 @@ public class Board implements Drawable {
 		
 //East Bank - ORN
 		District eastBank = new District( 
+				SQUARETYPE.DISTRICT,
 				"ORANGE",
 				"East Bank",
 				1.8);
@@ -197,10 +228,13 @@ public class Board implements Drawable {
 		eastBank.setSquareBehavior(new UnownedDistrictBehavior());
 		eastBank.setX(4);		
 		eastBank.setY(168);
+		go.setXX(106);
+		go.setYY(230);
 		squares.add(eastBank);
 
 //Treetop Park - ORN
 		District treetopPark = new District( 
+				SQUARETYPE.DISTRICT,
 				"ORANGE",
 				"Treetop Park",
 				2);
@@ -209,6 +243,8 @@ public class Board implements Drawable {
 		treetopPark.setSquareBehavior(new UnownedDistrictBehavior());
 		treetopPark.setX(4);		
 		treetopPark.setY(106);
+		go.setXX(106);
+		go.setYY(168);
 		squares.add(treetopPark);
 
 //Free Parking
@@ -220,6 +256,7 @@ public class Board implements Drawable {
 
 //Seaview - RED
 		District seaview = new District( 
+				SQUARETYPE.DISTRICT,
 				"RED",
 				"Seaview",
 				2.2);
@@ -228,6 +265,8 @@ public class Board implements Drawable {
 		seaview.setSquareBehavior(new UnownedDistrictBehavior());
 		seaview.setX(106);		
 		seaview.setY(4);
+		go.setXX(168);
+		go.setYY(104);
 		squares.add(seaview);
 
 //Chance
@@ -239,6 +278,7 @@ public class Board implements Drawable {
 
 //The Wharf - RED
 		District theWarf = new District( 
+				SQUARETYPE.DISTRICT,
 				"RED",
 				"The Wharf",
 				2.2);
@@ -247,11 +287,14 @@ public class Board implements Drawable {
 		theWarf.setSquareBehavior(new UnownedDistrictBehavior());
 		theWarf.setX(230);		
 		theWarf.setY(4);
+		go.setXX(292);
+		go.setYY(104);
 		squares.add(theWarf);
 
 		
 //Middleton - RED
 		District middleton = new District( 
+				SQUARETYPE.DISTRICT,
 				"RED",
 				"Middleton",
 				2.4);
@@ -260,6 +303,8 @@ public class Board implements Drawable {
 		middleton.setSquareBehavior(new UnownedDistrictBehavior());
 		middleton.setX(292);		
 		middleton.setY(4);
+		go.setXX(416);
+		go.setYY(104);
 		squares.add(middleton);
 
 //Planning Permission - Sewage Plant (3 Blocks) / Water Tower
@@ -271,6 +316,7 @@ public class Board implements Drawable {
 
 //New Town - YLW
 		District newTown = new District( 
+				SQUARETYPE.DISTRICT,
 				"YELLOW",
 				"New Town",
 				2.6);
@@ -279,10 +325,13 @@ public class Board implements Drawable {
 		newTown.setSquareBehavior(new UnownedDistrictBehavior());
 		newTown.setX(416);		
 		newTown.setY(4);
+		go.setXX(478);
+		go.setYY(104);
 		squares.add(newTown);
 
 //Silver Harbor - YLW
 		District silverHarbor = new District( 
+				SQUARETYPE.DISTRICT,
 				"YELLOW",
 				"Silver Harbor",
 				2.6);
@@ -291,6 +340,8 @@ public class Board implements Drawable {
 		silverHarbor.setSquareBehavior(new UnownedDistrictBehavior());
 		silverHarbor.setX(478);		
 		silverHarbor.setY(4);
+		go.setXX(540);
+		go.setYY(104);
 		squares.add(silverHarbor);
 
 //Chance
@@ -302,6 +353,7 @@ public class Board implements Drawable {
 
 //Central City - YLW
 		District centralCity = new District( 
+				SQUARETYPE.DISTRICT,
 				"YELLOW",
 				"Central City",
 				2.8);
@@ -310,6 +362,8 @@ public class Board implements Drawable {
 		centralCity.setSquareBehavior(new UnownedDistrictBehavior());
 		centralCity.setX(602);		
 		centralCity.setY(4);
+		go.setXX(664);
+		go.setYY(104);
 		squares.add(centralCity);
 
 //GOTOJAIL
@@ -321,6 +375,7 @@ public class Board implements Drawable {
 
 //Royal Court - GRN
 		District royalCourt = new District( 
+				SQUARETYPE.DISTRICT,
 				"GREEN",
 				"Royal Court",
 				3);
@@ -329,10 +384,13 @@ public class Board implements Drawable {
 		royalCourt.setSquareBehavior(new UnownedDistrictBehavior());
 		royalCourt.setX(708);		
 		royalCourt.setY(104);
+		go.setXX(768);
+		go.setYY(104);
 		squares.add(royalCourt);
 
 //The Marina - GRN
 		District theMarina = new District( 
+				SQUARETYPE.DISTRICT,
 				"GREEN",
 				"The Marina",
 				3);
@@ -341,6 +399,8 @@ public class Board implements Drawable {
 		theMarina.setSquareBehavior(new UnownedDistrictBehavior());
 		theMarina.setX(708);		
 		theMarina.setY(166);
+		go.setXX(768);
+		go.setYY(104);
 		squares.add(theMarina);
 
 //Auction UnOwned
@@ -352,6 +412,7 @@ public class Board implements Drawable {
 
 //Riverside - GRN
 		District riverside = new District( 
+				SQUARETYPE.DISTRICT,
 				"GREEN",
 				"Riverside",
 				3.2);
@@ -360,6 +421,8 @@ public class Board implements Drawable {
 		riverside.setSquareBehavior(new UnownedDistrictBehavior());
 		riverside.setX(708);		
 		riverside.setY(290);
+		go.setXX(768);
+		go.setYY(292);
 		squares.add(riverside);
 
 //Planning Permission Power Station (3 Blocks) / Wind Farm
@@ -378,6 +441,7 @@ public class Board implements Drawable {
 
 //Fortune Valley - BLU
 		District fortuneValley = new District( 
+				SQUARETYPE.DISTRICT,
 				"BLUE",
 				"Fortune Valley",
 				3.5);
@@ -386,6 +450,8 @@ public class Board implements Drawable {
 		fortuneValley.setSquareBehavior(new UnownedDistrictBehavior());
 		fortuneValley.setX(708);		
 		fortuneValley.setY(476);
+		go.setXX(768);
+		go.setYY(478);
 		squares.add(fortuneValley);
 
 //Industry Tax
@@ -397,6 +463,7 @@ public class Board implements Drawable {
 
 //Diamond Hills - BLU
 		District diamondHills = new District( 
+				SQUARETYPE.DISTRICT,
 				"BLUE",
 				"Diamond Hills",
 				4);
@@ -405,6 +472,8 @@ public class Board implements Drawable {
 		diamondHills.setSquareBehavior(new UnownedDistrictBehavior());
 		diamondHills.setX(708);		
 		diamondHills.setY(602);
+		go.setXX(768);
+		go.setYY(664);
 		squares.add(diamondHills);
 
 
@@ -415,11 +484,23 @@ public class Board implements Drawable {
 		return squares.get(position);
 	}
 	
-	public District getDistrict(int index) {
-		return (District)squares.get(index);
+	public District getDistrict(int position) {
+		return (District)squares.get(position);
 	}
 	
-
+	public ArrayList<Square> getSquares() {
+		return squares;
+	}
+	
+	public ArrayList<District> getDistricts() {
+		ArrayList<District> districtList = new ArrayList<District>();
+		for (int i=0; i < squares.size(); i++) {
+			if (getSquare(i).getType() == null) {
+				districtList.add(getDistrict(i));
+			}
+		}
+		return districtList;
+	}
 	
 	public JPanel init() {
 	

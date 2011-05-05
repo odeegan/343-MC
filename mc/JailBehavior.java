@@ -8,7 +8,7 @@ public class JailBehavior implements SquareBehavior {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		GamePane.getInstance().setMessagePanelText("You're visiting Jail");
 
 	}
 
