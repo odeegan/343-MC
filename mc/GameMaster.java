@@ -48,7 +48,8 @@ public class GameMaster {
 		startAuctionButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
-						GameMaster.getInstance().isPaused = false;
+						GameMaster.getInstance().isPaused = true;
+						GamePane.getInstance().clearMessageLayer();
 						gameStateMachine.setState(gameStateMachine.getAuctionState());
 
 					}

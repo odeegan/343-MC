@@ -374,39 +374,33 @@ class GamePane extends JLayeredPane {
 		JPanel buttonPanel;
 		
 		public MessagePanel() {
-			setLayout(new BorderLayout());
+			setLayout(new MigLayout());
 			
-			//setPreferredSize(new Dimension(350,250));
+			setPreferredSize(new Dimension(400,300));
 			setBorder(BorderFactory.createLineBorder(Color.black, 2));
-			setOpaque(true);
 			textArea = new JTextArea();
-			textArea.setBackground(Color.blue);
-			textArea.setOpaque(true);
-
-			buttonPanel = new JPanel();
-			buttonPanel.setPreferredSize(new Dimension(300,100));
-			buttonPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-
-			
-			checkBoxPanel = new JPanel();
-			checkBoxPanel.setPreferredSize(new Dimension(300, 30));
-			checkBoxPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-			
-			add(textArea, BorderLayout.NORTH);
-			add(checkBoxPanel, BorderLayout.CENTER);
-			add(buttonPanel, BorderLayout.SOUTH);
-		}
-		
-		public void setText(String str) {
-			remove(textArea);
-			textArea = new JTextArea(str);
-			textArea.setPreferredSize(new Dimension(350,200));
+			textArea.setPreferredSize(new Dimension(400,100));
 			textArea.setMargin(new Insets(10,10,10,10));
 			textArea.setFont(new Font("Verdana", Font.BOLD, 16));
 			textArea.setLineWrap(true);
 			textArea.setWrapStyleWord(true);
 			textArea.setOpaque(false);
-			add(textArea);
+
+			buttonPanel = new JPanel();
+			buttonPanel.setPreferredSize(new Dimension(400,100));
+
+			checkBoxPanel = new JPanel();
+			checkBoxPanel.setPreferredSize(new Dimension(400, 100));
+			
+			add(textArea, "cell 0 0");
+			add(checkBoxPanel, "cell 0 1");
+			add(buttonPanel, "cell 0 2");
+		}
+		
+		public void setText(String str) {
+			textArea.setText(str);
+			textArea.revalidate();
+			textArea.repaint();
 		}
 		
 		
@@ -418,13 +412,13 @@ class GamePane extends JLayeredPane {
 		}
 		
 		public void addButton(JButton btn) {
-			//btn.setPreferredSize(new Dimension(120, 30));
 			buttonPanel.add(btn);
 			buttonPanel.revalidate();
 			buttonPanel.repaint();
 		}
 			
 		public void addCheckBox(JCheckBox checkBox) {
+			checkBox.setFont(new Font("Verdana", Font.BOLD, 16));
 			checkBoxPanel.add(checkBox);
 			checkBoxPanel.revalidate();
 			checkBoxPanel.repaint();
