@@ -22,6 +22,7 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 		
 		GamePane gamePane = GamePane.getInstance();
 		gamePane.setMessagePanelText("You landed on Planning Permission");
+		gamePane.addMessagePanelText("Select a Hazard or a Bonus to build.");
 		gamePane.addSelectionLayer();
 		
 		int i = GameMaster.getInstance().getCurrentPlayer().getPosition();
@@ -30,7 +31,6 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 		
 		if (i > 0 && i < 10) {
 			// Rubbish Dump / Park
-			gamePane.addMessagePanelText("Build a ...");
 			
 			JRadioButton dump = new JRadioButton("Rubbish Dump");
 			dump.addItemListener(
@@ -52,9 +52,7 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 			gamePane.addMessagePanelRadioButton(park);
 		}
 		if (i > 10 && i < 20) {
-			// Prison / School
-			gamePane.addMessagePanelText("Build a ...");
-			
+			// Prison / School			
 			JRadioButton prison = new JRadioButton("Prison", true);
 			prison.addItemListener(
 			    new ItemListener() {
@@ -81,8 +79,6 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 		
 		if (i > 20 && i < 30) {
 			// Sewage Plant / Water Tower
-			gamePane.addMessagePanelText("Build a ...");
-			
 			JRadioButton sewage = new JRadioButton("Sewage Plant", true);
 			sewage.addItemListener(
 			    new ItemListener() {
@@ -109,9 +105,7 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 		}
 
 		if (i > 30 && i <= 39) {
-			// Power Station / Wind Farm
-			gamePane.addMessagePanelText("Build a ...");
-		
+			// Power Station / Wind Farm		
 			JRadioButton power = new JRadioButton("Power Station", false);
 			power.addItemListener(
 			    new ItemListener() {
