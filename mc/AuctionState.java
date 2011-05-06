@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -30,7 +31,8 @@ public class AuctionState implements GameState {
 	int bidArray[];
 	Player currentPlayer;
 	boolean isAuctioning;
-
+	ArrayList<Player> players;
+	
 	JFrame mainFrame;
 	JLayeredPane layeredPane;
 	JLabel counterLabel;
@@ -62,6 +64,7 @@ public class AuctionState implements GameState {
 		gameStateMachine = gsm;
 		mainFrame = mf;
 		isAuctioning = false;
+		players = gameMaster.getPlayers();
 
 		bidArray = new int[6];
 
@@ -69,7 +72,8 @@ public class AuctionState implements GameState {
 
 	}
 
-	private void initComponents() {
+	private void initComponents(){
+		
 		layeredPane = new JLayeredPane();
 		counterPanel = new JPanel();
 		auctionStartSliderPanel = new JPanel();
@@ -95,9 +99,11 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid1 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
-				bidArray[0] = currentBid + 10000;
-				currentBid = bidArray[0];
-				playerBids[0].setText(Integer.toString(bidArray[0]));
+				if((players.get(0).getCash() >= currentBid + 10000)  && (bidArray[0] != currentBid)){
+					bidArray[0] = currentBid + 10000;
+					currentBid = bidArray[0];
+					playerBids[0].setText(Integer.toString(bidArray[0]));
+				}
 			}
 		};
 		layeredPane.getInputMap().put(KeyStroke.getKeyStroke("Q"),"incrementBid1");
@@ -106,9 +112,11 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid2 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
+			if((players.get(1).getCash() >= currentBid + 10000) && (bidArray[1] != currentBid)){
 				bidArray[1] = currentBid + 10000;
 				currentBid = bidArray[1];
 				playerBids[1].setText(Integer.toString(bidArray[1]));
+			}
 			}
 		};
 		layeredPane.getInputMap().put(KeyStroke.getKeyStroke("CLOSE_BRACKET"),"incrementBid2");
@@ -117,10 +125,11 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid3 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
+				if((players.get(2).getCash() >= currentBid + 10000)  && (bidArray[2] != currentBid)){
 				bidArray[2] = currentBid + 10000;
 				currentBid = bidArray[2];
 				playerBids[2].setText(Integer.toString(bidArray[2]));
-			}
+			}}
 		};
 		layeredPane.getInputMap().put(KeyStroke.getKeyStroke("Z"),"incrementBid3");
 		layeredPane.getActionMap().put("incrementBid3",incBid3);
@@ -128,10 +137,11 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid4 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
+				if((players.get(3).getCash() >= currentBid + 10000)  && (bidArray[3] != currentBid)){
 				bidArray[3] = currentBid + 10000;
 				currentBid = bidArray[3];
 				playerBids[3].setText(Integer.toString(bidArray[3]));
-			}
+			}}
 		};
 		layeredPane.getInputMap().put(KeyStroke.getKeyStroke("SLASH"),"incrementBid4");
 		layeredPane.getActionMap().put("incrementBid4",incBid4);
@@ -139,10 +149,11 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid5 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
+				if((players.get(4).getCash() >= currentBid + 10000)  && (bidArray[4] != currentBid)){
 				bidArray[4] = currentBid + 10000;
 				currentBid = bidArray[4];
 				playerBids[4].setText(Integer.toString(bidArray[4]));
-			}
+			}}
 		};
 		layeredPane.getInputMap().put(KeyStroke.getKeyStroke("V"),"incrementBid5");
 		layeredPane.getActionMap().put("incrementBid5",incBid5);
@@ -150,10 +161,11 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid6 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
+				if((players.get(5).getCash() >= currentBid + 10000)  && (bidArray[5] != currentBid)){
 				bidArray[5] = currentBid + 10000;
 				currentBid = bidArray[5];
 				playerBids[5].setText(Integer.toString(bidArray[5]));
-			}
+			}}
 		};
 		layeredPane.getInputMap().put(KeyStroke.getKeyStroke("M"),"incrementBid6");
 		layeredPane.getActionMap().put("incrementBid6",incBid6);
@@ -282,7 +294,15 @@ public class AuctionState implements GameState {
 		winnerLabel.setText("Player " + (winningPlayer) + " has won with a bid of: " + winningBid);
 		Player winner = gameMaster.getPlayers().get(winningPlayer);
 		winner.pay((double)((double)winningBid / (double)1000000));
-		//winner.addDistrict(gameMaster.getBoard().getDistrict(gameMaster.getSelectedDistrict()));		
+		Square wonSquare = gameMaster.getBoard().getSquare(currentPlayer.getPosition());
+		District wonDistrict = (District)wonSquare;
+		if(wonDistrict.getType() == SQUARETYPE.DISTRICT)
+			winner.addDistrict(wonDistrict);
+//		else{
+//			wonSquare = gameMaster.getBoard().getSquare(GamePane.getInstance().getSelectedDistrict());
+//			wonDistrict = (District)wonSquare;
+//			winner.addDistrict(wonDistrict);
+//		}
 	}
 
 	protected void auctionStartSliderChanged() {
