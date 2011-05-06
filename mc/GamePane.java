@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -71,11 +71,13 @@ class GamePane extends JLayeredPane {
 			
 			private class MouseHandler implements MouseListener {
 				public void mouseClicked(MouseEvent event) {}
+				
 				public void mousePressed(MouseEvent e) {
 					setIcon(new ImageIcon("images/buttonSelect.png"));
-					addMessagePanelText(getText());
-					
-					setSelectedDistrict(Integer.parseInt(getText()));
+					int index = Integer.parseInt(getText());
+					addMessagePanelText(
+							GameMaster.getInstance().getBoard().getDistrict(index).getName());				
+					setSelectedDistrict(index);
 				}
 				
 				public void mouseReleased(MouseEvent e) {
@@ -87,7 +89,7 @@ class GamePane extends JLayeredPane {
 				}
 				
 				public void mouseExited(MouseEvent e) {
-					setIcon(new ImageIcon());
+					setIcon(null);
 				}
 			}
 
@@ -420,9 +422,9 @@ class GamePane extends JLayeredPane {
 			buttonPanel.repaint();
 		}
 			
-		public void addButtonGroup(JRadioButton radioButton) {
-			radioButton.setFont(new Font("Verdana", Font.BOLD, 16));
-			checkBoxPanel.add(radioButton);
+		public void addCheckBox(JCheckBox checkBox) {
+			checkBox.setFont(new Font("Verdana", Font.BOLD, 16));
+			checkBoxPanel.add(checkBox);
 			checkBoxPanel.revalidate();
 			checkBoxPanel.repaint();
 		
@@ -520,7 +522,6 @@ class GamePane extends JLayeredPane {
 	}
 	
 	public void setMessagePanelText(String str) {
-		clearMessageLayer();
 		messagePanel = new MessagePanel();
 		messagePanel.setText(str);
 		messageLayer.add(messagePanel);
@@ -535,8 +536,8 @@ class GamePane extends JLayeredPane {
 		messagePanel.addButton(btn);
 	}
 	
-	public void addMessagePanelRadioButton(JRadioButton radioButton) {
-		messagePanel.addButtonGroup(radioButton);
+	public void addMessagePanelCheckBox(JCheckBox checkBox) {
+		messagePanel.addCheckBox(checkBox);
 	}
 	
 	public void enableButton(JButton btn) {

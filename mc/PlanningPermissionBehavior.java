@@ -1,135 +1,188 @@
 package mc;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JRadioButton;
 
 
 
 public class PlanningPermissionBehavior implements SquareBehavior {
 
-	ButtonGroup buttonGroup;
+	GameMaster gameMaster;
+	GamePane gamePane;
+	String structure;
 	
 	public PlanningPermissionBehavior() {
-		// TODO Auto-generated constructor stub
+		gamePane = GamePane.getInstance();
+		gameMaster = GameMaster.getInstance();
 	}
 
 	@Override
 	public void execute() {
 		
-		GamePane gamePane = GamePane.getInstance();
 		gamePane.setMessagePanelText("You landed on Planning Permission");
 		gamePane.addMessagePanelText("Select a Hazard or a Bonus to build.");
-		gamePane.addSelectionLayer();
 		
 		int i = GameMaster.getInstance().getCurrentPlayer().getPosition();
 		
-		buttonGroup = new ButtonGroup();
 		
 		if (i > 0 && i < 10) {
 			// Rubbish Dump / Park
 			
-			JRadioButton dump = new JRadioButton("Rubbish Dump");
-			dump.addItemListener(
-			    new ItemListener() {
-			        public void itemStateChanged(ItemEvent e) {
+			JCheckBox dump = new JCheckBox("Rubbish Dump");
+			dump.addActionListener(
+				    new ActionListener() {
+				        public void actionPerformed(ActionEvent e) {
+			        		System.out.println(e.getActionCommand());
+			        		buildStructure(e.getActionCommand());
+				        	
+				        }
+			    }
+			);
+			JCheckBox park = new JCheckBox("Park");
+			park.addActionListener(
+			    new ActionListener() {
+			        public void actionPerformed(ActionEvent e) {
+		        		System.out.println(e.getActionCommand());
+		        		buildStructure(e.getActionCommand());		        	
 			        }
 			    }
 			);
-			JRadioButton park = new JRadioButton("Park", true);
-			park.addItemListener(
-			    new ItemListener() {
-			        public void itemStateChanged(ItemEvent e) {
-			        }
-			    }
-			);
-			buttonGroup.add(dump);
-			buttonGroup.add(park);
-			gamePane.addMessagePanelRadioButton(dump);
-			gamePane.addMessagePanelRadioButton(park);
+
+			gamePane.addMessagePanelCheckBox(dump);
+			gamePane.addMessagePanelCheckBox(park);
 		}
 		if (i > 10 && i < 20) {
 			// Prison / School			
-			JRadioButton prison = new JRadioButton("Prison", true);
-			prison.addItemListener(
-			    new ItemListener() {
-			        public void itemStateChanged(ItemEvent e) {
-			            // Set "ignore" whenever box is checked or unchecked.
-			            //ignore = (e.getStateChange() == ItemEvent.SELECTED);
+			JCheckBox prison = new JCheckBox("Prison");
+			prison.addActionListener(
+				    new ActionListener() {
+				        public void actionPerformed(ActionEvent e) {
+			        		System.out.println(e.getActionCommand());
+			        		buildStructure(e.getActionCommand());		        	
 			        }
 			    }
 			);
-			JRadioButton school = new JRadioButton("School", true);
-			school.addItemListener(
-			    new ItemListener() {
-			        public void itemStateChanged(ItemEvent e) {
-			            // Set "ignore" whenever box is checked or unchecked.
-			            //ignore = (e.getStateChange() == ItemEvent.SELECTED);
-			        }
+			JCheckBox school = new JCheckBox("School");
+			school.addActionListener(
+				    new ActionListener() {
+				        public void actionPerformed(ActionEvent e) {
+			        		System.out.println(e.getActionCommand());
+			        		buildStructure(e.getActionCommand());		        	
+				        }
 			    }
 			);
-			buttonGroup.add(prison);
-			buttonGroup.add(school);
-			gamePane.addMessagePanelRadioButton(prison);
-			gamePane.addMessagePanelRadioButton(school);
+
+			gamePane.addMessagePanelCheckBox(prison);
+			gamePane.addMessagePanelCheckBox(school);
 		}
 		
 		if (i > 20 && i < 30) {
 			// Sewage Plant / Water Tower
-			JRadioButton sewage = new JRadioButton("Sewage Plant", true);
-			sewage.addItemListener(
-			    new ItemListener() {
-			        public void itemStateChanged(ItemEvent e) {
-			            // Set "ignore" whenever box is checked or unchecked.
-			            //ignore = (e.getStateChange() == ItemEvent.SELECTED);
+			JCheckBox sewage = new JCheckBox("Sewage Plant");
+			sewage.addActionListener(
+				    new ActionListener() {
+				        public void actionPerformed(ActionEvent e) {
+			        		System.out.println(e.getActionCommand());
+			        		buildStructure(e.getActionCommand());		        	
+
 			        }
 			    }
 			);
 			
-			JRadioButton water = new JRadioButton("Water Tower", true);
-			water.addItemListener(
-			    new ItemListener() {
-			        public void itemStateChanged(ItemEvent e) {
-			            // Set "ignore" whenever box is checked or unchecked.
-			            //ignore = (e.getStateChange() == ItemEvent.SELECTED);
+			JCheckBox water = new JCheckBox("Water Tower");
+			water.addActionListener(
+				    new ActionListener() {
+				        public void actionPerformed(ActionEvent e) {
+			        		System.out.println(e.getActionCommand());
+			        		buildStructure(e.getActionCommand());		        	
+
 			        }
 			    }
 			);
-			buttonGroup.add(sewage);
-			buttonGroup.add(water);
-			gamePane.addMessagePanelRadioButton(sewage);
-			gamePane.addMessagePanelRadioButton(water);
+
+			gamePane.addMessagePanelCheckBox(sewage);
+			gamePane.addMessagePanelCheckBox(water);
 		}
 
 		if (i > 30 && i <= 39) {
 			// Power Station / Wind Farm		
-			JRadioButton power = new JRadioButton("Power Station", false);
-			power.addItemListener(
-			    new ItemListener() {
-			        public void itemStateChanged(ItemEvent e) {
-			            // Set "ignore" whenever box is checked or unchecked.
-			            //ignore = (e.getStateChange() == ItemEvent.SELECTED);
+			JCheckBox power = new JCheckBox("Power Station");
+			power.addActionListener(
+				    new ActionListener() {
+				        public void actionPerformed(ActionEvent e) {
+			        		System.out.println(e.getActionCommand());
+			        		buildStructure(e.getActionCommand());		        	
+
 			        }
 			    }
 			);
-			JRadioButton wind = new JRadioButton("Wind Farm", false);
-			wind.addItemListener(
-			    new ItemListener() {
-			        public void itemStateChanged(ItemEvent e) {
-			            // Set "ignore" whenever box is checked or unchecked.
-			            //ignore = (e.getStateChange() == ItemEvent.SELECTED);
+			JCheckBox wind = new JCheckBox("Wind Farm");
+			wind.addActionListener(
+				    new ActionListener() {
+				        public void actionPerformed(ActionEvent e) {
+			        		System.out.println(e.getActionCommand());
+			        		buildStructure(e.getActionCommand());		        	
+
 			        }
 			    }
 			);
-			buttonGroup.add(power);
-			buttonGroup.add(wind);
-			gamePane.addMessagePanelRadioButton(power);
-			gamePane.addMessagePanelRadioButton(wind);
+
+			gamePane.addMessagePanelCheckBox(power);
+			gamePane.addMessagePanelCheckBox(wind);
 		}
 
+	}
+
+	public void buildStructure(String str) {
+		
+		final String structure = str; 
+		gamePane.clearMessageLayer();
+		gamePane.addSelectionLayer();
+		gamePane.setMessagePanelText(structure);
+		gamePane.addMessagePanelText("Now select a district to build on.");
+		
+		JButton buildItButton = new JButton("build it");
+		buildItButton.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
+						
+						District district = GameMaster.getInstance().getBoard().getDistrict(gamePane.getSelectedDistrict());
+						
+						GamePane.getInstance().clearMessageLayer();
+						
+						if (structure == "Rubbish Dump") {
+							district.addHazard(
+									StructureFactory.getInstance().get(STRUCTURE.RUBBISHDUMP));
+						} else if (structure == "Park") {
+							district.addHazard(
+									StructureFactory.getInstance().get(STRUCTURE.PARK));
+						} else if (structure == "Prison") {
+							district.addHazard(
+									StructureFactory.getInstance().get(STRUCTURE.PRISON));
+						} else if (structure == "School") {
+							district.addHazard(
+									StructureFactory.getInstance().get(STRUCTURE.SCHOOL));
+						} else if (structure == "Sewage Plant") {
+							district.addHazard(
+									StructureFactory.getInstance().get(STRUCTURE.SEWAGEPLANT));
+						} else if (structure == "Water Tower") {
+							district.addHazard(
+									StructureFactory.getInstance().get(STRUCTURE.WATERTOWER));
+						} else if (structure == "Power Station") {
+							district.addHazard(
+									StructureFactory.getInstance().get(STRUCTURE.POWERSTATION));
+						} else if (structure == "Wind Farm") {
+							district.addHazard(
+									StructureFactory.getInstance().get(STRUCTURE.WINDFARM));
+						}
+					
+					}
+				});
+
+		gamePane.addMessagePanelButton(buildItButton);
 	}
 
 }

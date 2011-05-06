@@ -29,7 +29,7 @@ public class StructureFactory {
 	}
 	
 	
-	public STRUCTURE getStructure(STRUCTURE st) {
+	public STRUCTURE get(STRUCTURE st) {
 		if (st == STRUCTURE.PARK && parkCount != 0) {
 			parkCount--;
 			return STRUCTURE.PARK;
@@ -66,7 +66,7 @@ public class StructureFactory {
 		}
 	}
 	
-	public void scrapStructure(STRUCTURE st) {
+	public void scrap(STRUCTURE st) {
 		if (st == STRUCTURE.PARK) {
 			parkCount++;
 		} else if (st == STRUCTURE.POWERSTATION) {

@@ -120,6 +120,14 @@ public class District extends Square {
 		monopolyTower = true;
 	}
 	
+	public void addHazard(STRUCTURE str) {
+		hazard = str;
+	}
+	
+	public void addBonus(STRUCTURE str) {
+		bonus = str;
+	}
+	
 	public String getName() {
 		return name;
 	}
