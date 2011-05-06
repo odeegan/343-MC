@@ -20,7 +20,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
@@ -63,7 +62,8 @@ class GamePane extends JLayeredPane {
 	public class DistrictElementsPanel extends JPanel {
 		
 		ArrayList<Square> squares;
-		JLabel label;
+		JLabel ownerLabel;
+		JLabel railroad;
 		
 		public DistrictElementsPanel() {
 			setLayout(null);
@@ -74,26 +74,39 @@ class GamePane extends JLayeredPane {
 		public void update() {
 			
 			squares = GameMaster.getInstance().getBoard().getSquares();
+			ownerLabel = new JLabel();
+			ownerLabel.setVisible(false);
+			railroad = new JLabel();
+			railroad.setVisible(false);
+			
 			for (int i=0; i < squares.size(); i++) {
 				if (squares.get(i).getType() == SQUARETYPE.DISTRICT) {
 					District district = (District)squares.get(i);
-					label = new JLabel();
-					label.setFont(new Font("Verdana", Font.ITALIC, 17));
-					label.setText(Integer.toString(i));
-					label.setForeground(Color.blue);
-					if (i > 0 && i < 10) {
-						label.setBounds(district.getX()+4, district.getY()-85, 62, 104);
+					
+					if (district.getOwner() != null) {
+						ownerLabel.setIcon(new ImageIcon("images/dot" + district.getOwner().getIndex() + ".png"));
+						ownerLabel.setVisible(true);
+						if (i > 0 && i < 10) {
+							ownerLabel.setBounds(district.getX()+4, district.getY()-50, 30, 30);
+							//railroad.setBounds(district.getX()+4, district.getY()-50, 30, 30);
+						}
+						if (i > 10 && i < 20) {
+							ownerLabel.setBounds(district.getX()+77, district.getY()+25, 30, 30);
+							//railroad.setBounds(district.getX()+77, district.getY()+25, 30, 30);
+						}
+						if (i > 20 && i < 30) {
+							ownerLabel.setBounds(district.getX()+5, district.getY()+75, 30, 30);
+							//railroad.setBounds(district.getX()+5, district.getY()+75, 30, 30);
+						}
+						if (i > 30 && i <= 39) {
+							ownerLabel.setBounds(district.getX()-48, district.getY()+28, 30, 30);
+							//railroad.setBounds(district.getX()-48, district.getY()+28, 30, 30);
+						}
+						add(ownerLabel);
+						//add(railroad);
 					}
-					if (i > 10 && i < 20) {
-						label.setBounds(district.getX()+80, district.getY()+10, 104, 62);
-					}
-					if (i > 20 && i < 30) {
-						label.setBounds(district.getX()+10, district.getY()+40, 62, 104);
-					}
-					if (i > 30 && i <= 39) {
-						label.setBounds(district.getX()-45, district.getY()+20, 104, 62);
-					}
-					add(label);
+					
+				
 				}
 			}
 		}
@@ -658,6 +671,10 @@ class GamePane extends JLayeredPane {
 		System.out.println("adding selcetion layer");
 		revalidate();
 		repaint();
+	}
+	
+	public void removeSelectionLayer() {
+		districtRollOverPanel.removeAll();
 	}
 	
 	public void setSelectedDistrict(int index) {
