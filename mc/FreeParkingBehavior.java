@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class FreeParkingBehavior implements SquareBehavior {
 
+	Player previousOwner;
+	
 	public FreeParkingBehavior() {}
 
 	@Override
@@ -14,20 +16,22 @@ public class FreeParkingBehavior implements SquareBehavior {
 		
 		for (Player player : players) {
 			if (player.hasRentDodgeCard == true) {
-				if (player == GameMaster.getInstance().getCurrentPlayer()) {
-					GamePane.getInstance().addMessagePanelText(
-						"\nUnfortunately, you already have the Rent Dodge Card");
-				} else {
-					GamePane.getInstance().setMessagePanelText(
-							" you get to take the RentDodge card from "
-							+ player.getName());
-					player.hasRentDodgeCard = false;
-				}
-			} else {
-				GamePane.getInstance().setMessagePanelText(
-						"\nYou get to take the Rent Dodge Card!");
+				previousOwner = player;
 			}
-			player.hasRentDodgeCard = false;
+		}
+		
+		if (previousOwner != null) {			
+			if (previousOwner.getName() == GameMaster.getInstance().getCurrentPlayer().getName()) {
+					GamePane.getInstance().addMessagePanelText(
+					"\nUnfortunately, you already have the Rent Dodge Card");
+			} else {
+				GamePane.getInstance().addMessagePanelText(
+					"\nYou get to take the Rent Dodge Card from " + previousOwner.getName());
+			}
+			previousOwner.hasRentDodgeCard = false;
+		} else {
+			GamePane.getInstance().addMessagePanelText(
+					"\nYou get to take the Rent Dodge Card.");	
 		}
 		GameMaster.getInstance().getCurrentPlayer().hasRentDodgeCard = true;
 	}

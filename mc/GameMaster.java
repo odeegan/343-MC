@@ -132,6 +132,7 @@ public class GameMaster {
 							System.out.println(currentPlayer.getName() + " is staying put on "
 									+ newSquare.getName());
 							currentPlayer.doMove();
+							gamePane.disableButton(gamePane.getTaxiButton());
 							newSquare.performBehavior();
 							gamePane.update();
 						}
@@ -216,6 +217,7 @@ public class GameMaster {
 			
 		} else {
 			if (currentPlayer.isInJail) {
+				gamePane.clearMessageLayer();
 				gamePane.setMessagePanelText("Better luck next time.");
 				currentPlayer.setIsInJail(true);
 			} else {

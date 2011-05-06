@@ -2,8 +2,7 @@
 
 	
 
-[ ]	PLANNINGPERMISSION("Planning Permission")
-[ ] get "select district" working
+
 
 []	CHANCE("Chance")
  
@@ -15,8 +14,8 @@
 [x]	GO("G0"), 
 [x]	GOTOJAIL("Go To Jail!"),
 [X]	JAIL("Jail");
-
-[ ] railroads
+[x]	PLANNINGPERMISSION("Planning Permission")
+[x] get "select district" working
 [ ] display all players' networth
 
 
@@ -28,4 +27,5 @@
 
 DISPLAY
 [ ] put a colored marker on properties that are owned (use the same color as the player)
+[ ] railroads
 [ ] railroads

@@ -27,7 +27,7 @@ public class IndustryTaxBehavior implements SquareBehavior {
 		}
 		
 		if (hasBlocks) {
-			gamePane.setMessagePanelText("Pay $2M for your industrial buildings");
+			gamePane.addMessagePanelText("Pay $2M for your industrial buildings");
 			JButton payFineButton = new JButton("Pay $2M");
 			payFineButton.addActionListener(
 					new ActionListener() {
@@ -43,7 +43,7 @@ public class IndustryTaxBehavior implements SquareBehavior {
 				gamePane.enableButton(gamePane.getTaxDodgeButton());
 			}
 		} else {
-			gamePane.setMessagePanelText("You do not have industrial buildings."
+			gamePane.addMessagePanelText("You do not have industrial buildings."
 						+ " Pay nothing.");
 		}
 		
