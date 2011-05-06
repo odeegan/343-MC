@@ -97,6 +97,11 @@ public class GameMaster {
 		return players.get(index);
 	}
 	
+	public int getNumPlayers() {
+		// TODO Auto-generated method stub
+		return players.size();
+	}
+	
 	public Player getPreviousPlayer() {
 		int index;
 		// use mod math to loop back to the first player
@@ -352,7 +357,6 @@ public class GameMaster {
 	public void setGameStateMachine(GameStateMachine gsm) {
 		gameStateMachine = gsm;
 	}
-	
 	
 	
 }
