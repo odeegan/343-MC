@@ -39,6 +39,7 @@ public class District extends Square {
 	double[] rents;
 	
 	public District (SQUARETYPE type, String color, String name,  double cost) {
+		super(type);
 		this.name = name;
 		this.color = color;
 		this.cost = cost;

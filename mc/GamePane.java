@@ -44,6 +44,7 @@ class GamePane extends JLayeredPane {
 	private static JPanel hudPanel3;
 	private static CurrentPlayerPanel currentPlayerPanel;
 	private static CurrentSquarePanel currentSquarePanel;
+	private static DistrictElementsPanel districtElementsPanel;
 	
 	private static JButton rollDiceButton;
 	private static JButton buildButton;
@@ -59,6 +60,47 @@ class GamePane extends JLayeredPane {
 	
 	private static final GamePane GAMEPANE = new GamePane();
 
+	public class DistrictElementsPanel extends JPanel {
+		
+		ArrayList<Square> squares;
+		JLabel label;
+		
+		public DistrictElementsPanel() {
+			setLayout(null);
+			setOpaque(false);
+			setBounds(0, 0, 768, 768);
+		}
+		
+		public void update() {
+			
+			squares = GameMaster.getInstance().getBoard().getSquares();
+			for (int i=0; i < squares.size(); i++) {
+				if (squares.get(i).getType() == SQUARETYPE.DISTRICT) {
+					District district = (District)squares.get(i);
+					label = new JLabel();
+					label.setFont(new Font("Verdana", Font.ITALIC, 17));
+					label.setText(Integer.toString(i));
+					label.setForeground(Color.blue);
+					if (i > 0 && i < 10) {
+						label.setBounds(district.getX()+4, district.getY()-85, 62, 104);
+					}
+					if (i > 10 && i < 20) {
+						label.setBounds(district.getX()+80, district.getY()+10, 104, 62);
+					}
+					if (i > 20 && i < 30) {
+						label.setBounds(district.getX()+10, district.getY()+40, 62, 104);
+					}
+					if (i > 30 && i <= 39) {
+						label.setBounds(district.getX()-45, district.getY()+20, 104, 62);
+					}
+					add(label);
+				}
+			}
+		}
+	}
+	
+	
+	
 	public class DistrictRollOverPanel extends JPanel {
 		
 		ArrayList<Square> squares;		
@@ -115,7 +157,7 @@ class GamePane extends JLayeredPane {
 			
 			squares = GameMaster.getInstance().getBoard().getSquares();
 			for (int i=0; i < squares.size(); i++) {
-				if (squares.get(i).getType() == null) {
+				if (squares.get(i).getType() == SQUARETYPE.DISTRICT) {
 					District district = (District)squares.get(i);
 					label = new DistrictLabel();
 					label.setFont(new Font("Verdana", Font.ITALIC, 2));
@@ -527,10 +569,13 @@ class GamePane extends JLayeredPane {
 		
 		baseLayer.add(board, BorderLayout.WEST);	
 		baseLayer.add(mainHudPanel, BorderLayout.EAST);
-			
+		
+		districtElementsPanel = new DistrictElementsPanel();
+		
 		add(baseLayer, new Integer(0));
 		add(playerTokensLayer, new Integer(1));
 		add(messageLayer, new Integer(2));	
+		add(districtElementsPanel, new Integer(3));	
 	}
 	
 
@@ -627,6 +672,7 @@ class GamePane extends JLayeredPane {
 		currentPlayerPanel.update();
 		currentSquarePanel.update();
 		playerTokensLayer.update();
+		districtElementsPanel.update();
 		revalidate();
 		repaint();
 	}
