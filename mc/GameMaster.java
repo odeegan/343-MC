@@ -221,15 +221,15 @@ public class GameMaster {
 		int[] dice = new int[2];
 		
 		//Jumping to auction square
-		dice[0] = 6;
-		dice[1] = 6;
-		return dice;
+//		dice[0] = 6;
+//		dice[1] = 6;
+//		return dice;
 		//end auction square test block
 		
 		
-//		dice[0] = generator.nextInt(6) + 1;
-//		dice[1] = generator.nextInt(6) + 1;
-//		return dice;
+		dice[0] = generator.nextInt(6) + 1;
+		dice[1] = generator.nextInt(6) + 1;
+		return dice;
 	}
 	
 	public void useRentDodgeCard() {

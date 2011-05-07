@@ -183,9 +183,64 @@ public class District extends Square {
 		} else {
 			string += "\nCost: " + Double.toString(getCost());
 		}
-		
+		if (bonus != null) {
+			string += "\nBonus: " + bonus.name();			
+		}
+		if (hazard !=null) {
+			string += "\nHazard: " + hazard.name();			
+		}
+		if (residentialBlockCount > 0) {
+			string += "\nRes Blocks: " + residentialBlockCount;	
+		}
+		if (industrialBlockCount > 0) {
+			string += "\nInd Blocks: " + industrialBlockCount;			
+		}
+		if (skyscraper) {
+			string += "\nSkyScraper";			
+		}
+		if (stadium) {
+			string += "\nStadium";		
+		}
+		if (monopolyTower) {
+			string += "\nMonopolyTower";			
+		}
 		return string;
+	
 	}
 
+	public String getHTML() {
+		String string = new String("<html>");
+		string += "Name: " + getName(); 
+		if (owner != null) {
+			string += "<br>Owner: " + owner;
+			string += "<br><br>Current Rent: " + getRent();
+		} else {
+			string += "<br><br>Cost: " + Double.toString(getCost());
+		}
+		if (bonus != null) {
+			string += "<br>Bonus: " + bonus.name();			
+		}
+		if (hazard !=null) {
+			string += "<br>Hazard: " + hazard.name();			
+		}
+		if (residentialBlockCount > 0) {
+			string += "<br>Res Blocks: " + residentialBlockCount;	
+		}
+		if (industrialBlockCount > 0) {
+			string += "<br>Ind Blocks: " + industrialBlockCount;			
+		}
+		if (skyscraper) {
+			string += "<br>SkyScraper";			
+		}
+		if (stadium) {
+			string += "<br>Stadium";		
+		}
+		if (monopolyTower) {
+			string += "<br>MonopolyTower";			
+		}
+		string += "<html>";
+		return string;
+	
+	}
 	
 }

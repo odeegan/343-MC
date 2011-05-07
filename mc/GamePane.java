@@ -38,9 +38,11 @@ class GamePane extends JLayeredPane {
 
 	
 	private static JPanel hudButtonPanel;
+	private static JPanel hudPanel0;
 	private static JPanel hudPanel1;
 	private static JPanel hudPanel2;
 	private static JPanel hudPanel3;
+	private static NetworthPanel networthPanel;
 	private static CurrentPlayerPanel currentPlayerPanel;
 	private static CurrentSquarePanel currentSquarePanel;
 	private static DistrictElementsPanel districtElementsPanel;
@@ -59,6 +61,43 @@ class GamePane extends JLayeredPane {
 	
 	private static final GamePane GAMEPANE = new GamePane();
 
+	
+	public class NetworthPanel extends JPanel {
+		
+		public NetworthPanel() {
+			//setLayout();
+			setPreferredSize(new Dimension(432,120));
+		}
+		
+		public void update() {
+			removeAll();
+			setBorder(BorderFactory.createTitledBorder("Networth"));
+			ArrayList<Player> players = GameMaster.getInstance().getPlayers();
+			double winning = 0.0;
+			for (Player player: players) {
+				if (winning < player.getNetWorth()) {
+					winning = player.getNetWorth();
+				}
+			}
+				
+			for (Player player: players) {
+				JTextArea text = new JTextArea();
+				if (player.getNetWorth() == winning) {
+					text.setForeground(Color.black);
+				} else {
+					text.setForeground(Color.gray);
+				}
+				text.setFont(new Font("Verdana", Font.BOLD, 16));
+				text.setOpaque(false);
+				text.setPreferredSize(new Dimension(100, 40));
+				text.setBorder(BorderFactory.createTitledBorder(player.getName()));
+				text.setText(Double.toString(player.getNetWorth()));
+				add(text);
+			}
+		}
+	}
+	
+	
 	public class DistrictElementsPanel extends JPanel {
 		
 		ArrayList<Square> squares;
@@ -72,10 +111,7 @@ class GamePane extends JLayeredPane {
 		public void update() {
 			
 			squares = GameMaster.getInstance().getBoard().getSquares();
-			
-//			railroad = new JLabel();
-//			railroad.setVisible(false);
-			
+						
 			removeAll();
 			
 			for (int i=0; i < squares.size(); i++) {
@@ -182,11 +218,16 @@ class GamePane extends JLayeredPane {
 			setOpaque(false);
 			setBounds(0, 0, 768, 768);
 			
+		}
+		
+		public void update() {
+			removeAll();
 			squares = GameMaster.getInstance().getBoard().getSquares();
 			for (int i=0; i < squares.size(); i++) {
 				if (squares.get(i).getType() == SQUARETYPE.DISTRICT) {
 					District district = (District)squares.get(i);
 					label = new DistrictLabel();
+					label.setToolTipText(district.getHTML());
 					label.setFont(new Font("Verdana", Font.ITALIC, 2));
 					label.setText(Integer.toString(i));
 					label.setForeground(Color.white);
@@ -205,6 +246,8 @@ class GamePane extends JLayeredPane {
 					add(label);
 				}
 			}
+			
+			
 		}
 	
 	}
@@ -402,7 +445,7 @@ class GamePane extends JLayeredPane {
 			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
 			playerToken.setIcon(new ImageIcon(currentPlayer.getTokenFile()));
 			playerDetails.setText(currentPlayer.getDetails());
-			playerDetails.setFont(new Font("Verdana", Font.BOLD, 14));
+			playerDetails.setFont(new Font("Verdana", Font.BOLD, 17));
 			playerDetails.setLineWrap(true);
 			playerDetails.setWrapStyleWord(true);
 			playerDetails.setBounds(0, 0, 370, 170);
@@ -542,17 +585,22 @@ class GamePane extends JLayeredPane {
 		mainHudPanel.setPreferredSize(new Dimension(432,768));
 		mainHudPanel.setOpaque(false);
 
+		networthPanel = new NetworthPanel();
+		networthPanel.setBounds(0, 0, 426, 118);
+		networthPanel.setBorder(BorderFactory.createTitledBorder("Networth"));		
+		
+		
 		hudPanel1 = new JPanel();
-		hudPanel1.setBounds(0, 0, 432, 200);
-		hudPanel1.setBorder(BorderFactory.createTitledBorder("Current Square"));		
-		currentSquarePanel = new CurrentSquarePanel();
-		hudPanel1.add(currentSquarePanel);
+		hudPanel1.setBounds(0, 120, 426, 200);
+		hudPanel1.setBorder(BorderFactory.createTitledBorder("Current Player"));		
+		currentPlayerPanel = new CurrentPlayerPanel();
+		hudPanel1.add(currentPlayerPanel);
 
 		hudPanel2 = new JPanel();
-		hudPanel2.setBounds(0, 201, 432, 200);
-		hudPanel2.setBorder(BorderFactory.createTitledBorder("Current Player"));
-		currentPlayerPanel = new CurrentPlayerPanel();
-		hudPanel2.add(currentPlayerPanel);
+		hudPanel2.setBounds(0, 321, 426, 200);
+		hudPanel2.setBorder(BorderFactory.createTitledBorder("Current Square"));
+		currentSquarePanel = new CurrentSquarePanel();
+		hudPanel2.add(currentSquarePanel);
 
 		
 		rollDiceButton = new RollDiceButton();
@@ -560,7 +608,7 @@ class GamePane extends JLayeredPane {
 		endTurnButton = new EndTurnButton();
 		
 		hudButtonPanel = new JPanel();
-		hudButtonPanel.setBounds(0, 401, 432, 50);
+		hudButtonPanel.setBounds(0, 521, 426, 50);
 		hudButtonPanel.add(rollDiceButton);
 		hudButtonPanel.add(buildButton);
 		hudButtonPanel.add(endTurnButton);
@@ -573,13 +621,14 @@ class GamePane extends JLayeredPane {
 		taxDodgeButton = new TaxDodgeButton();
 		
 		hudPanel3 = new JPanel();
-		hudPanel3.setBounds(0, 451, 432, 118);
+		hudPanel3.setBounds(0, 571, 430, 118);
 		hudPanel3.setBorder(BorderFactory.createTitledBorder("Chance Cards"));
 		hudPanel3.add(getOutOfJailButton);
 		hudPanel3.add(rentDodgeButton);
 		hudPanel3.add(taxDodgeButton);
 		hudPanel3.add(taxiButton);
 		
+		mainHudPanel.add(networthPanel);
 		mainHudPanel.add(hudPanel1);
 		mainHudPanel.add(hudButtonPanel);
 		mainHudPanel.add(hudPanel2);
@@ -598,13 +647,13 @@ class GamePane extends JLayeredPane {
 		baseLayer.add(mainHudPanel, BorderLayout.EAST);
 		
 		districtElementsPanel = new DistrictElementsPanel();
-		//districtRollOverPanel = new DistrictRollOverPanel();
+		districtRollOverPanel = new DistrictRollOverPanel();
 		
 		add(baseLayer, new Integer(0));
 		add(playerTokensLayer, new Integer(1));
 		add(messageLayer, new Integer(2));	
 		add(districtElementsPanel, new Integer(3));	
-		//add(districtRollOverPanel, new Integer(4));
+		add(districtRollOverPanel, new Integer(4));
 
 	}
 	
@@ -681,20 +730,13 @@ class GamePane extends JLayeredPane {
 	public JButton getTaxiButton() {
 		return taxiButton;
 	}
-	
-	public void addSelectionLayer() {
-		districtRollOverPanel = new DistrictRollOverPanel();
-		System.out.println("adding selection layer");
-		revalidate();
-		repaint();
-	}
-	
-	public void removeSelectionLayer() {
-		districtRollOverPanel.removeAll();
-	}
-	
+		
 	public void setSelectedDistrict(int index) {
 		selectedDistrict = index;
+	}
+	
+	public void clearSelectedDistrict() {
+		selectedDistrict = -1;
 	}
 	
 	public int getSelectedDistrict() {
@@ -706,6 +748,8 @@ class GamePane extends JLayeredPane {
 		currentSquarePanel.update();
 		playerTokensLayer.update();
 		districtElementsPanel.update();
+		districtRollOverPanel.update();
+		networthPanel.update();
 		revalidate();
 		repaint();
 	}

@@ -150,7 +150,7 @@ public class Player {
 	
 	public String getDetails() {
 		String string = new String("");
-		string += "Name: " + getName(); 
+		string += getName(); 
 		string += "\nCash: " + Double.toString(getCash());
 		if (getCash() != getNetWorth()) {
 			string += "\nNetworth: " + getNetWorth();
