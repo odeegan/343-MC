@@ -22,6 +22,7 @@ public class OwnedDistrictBehavior implements SquareBehavior {
 						currentPlayer.pay(district.getRent());
 						gamePane.clearMessageLayer();
 						gamePane.update();
+						GameMaster.getInstance().checkForRailroad();
 					}
 				});
 		
@@ -37,4 +38,5 @@ public class OwnedDistrictBehavior implements SquareBehavior {
 		}
 		gamePane.addMessagePanelButton(payRentButton);
 	}
+	
 }

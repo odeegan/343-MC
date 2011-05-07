@@ -103,8 +103,9 @@ public class GameMaster {
 	public void checkSquare(int roll) {
 		System.out.println("checking square");
 		currentPlayer.testMove(roll);
-		final Square newSquare = board.getSquare(currentPlayer.position);
 		
+		final Square newSquare = board.getSquare(currentPlayer.getPosition());
+			
 		if (currentPlayer.hasTaxiCard) {
 			gamePane.enableButton(gamePane.getTaxiButton());
 
@@ -132,6 +133,39 @@ public class GameMaster {
 			gamePane.update();	
 		}
 	}
+	
+	public void checkForRailroad() {
+		District district = board.getDistrict(currentPlayer.getPosition());
+		
+		if (district.isRailRoaded()) {
+			gamePane.setMessagePanelText(district.getName() +  " has a railroad.");
+			JButton railroadButton = new JButton("Use the RailRoad");
+			railroadButton.addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {						
+							useRailroad();
+						}
+					});	
+			gamePane.addMessagePanelButton(railroadButton);
+		}
+		if (district.isRailRoaded()) {
+			JButton railroadButton = new JButton("Stay Put");
+			railroadButton.addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {						
+							gamePane.clearMessageLayer();
+							gamePane.update();
+						}
+					});
+			gamePane.addMessagePanelButton(railroadButton);
+		}
+	}
+	
+	
+	public void useRailroad() {
+		
+	}
+	
 	
 	public void displayPlayerChanceCards() {
 		gamePane.hideButton(gamePane.getGetOutOfJailButton());

@@ -27,6 +27,7 @@ public class UnownedDistrictBehavior implements SquareBehavior{
 						district.setSquareBehavior(new OwnedDistrictBehavior());
 						gamePane.clearMessageLayer();
 						gamePane.update();
+						GameMaster.getInstance().checkForRailroad();
 					}
 				});
 		
@@ -35,7 +36,7 @@ public class UnownedDistrictBehavior implements SquareBehavior{
 		auctionButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
-						//TODO: create method for seleting a district
+						GameMaster.getInstance().checkForRailroad();
 						GameMaster.getInstance().startAuction();
 						}
 				});
@@ -47,7 +48,7 @@ public class UnownedDistrictBehavior implements SquareBehavior{
 			gamePane.setMessagePanelText("You do not have"
 						+ " enough cash to purchase it.");	
 			gamePane.addMessagePanelButton(auctionButton);
-		}
+		}		
 	}
 }
 

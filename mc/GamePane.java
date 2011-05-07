@@ -354,7 +354,7 @@ class GamePane extends JLayeredPane {
 						public void actionPerformed(ActionEvent event) {
 							System.out.println("used Rent Dodge Card");
 							GameMaster.getInstance().useRentDodgeCard();
-							//setEnabled(false);
+							GameMaster.getInstance().checkForRailroad();
 						}
 					});
 		}
