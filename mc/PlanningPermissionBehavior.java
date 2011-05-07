@@ -140,7 +140,6 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 		
 		final String structure = str; 
 		gamePane.clearMessageLayer();
-		gamePane.addSelectionLayer();
 		gamePane.setMessagePanelText(structure);
 		gamePane.addMessagePanelText("Now select a district to build on.");
 		
