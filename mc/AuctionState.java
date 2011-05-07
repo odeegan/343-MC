@@ -63,11 +63,10 @@ public class AuctionState implements GameState {
 	private static final DecimalFormat money = new DecimalFormat("###,###,###,###");
 
 	public AuctionState(GameStateMachine gsm, JFrame mf) {
-		gameMaster = GameMaster.getInstance();
 		gameStateMachine = gsm;
 		mainFrame = mf;
 		isAuctioning = false;
-		players = gameMaster.getPlayers();
+
 
 		bidArray = new int[6];
 
@@ -360,6 +359,8 @@ public class AuctionState implements GameState {
 
 	public void enter() {
 		System.out.println("This is the Auction.");
+		gameMaster = GameMaster.getInstance();
+		players = gameMaster.getPlayers();
 		playerCount = gameMaster.getNumPlayers();
 		currentPlayer = gameMaster.getCurrentPlayer();
 		auctionStartSlider.setMaximum((int)(currentPlayer.getCash()*1000000));

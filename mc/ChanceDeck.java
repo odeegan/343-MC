@@ -14,12 +14,12 @@ public class ChanceDeck {
 		// init all the chance cards here
 		// ...
 		// ...
-		chanceCards.add(new ChanceCardEasyMoney());
+		//chanceCards.add(new ChanceCardEasyMoney());
 		// lots more ....
 		
 		
 		// shuffle the deck
-		Collections.shuffle(chanceCards);
+		//Collections.shuffle(chanceCards);
 	}
 
 	public void addCard(ChanceCard card) {
