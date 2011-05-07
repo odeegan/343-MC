@@ -28,6 +28,7 @@ public class ChanceBehavior implements SquareBehavior {
 		ChanceCard drawnCard = GameMaster.getInstance().getChanceDeck().drawCard();
 		drawnCard.performCard();
 		drawChanceCard.setVisible(false);
+		GameMaster.getInstance().resumeTurn();
 	}
 
 }

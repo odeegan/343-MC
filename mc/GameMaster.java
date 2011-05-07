@@ -53,12 +53,15 @@ public class GameMaster {
 	}
 	
 	public void startTurn() {
-		if (isPaused) {
+		if (isPaused || currentPlayer.rolledDoubles) {
 			resumeTurn();
+			isPaused = false;
 		}
-		
-		gamePane.enableButton(gamePane.getRollDiceButton());
-		gamePane.disableButton(gamePane.getEndTurnButton());
+		else{
+			gamePane.enableButton(gamePane.getRollDiceButton());
+			isPaused = false;
+			gamePane.disableButton(gamePane.getEndTurnButton());
+		}
 		gamePane.update();
 		displayPlayerChanceCards();
 		System.out.println("--------------------------------");
@@ -71,7 +74,14 @@ public class GameMaster {
 	
 	public void resumeTurn() {
 	//TODO: resume the players turn after the GameState is handed back to us
-		
+		if(!currentPlayer.rolledDoubles){
+			gamePane.disableButton(gamePane.getRollDiceButton());
+			gamePane.enableButton(gamePane.getEndTurnButton());
+		}
+		else{
+			gamePane.enableButton(gamePane.getRollDiceButton());
+			gamePane.disableButton(gamePane.getEndTurnButton());
+		}
 	}
 	
 	
