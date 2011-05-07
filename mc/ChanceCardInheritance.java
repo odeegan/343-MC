@@ -6,14 +6,15 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 
-public class ChanceCardAuctionUnowned extends ChanceCard {
+public class ChanceCardInheritance extends ChanceCard {
 	GameMaster gameMaster;
 	GamePane gamePane;
 	ArrayList<District> districts;
 	ArrayList<District> unownedDistricts;
 	boolean failed;
+	JButton inheritanceButton;
 	
-	public ChanceCardAuctionUnowned() {
+	public ChanceCardInheritance() {
 	failed = false;
 	}
 
@@ -22,22 +23,22 @@ public class ChanceCardAuctionUnowned extends ChanceCard {
 		gameMaster = GameMaster.getInstance();
 		gamePane = GamePane.getInstance();
 		gamePane.clearMessageLayer();
-		if(!failed)	gamePane.setMessagePanelText("You drew Auction Card!");
+		if(!failed)	gamePane.setMessagePanelText("You drew Inheritance!");
 		else gamePane.setMessagePanelText("District Already Owned.");
-		gamePane.addMessagePanelText("Select an Unowned District to Auction.");
+		gamePane.addMessagePanelText("Select an Unowned District to Purchase for 500k.");
 
-		gamePane.clearSelectedDistrict();
-		JButton startAuctionButton = new JButton("Start Auction");
-		startAuctionButton.addActionListener(
+		gamePane.setSelectedDistrict(-1);
+		inheritanceButton = new JButton("Purchase District");
+		inheritanceButton.addActionListener(
 				new ActionListener(){
 					public void actionPerformed(ActionEvent evt){
-						startAuctionButtonPerformed();
+						inheritanceButtonPerformed();
 					}
 				});
-		gamePane.addMessagePanelButton(startAuctionButton);
+		gamePane.addMessagePanelButton(inheritanceButton);
 	}
 
-	protected void startAuctionButtonPerformed() {
+	protected void inheritanceButtonPerformed() {
 		int selectedDistrictIndex = gamePane.getSelectedDistrict();
 		Board board = gameMaster.getBoard();
 		if(selectedDistrictIndex != -1){
@@ -46,14 +47,19 @@ public class ChanceCardAuctionUnowned extends ChanceCard {
 			if(selectedSquare.getType() == SQUARETYPE.DISTRICT){
 				district = (District)selectedSquare;
 				if(!district.isOwned()){
-					gameMaster.startAuction();
+					gamePane.clearSelectedDistrict();
+					gameMaster.getCurrentPlayer().addDistrict(district);
+					gameMaster.getCurrentPlayer().pay(0.5);
+					gamePane.clearMessageLayer();
+					gamePane.setMessagePanelText("You now own " + district.getName() +"!");
+					inheritanceButton.setVisible(false);
 				}else{
 					failed = true;
 					performCard();
 			}}
 		}
-		else{
-			failed = true;
-			performCard();
-		}}
+	else{
+		failed = true;
+		performCard();
+	}}
 }
