@@ -35,6 +35,7 @@ public class Player {
 
 	public void addDistrict(District district) {
 		districts.add(district);
+		district.setOwner(this);
 	}
 	
 	public double getCash() {

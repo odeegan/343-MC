@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -57,7 +58,9 @@ public class AuctionState implements GameState {
 	// test variables
 	JPanel winnerPanel;
 	JLabel winnerLabel;
-	private static final Font counterFont = new Font("Impact", Font.BOLD, 50);
+	private static final Font counterFont = new Font("Impact", Font.BOLD, 68);
+	private static final Font bidFont = new Font("Impact", Font.BOLD, 24);
+	private static final DecimalFormat money = new DecimalFormat("###,###,###,###");
 
 	public AuctionState(GameStateMachine gsm, JFrame mf) {
 		gameMaster = GameMaster.getInstance();
@@ -90,6 +93,7 @@ public class AuctionState implements GameState {
 		playersPanel.setLayout(new MigLayout("align center"));
 		for(int jj = 0; jj < 6; jj++){
 			playerBids[jj] = new JLabel();
+			playerBids[jj].setFont(bidFont);
 			playerPanels[jj] = new JPanel();
 			playerPanels[jj].setLayout(new MigLayout("align center"));
 			playerPanels[jj].add(playerBids[jj]);
@@ -102,7 +106,7 @@ public class AuctionState implements GameState {
 				if(((players.get(0).getCash()*1000000) >= currentBid + 10000)  && (bidArray[0] != currentBid)){
 					bidArray[0] = currentBid + 10000;
 					currentBid = bidArray[0];
-					playerBids[0].setText(Integer.toString(bidArray[0]));
+					playerBids[0].setText(money.format(bidArray[0]));
 				}
 			}
 		};
@@ -115,7 +119,7 @@ public class AuctionState implements GameState {
 			if((players.get(1).getCash()*1000000 >= currentBid + 10000) && (bidArray[1] != currentBid)){
 				bidArray[1] = currentBid + 10000;
 				currentBid = bidArray[1];
-				playerBids[1].setText(Integer.toString(bidArray[1]));
+				playerBids[1].setText(money.format(bidArray[1]));
 			}
 			}
 		};
@@ -128,7 +132,7 @@ public class AuctionState implements GameState {
 				if((players.get(2).getCash()*1000000 >= currentBid + 10000)  && (bidArray[2] != currentBid)){
 				bidArray[2] = currentBid + 10000;
 				currentBid = bidArray[2];
-				playerBids[2].setText(Integer.toString(bidArray[2]));
+				playerBids[2].setText(money.format(bidArray[2]));
 			}}
 		};
 		layeredPane.getInputMap().put(KeyStroke.getKeyStroke("Z"),"incrementBid3");
@@ -140,7 +144,7 @@ public class AuctionState implements GameState {
 				if((players.get(3).getCash()*1000000 >= currentBid + 10000)  && (bidArray[3] != currentBid)){
 				bidArray[3] = currentBid + 10000;
 				currentBid = bidArray[3];
-				playerBids[3].setText(Integer.toString(bidArray[3]));
+				playerBids[3].setText(money.format(bidArray[3]));
 			}}
 		};
 		layeredPane.getInputMap().put(KeyStroke.getKeyStroke("SLASH"),"incrementBid4");
@@ -152,7 +156,7 @@ public class AuctionState implements GameState {
 				if((players.get(4).getCash()*1000000 >= currentBid + 10000)  && (bidArray[4] != currentBid)){
 				bidArray[4] = currentBid + 10000;
 				currentBid = bidArray[4];
-				playerBids[4].setText(Integer.toString(bidArray[4]));
+				playerBids[4].setText(money.format(bidArray[4]));
 			}}
 		};
 		layeredPane.getInputMap().put(KeyStroke.getKeyStroke("V"),"incrementBid5");
@@ -164,7 +168,7 @@ public class AuctionState implements GameState {
 				if((players.get(5).getCash()*1000000 >= currentBid + 10000)  && (bidArray[5] != currentBid)){
 				bidArray[5] = currentBid + 10000;
 				currentBid = bidArray[5];
-				playerBids[5].setText(Integer.toString(bidArray[5]));
+				playerBids[5].setText(money.format(bidArray[5]));
 			}}
 		};
 		layeredPane.getInputMap().put(KeyStroke.getKeyStroke("M"),"incrementBid6");
@@ -197,8 +201,9 @@ public class AuctionState implements GameState {
 
 		counterLabel.setText("");
 		counterLabel.setFont(counterFont);
-		sliderLabel.setText("10000");
+		sliderLabel.setText("10,000");
 		sliderLabel.setPreferredSize(new Dimension(130, 30));
+		sliderLabel.setFont(bidFont);
 
 		for(int jj = 0; jj < 6; jj++){
 			playerBids[jj].setText("0");
@@ -306,8 +311,9 @@ public class AuctionState implements GameState {
 	}
 
 	protected void auctionStartSliderChanged() {
-		sliderLabel.setText(Integer.toString((auctionStartSlider.getValue())));
-		System.out.println("I CHANGED!");
+		//sliderLabel.setText(Integer.toString((auctionStartSlider.getValue())));
+		sliderLabel.setText(money.format(auctionStartSlider.getValue()));
+		//System.out.println("I CHANGED!");
 
 	}
 
@@ -325,7 +331,7 @@ public class AuctionState implements GameState {
 				playersPanel.add(playerPanels[ii],"span 1");
 			else playersPanel.add(playerPanels[ii],"wrap");
 			
-			playerBids[ii].setText(Integer.toString(bidArray[ii]));
+			playerBids[ii].setText(money.format(bidArray[ii]));
 			playerBids[ii].setPreferredSize(new Dimension(130,30));
 		}
 
