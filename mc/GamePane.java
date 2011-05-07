@@ -72,10 +72,7 @@ class GamePane extends JLayeredPane {
 		public void update() {
 			
 			squares = GameMaster.getInstance().getBoard().getSquares();
-			
-//			railroad = new JLabel();
-//			railroad.setVisible(false);
-			
+						
 			removeAll();
 			
 			for (int i=0; i < squares.size(); i++) {
@@ -182,6 +179,9 @@ class GamePane extends JLayeredPane {
 			setOpaque(false);
 			setBounds(0, 0, 768, 768);
 			
+		}
+		
+		public void update() {
 			squares = GameMaster.getInstance().getBoard().getSquares();
 			for (int i=0; i < squares.size(); i++) {
 				if (squares.get(i).getType() == SQUARETYPE.DISTRICT) {
@@ -205,6 +205,8 @@ class GamePane extends JLayeredPane {
 					add(label);
 				}
 			}
+			
+			
 		}
 	
 	}
@@ -598,13 +600,13 @@ class GamePane extends JLayeredPane {
 		baseLayer.add(mainHudPanel, BorderLayout.EAST);
 		
 		districtElementsPanel = new DistrictElementsPanel();
-		//districtRollOverPanel = new DistrictRollOverPanel();
+		districtRollOverPanel = new DistrictRollOverPanel();
 		
 		add(baseLayer, new Integer(0));
 		add(playerTokensLayer, new Integer(1));
 		add(messageLayer, new Integer(2));	
 		add(districtElementsPanel, new Integer(3));	
-		//add(districtRollOverPanel, new Integer(4));
+		add(districtRollOverPanel, new Integer(4));
 
 	}
 	
@@ -681,20 +683,13 @@ class GamePane extends JLayeredPane {
 	public JButton getTaxiButton() {
 		return taxiButton;
 	}
-	
-	public void addSelectionLayer() {
-		districtRollOverPanel = new DistrictRollOverPanel();
-		System.out.println("adding selection layer");
-		revalidate();
-		repaint();
-	}
-	
-	public void removeSelectionLayer() {
-		districtRollOverPanel.removeAll();
-	}
-	
+		
 	public void setSelectedDistrict(int index) {
 		selectedDistrict = index;
+	}
+	
+	public void clearSelectedDistrict() {
+		selectedDistrict = -1;
 	}
 	
 	public int getSelectedDistrict() {
@@ -706,6 +701,7 @@ class GamePane extends JLayeredPane {
 		currentSquarePanel.update();
 		playerTokensLayer.update();
 		districtElementsPanel.update();
+		districtRollOverPanel.update();
 		revalidate();
 		repaint();
 	}

@@ -21,7 +21,7 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 
 	@Override
 	public void execute() {
-		
+		//gamePane.clearSelectedDistrict();
 		gamePane.setMessagePanelText("You landed on Planning Permission");
 		gamePane.addMessagePanelText("Select a Hazard or a Bonus to build.");
 		
