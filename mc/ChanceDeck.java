@@ -1,5 +1,7 @@
 package mc;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 
 public class ChanceDeck {
@@ -11,15 +13,17 @@ public class ChanceDeck {
 	
 	
 	public ChanceDeck() {
+		chanceCards = new ArrayList<ChanceCard>();
+		discardPile = new ArrayList<ChanceCard>();
 		// init all the chance cards here
 		// ...
 		// ...
-		//chanceCards.add(new ChanceCardEasyMoney());
+		chanceCards.add(new ChanceCardEasyMoney());
 		// lots more ....
 		
 		
 		// shuffle the deck
-		//Collections.shuffle(chanceCards);
+		Collections.shuffle(chanceCards);
 	}
 
 	public void addCard(ChanceCard card) {
@@ -36,10 +40,13 @@ public class ChanceDeck {
 			// Move cards from the discard pile back to the deck.
 			// We can't simply instantiate a new deck, because players may
 			// still have cards in their possession.
-			chanceCards = discardPile;
+			//chanceCards = discardPile;
+			for(ChanceCard card: discardPile)
+				chanceCards.add(card);
+			
 			
 			// shuffle the new deck
-			Collections.shuffle(chanceCards);
+			//Collections.shuffle(chanceCards);
 			
 			// empty the discardPile
 			discardPile.clear();

@@ -1,5 +1,10 @@
 package mc;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+
 public class ChanceCardEasyMoney extends ChanceCard{
 	/**
 	 * EASY MONEY
@@ -15,8 +20,6 @@ public class ChanceCardEasyMoney extends ChanceCard{
 	boolean isPocketable = false;
 	
 	public ChanceCardEasyMoney() {
-		gm = GameMaster.getInstance();
-		gp = GamePane.getInstance();
 	}
 	
 	/**
@@ -28,8 +31,24 @@ public class ChanceCardEasyMoney extends ChanceCard{
 	public void performCard() {
 		// the player's pay method should handle the case
 		// where the player has insufficient cash
+		gm = GameMaster.getInstance();
+		gp = GamePane.getInstance();
 		gm.getNextPlayer().pay(1);
 		gm.getCurrentPlayer().collect(1);
-		
+		gp.addMessagePanelText("You drew " + this.name + "!");
+		gp.addMessagePanelText(gm.getNextPlayer().getName() +" has paid you 1m!");
+		gp.update();
+//		JButton continueButton = new JButton();
+//		continueButton.addActionListener(
+//				new ActionListener(){
+//					public void actionPerformed(ActionEvent evt){
+//						continueButtonPerformed();
+//					}
+//				});
+//		
 	}
+//
+//	protected void continueButtonPerformed() {
+//		
+//	}
 }

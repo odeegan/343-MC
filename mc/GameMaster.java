@@ -19,6 +19,7 @@ public class GameMaster {
 	private static ArrayList<Player> players;
 	private static Board board;
 	private static Player currentPlayer;
+	private static ChanceDeck chanceDeck;
 	
 	private boolean isPaused = false;
 		
@@ -29,6 +30,7 @@ public class GameMaster {
 		players = new ArrayList<Player>();
 		board = new Board();
 		gamePane = GamePane.getInstance();
+		chanceDeck = new ChanceDeck();
 	}
 	
 	public static GameMaster getInstance() {
@@ -412,6 +414,10 @@ public class GameMaster {
 
 	public void setGameStateMachine(GameStateMachine gsm) {
 		gameStateMachine = gsm;
+	}
+
+	public ChanceDeck getChanceDeck() {
+		return chanceDeck;
 	}
 	
 	
