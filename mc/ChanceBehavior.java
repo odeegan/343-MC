@@ -15,7 +15,6 @@ public class ChanceBehavior implements SquareBehavior {
 	@Override
 	public void execute() {
 		GamePane.getInstance().setMessagePanelText("You landed on Chance");
-//		if(drawChanceCard == null){
 			drawChanceCard = new JButton("Draw Card");
 			drawChanceCard.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent evt){
@@ -23,13 +22,9 @@ public class ChanceBehavior implements SquareBehavior {
 				}
 			});
 			GamePane.getInstance().addMessagePanelButton(drawChanceCard);
-	//	}
-	//	else
-	//		drawChanceCard.setVisible(true);
 	}
 
 	protected void drawChanceCardButtonActionPerformed() {
-		//GamePane.getInstance().clearMessageLayer();
 		ChanceCard drawnCard = GameMaster.getInstance().getChanceDeck().drawCard();
 		drawnCard.performCard();
 		drawChanceCard.setVisible(false);
