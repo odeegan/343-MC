@@ -99,7 +99,7 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid1 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
-				if((players.get(0).getCash() >= currentBid + 10000)  && (bidArray[0] != currentBid)){
+				if(((players.get(0).getCash()*1000000) >= currentBid + 10000)  && (bidArray[0] != currentBid)){
 					bidArray[0] = currentBid + 10000;
 					currentBid = bidArray[0];
 					playerBids[0].setText(Integer.toString(bidArray[0]));
@@ -112,7 +112,7 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid2 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
-			if((players.get(1).getCash() >= currentBid + 10000) && (bidArray[1] != currentBid)){
+			if((players.get(1).getCash()*1000000 >= currentBid + 10000) && (bidArray[1] != currentBid)){
 				bidArray[1] = currentBid + 10000;
 				currentBid = bidArray[1];
 				playerBids[1].setText(Integer.toString(bidArray[1]));
@@ -125,7 +125,7 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid3 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
-				if((players.get(2).getCash() >= currentBid + 10000)  && (bidArray[2] != currentBid)){
+				if((players.get(2).getCash()*1000000 >= currentBid + 10000)  && (bidArray[2] != currentBid)){
 				bidArray[2] = currentBid + 10000;
 				currentBid = bidArray[2];
 				playerBids[2].setText(Integer.toString(bidArray[2]));
@@ -137,7 +137,7 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid4 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
-				if((players.get(3).getCash() >= currentBid + 10000)  && (bidArray[3] != currentBid)){
+				if((players.get(3).getCash()*1000000 >= currentBid + 10000)  && (bidArray[3] != currentBid)){
 				bidArray[3] = currentBid + 10000;
 				currentBid = bidArray[3];
 				playerBids[3].setText(Integer.toString(bidArray[3]));
@@ -149,7 +149,7 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid5 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
-				if((players.get(4).getCash() >= currentBid + 10000)  && (bidArray[4] != currentBid)){
+				if((players.get(4).getCash()*1000000 >= currentBid + 10000)  && (bidArray[4] != currentBid)){
 				bidArray[4] = currentBid + 10000;
 				currentBid = bidArray[4];
 				playerBids[4].setText(Integer.toString(bidArray[4]));
@@ -161,7 +161,7 @@ public class AuctionState implements GameState {
 		@SuppressWarnings("serial")
 		Action incBid6 = new AbstractAction(){
 			public void actionPerformed(ActionEvent evt){
-				if((players.get(5).getCash() >= currentBid + 10000)  && (bidArray[5] != currentBid)){
+				if((players.get(5).getCash()*1000000 >= currentBid + 10000)  && (bidArray[5] != currentBid)){
 				bidArray[5] = currentBid + 10000;
 				currentBid = bidArray[5];
 				playerBids[5].setText(Integer.toString(bidArray[5]));
@@ -295,14 +295,14 @@ public class AuctionState implements GameState {
 		Player winner = gameMaster.getPlayers().get(winningPlayer);
 		winner.pay((double)((double)winningBid / (double)1000000));
 		Square wonSquare = gameMaster.getBoard().getSquare(currentPlayer.getPosition());
-		District wonDistrict = (District)wonSquare;
-		if(wonDistrict.getType() == SQUARETYPE.DISTRICT)
+		if(wonSquare.getType() == SQUARETYPE.DISTRICT){
+			District wonDistrict = (District)wonSquare;
 			winner.addDistrict(wonDistrict);
-//		else{
-//			wonSquare = gameMaster.getBoard().getSquare(GamePane.getInstance().getSelectedDistrict());
-//			wonDistrict = (District)wonSquare;
-//			winner.addDistrict(wonDistrict);
-//		}
+		}else{
+			wonSquare = gameMaster.getBoard().getSquare(GamePane.getInstance().getSelectedDistrict());
+			District wonDistrict = (District)wonSquare;
+			winner.addDistrict(wonDistrict);
+		}
 	}
 
 	protected void auctionStartSliderChanged() {
@@ -314,6 +314,7 @@ public class AuctionState implements GameState {
 	protected void auctionStartButtonActionPerformed(ActionEvent evt) {
 		System.out.println("Auction Started");
 		currentBid = auctionStartSlider.getValue();
+		if(currentBid < 10000) currentBid = 10000;
 		bidArray[currentPlayer.index] = currentBid;
 		auctionMode();
 	}

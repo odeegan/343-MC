@@ -40,22 +40,9 @@ public class GameMaster {
 	}
 	
 	public void startAuction() {
-		System.out.println(currentPlayer.getName() + " is in Jail");
-		gamePane.setMessagePanelText("Start the Auction !");
-			
-
-		JButton startAuctionButton = new JButton("START");
-		startAuctionButton.addActionListener(
-				new ActionListener() {
-					public void actionPerformed(ActionEvent event) {
-						GameMaster.getInstance().isPaused = true;
-						GamePane.getInstance().clearMessageLayer();
-						gameStateMachine.setState(gameStateMachine.getAuctionState());
-
-					}
-				});
-
-		gamePane.addMessagePanelButton(startAuctionButton);
+		GameMaster.getInstance().isPaused = true;
+		GamePane.getInstance().clearMessageLayer();
+		gameStateMachine.setState(gameStateMachine.getAuctionState());
 	}
 	
 	public void startBuild() {
@@ -229,11 +216,20 @@ public class GameMaster {
 	}
 		
 	public int[] rollDice() {
+		
 		Random generator = new Random();
 		int[] dice = new int[2];
-		dice[0] = generator.nextInt(6) + 1;
-		dice[1] = generator.nextInt(6) + 1;
+		
+		//Jumping to auction square
+		dice[0] = 6;
+		dice[1] = 6;
 		return dice;
+		//end auction square test block
+		
+		
+//		dice[0] = generator.nextInt(6) + 1;
+//		dice[1] = generator.nextInt(6) + 1;
+//		return dice;
 	}
 	
 	public void useRentDodgeCard() {
