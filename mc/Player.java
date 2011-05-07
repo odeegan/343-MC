@@ -76,6 +76,7 @@ public class Player {
 	
 	public void pay(double amount) {
 		cash = cash - amount;
+		
 		// insert logic to check for bankruptcy or
 		// figure out when to check if a player can't afford something
 		// do we put it here, or in the logic before this method gets called?
