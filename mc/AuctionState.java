@@ -307,6 +307,7 @@ public class AuctionState implements GameState {
 			wonSquare = gameMaster.getBoard().getSquare(GamePane.getInstance().getSelectedDistrict());
 			District wonDistrict = (District)wonSquare;
 			winner.addDistrict(wonDistrict);
+			GamePane.getInstance().clearSelectedDistrict();
 		}
 	}
 
