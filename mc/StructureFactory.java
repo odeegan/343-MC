@@ -15,7 +15,13 @@ public class StructureFactory {
 	int sewagePlantCount = 3;
 	int waterTowerCount = 3;
 	int windFarmCount = 3;
- 
+	int railroadCount = 8;
+	int monopolyTowerCount = 1;
+	int skyscraperCount = 5;
+	int industrialCount = 20;
+	int residentialCount = 20;
+	int stadiumCount = 2;
+	
 	
 	private static StructureFactory uniqueInstance;
 	
@@ -61,6 +67,30 @@ public class StructureFactory {
 				windFarmCount != 0) {
 			windFarmCount--;
 			return STRUCTURE.WINDFARM;
+		} else if ( st == STRUCTURE.MONOPOLYTOWER &&
+				monopolyTowerCount != 0) {
+			monopolyTowerCount--;
+			return STRUCTURE.MONOPOLYTOWER;
+		} else if ( st == STRUCTURE.RAILROAD &&
+				railroadCount != 0) {
+			railroadCount--;
+			return STRUCTURE.RAILROAD;
+		} else if ( st == STRUCTURE.SKYSCRAPER &&
+				skyscraperCount != 0) {
+			skyscraperCount--;
+			return STRUCTURE.SKYSCRAPER;
+		} else if ( st == STRUCTURE.RESIDENTIAL &&
+				residentialCount != 0) {
+			residentialCount--;
+			return STRUCTURE.RESIDENTIAL;
+		} else if ( st == STRUCTURE.INDUSTRIAL && 
+				industrialCount != 0) {
+			industrialCount--;
+			return STRUCTURE.INDUSTRIAL;
+		} else if ( st == STRUCTURE.STADIUM && 
+				stadiumCount != 0) {
+			stadiumCount--;
+			return STRUCTURE.STADIUM;
 		} else {
 			return null;
 		}
@@ -83,6 +113,14 @@ public class StructureFactory {
 			waterTowerCount++;
 		} else if (st == STRUCTURE.WINDFARM) {
 			windFarmCount++;
+		} else if (st == STRUCTURE.MONOPOLYTOWER){
+			monopolyTowerCount++;
+		} else if (st == STRUCTURE.RAILROAD) {
+			railroadCount++;
+		} else if (st == STRUCTURE.SKYSCRAPER) {
+			skyscraperCount++;
+		} else if (st == STRUCTURE.STADIUM){
+			stadiumCount++;
 		}
 	}
 }

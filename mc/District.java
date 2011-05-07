@@ -19,6 +19,7 @@ public class District extends Square {
 
 	int residentialBlockCount = 0;
 	int industrialBlockCount = 0;
+
 		
 	// STRUCTURES is an enum that stores type and block count
 	STRUCTURE bonus;	
@@ -33,6 +34,7 @@ public class District extends Square {
 	double residentialCost;
 	double industrialCost;
 	double skyscraperCost;
+	double monopolyTowerCost = 7.0;
 	
 	boolean isMortgaged = false;
 	
@@ -84,6 +86,10 @@ public class District extends Square {
 		this.skyscraperCost = sc;
 	}
 	
+	public double getMonopolyTowerCost() {
+		return monopolyTowerCost;
+	}
+	
 	public double getCost() {
 		return cost;
 	}
@@ -97,7 +103,11 @@ public class District extends Square {
 	}
 	
 	public int getTotalBlockCount() {
-		return residentialBlockCount + industrialBlockCount;
+		int sum = residentialBlockCount + industrialBlockCount;
+		if(hazard != null) {
+			sum += hazard.getBlockCount();
+		}
+		return sum;
 	}
 	
 	public void addIndustrialBlock(int amount) {
@@ -147,6 +157,10 @@ public class District extends Square {
 
 	public boolean isBonused() {
 		return bonus != null;
+	}
+	
+	public boolean isHazarded() {
+		return hazard != null;
 	}
 
 	public boolean isRailRoaded() {
