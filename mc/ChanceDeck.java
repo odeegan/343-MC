@@ -21,6 +21,7 @@ public class ChanceDeck {
 		chanceCards.add(new ChanceCardEasyMoney());
 		chanceCards.add(new ChanceCardAuctionUnowned());
 		chanceCards.add(new ChanceCardInheritance());
+		chanceCards.add(new ChanceCardGoToJail());
 		// lots more ....
 		
 		
