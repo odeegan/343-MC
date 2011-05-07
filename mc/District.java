@@ -24,7 +24,7 @@ public class District extends Square {
 	STRUCTURE bonus;	
 	STRUCTURE hazard;
 		
-	boolean railroad = true;
+	boolean railroad = false;
 	boolean skyscraper = false;
 	boolean stadium = false;
 	boolean monopolyTower = false;

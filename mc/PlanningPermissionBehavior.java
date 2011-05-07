@@ -156,25 +156,25 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 							district.addHazard(
 									StructureFactory.getInstance().get(STRUCTURE.RUBBISHDUMP));
 						} else if (structure == "Park") {
-							district.addHazard(
+							district.addBonus(
 									StructureFactory.getInstance().get(STRUCTURE.PARK));
 						} else if (structure == "Prison") {
 							district.addHazard(
 									StructureFactory.getInstance().get(STRUCTURE.PRISON));
 						} else if (structure == "School") {
-							district.addHazard(
+							district.addBonus(
 									StructureFactory.getInstance().get(STRUCTURE.SCHOOL));
 						} else if (structure == "Sewage Plant") {
 							district.addHazard(
 									StructureFactory.getInstance().get(STRUCTURE.SEWAGEPLANT));
 						} else if (structure == "Water Tower") {
-							district.addHazard(
+							district.addBonus(
 									StructureFactory.getInstance().get(STRUCTURE.WATERTOWER));
 						} else if (structure == "Power Station") {
 							district.addHazard(
 									StructureFactory.getInstance().get(STRUCTURE.POWERSTATION));
 						} else if (structure == "Wind Farm") {
-							district.addHazard(
+							district.addBonus(
 									StructureFactory.getInstance().get(STRUCTURE.WINDFARM));
 						}
 					

@@ -143,6 +143,7 @@ public class GameMaster {
 			railroadButton.addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {						
+							gamePane.clearMessageLayer();
 							useRailroad();
 						}
 					});	
@@ -163,8 +164,31 @@ public class GameMaster {
 	
 	
 	public void useRailroad() {
+		gamePane.clearSelectedDistrict();		
+		gamePane.setMessagePanelText("Select a District with a Railroad.");
 		
+		JButton button = new JButton("Move");
+			button.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent event) {						
+							if (gamePane.getSelectedDistrict() == -1) {
+								gamePane.addMessagePanelText("Please selected a district");
+							}
+							if (board.getDistrict(gamePane.getSelectedDistrict()).isRailRoaded() == true) {
+								int delta = gamePane.getSelectedDistrict() - currentPlayer.getPosition();
+								System.out.println("take railroad");
+								currentPlayer.testMove(delta);
+								currentPlayer.doMove();
+								gamePane.update();
+							}
+						}
+					});	
+		gamePane.addMessagePanelButton(button);
+		
+
 	}
+	
+
 	
 	
 	public void displayPlayerChanceCards() {
