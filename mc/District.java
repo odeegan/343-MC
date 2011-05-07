@@ -41,6 +41,7 @@ public class District extends Square {
 	double[] rents;
 	
 	public District (SQUARETYPE type, String color, String name,  double cost) {
+		super(type);
 		this.name = name;
 		this.color = color;
 		this.cost = cost;
@@ -128,6 +129,14 @@ public class District extends Square {
 	
 	public void addMonopolyTower() {
 		monopolyTower = true;
+	}
+	
+	public void addHazard(STRUCTURE str) {
+		hazard = str;
+	}
+	
+	public void addBonus(STRUCTURE str) {
+		bonus = str;
 	}
 	
 	public String getName() {

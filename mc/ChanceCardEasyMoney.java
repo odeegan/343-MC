@@ -9,11 +9,14 @@ public class ChanceCardEasyMoney extends ChanceCard{
 	 */
 	
 	String name = "Easy Money";
+	GameMaster gm;
+	GamePane gp;
 	
 	boolean isPocketable = false;
 	
 	public ChanceCardEasyMoney() {
-		// empty constructor
+		gm = GameMaster.getInstance();
+		gp = GamePane.getInstance();
 	}
 	
 	/**
@@ -22,10 +25,11 @@ public class ChanceCardEasyMoney extends ChanceCard{
 	 * 
 	 * @param player - the current Player
 	 */
-	public void performCard(GameInstance gi) {
+	public void performCard() {
 		// the player's pay method should handle the case
 		// where the player has insufficient cash
-		gm.getNextPlayer().pay(1000000);
-		gm.currentPlayer().collect(1000000);
+		gm.getNextPlayer().pay(1);
+		gm.getCurrentPlayer().collect(1);
+		
 	}
 }

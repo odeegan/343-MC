@@ -9,7 +9,7 @@ public class ChanceBehavior implements SquareBehavior {
 	@Override
 	public void execute() {
 		GamePane.getInstance().setMessagePanelText("You landed on Chance");
-
+		
 	}
 
 }
