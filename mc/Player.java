@@ -60,7 +60,7 @@ public class Player {
 	}
 	
 	public int testMove(int delta) {
-		int newPosition = (getPosition() + delta) % 39;
+		int newPosition = (getPosition() + delta) % 40;
 		previousPosition = position;
 		position = newPosition;
 		return position;

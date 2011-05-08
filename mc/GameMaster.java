@@ -355,6 +355,13 @@ public class GameMaster {
 	
 	
 	public void endTurn() {
+		
+		//I don't know if this was necessary
+		currentPlayer.rolledDoubles = false;
+		currentPlayer.numDoubles = 0;
+		
+		
+		
 		currentPlayer = getNextPlayer();
 		gamePane.clearMessageLayer();
 		gamePane.update();
