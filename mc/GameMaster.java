@@ -23,6 +23,8 @@ public class GameMaster {
 	
 	private boolean isPaused = false;
 	private boolean isBuilding = false;
+//this should be in gamepane but I had to modify it to work properly
+	private JButton railButton;
 		
 	private static final GameMaster GAMEMASTER = new GameMaster();
 
@@ -198,23 +200,14 @@ public class GameMaster {
 		gamePane.clearSelectedDistrict();		
 		gamePane.setMessagePanelText("Select a District with a Railroad.");
 		
-		JButton button = new JButton("Move");
-			button.addActionListener(
+		railButton = new JButton("Move");
+			railButton.addActionListener(
 				new ActionListener() {
-					public void actionPerformed(ActionEvent event) {						
-							if (gamePane.getSelectedDistrict() == -1) {
-								gamePane.addMessagePanelText("Please selected a district");
-							}
-							if (board.getDistrict(gamePane.getSelectedDistrict()).isRailRoaded() == true) {
-								int delta = gamePane.getSelectedDistrict() - currentPlayer.getPosition();
-								System.out.println("take railroad");
-								currentPlayer.testMove(delta);
-								currentPlayer.doMove();
-								gamePane.update();
-							}
+					public void actionPerformed(ActionEvent event) {
+						railroadButtonClicked();
 						}
 					});	
-		gamePane.addMessagePanelButton(button);
+		gamePane.addMessagePanelButton(railButton);
 		
 
 	}
@@ -222,6 +215,21 @@ public class GameMaster {
 
 	
 	
+	protected void railroadButtonClicked() {
+		
+		if (gamePane.getSelectedDistrict() == -1) {
+			gamePane.addMessagePanelText("Please selected a district");
+		}
+		if (board.getDistrict(gamePane.getSelectedDistrict()).isRailRoaded() == true) {
+			int delta = gamePane.getSelectedDistrict() - currentPlayer.getPosition();
+			System.out.println("take railroad");
+			currentPlayer.testMove(delta);
+			currentPlayer.doMove();
+			railButton.setVisible(false);
+			gamePane.update();
+		}
+	}
+
 	public void displayPlayerChanceCards() {
 		gamePane.hideButton(gamePane.getGetOutOfJailButton());
 		gamePane.hideButton(gamePane.getRentDodgeButton());
