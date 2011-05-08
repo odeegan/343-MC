@@ -23,6 +23,7 @@ public class ChanceDeck {
 		chanceCards.add(new ChanceCardInheritance());
 		chanceCards.add(new ChanceCardGoToJail());
 		chanceCards.add(new ChanceCardAdvanceToGo());
+		chanceCards.add(new ChanceCardToxicWaste());
 		// lots more ....
 		
 		
