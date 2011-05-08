@@ -11,6 +11,7 @@ import java.awt.event.ItemListener;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -78,6 +79,7 @@ public class BuildState implements GameState{
 
 	//private SpinnerNumberModel model;
 	private DefaultListModel cartListModel;
+	private DefaultComboBoxModel comboBoxModel; 
 	
 	private static String[] playerDistricts;
 	
@@ -126,16 +128,31 @@ public class BuildState implements GameState{
 		selectDistrictLabel = new JLabel("Districts:");
 		blocksToBuildLabel = new JLabel("Blocks:");
 
-		//buildAllowanceTextField = new BuildAllowanceTextField();
+		buildAllowanceTextField = new JTextField();
+		buildAllowanceTextField.setEditable(false);
+		buildAllowanceTextField.setPreferredSize(new Dimension(250,30));
+		ownedDistrictsComboBox = new JComboBox();			
+		ownedDistrictsComboBox.setEditable(false);
+		ownedDistrictsComboBox.addItemListener(
+				new ItemListener(){
+					public void itemStateChanged(ItemEvent event){
+						if(event.getStateChange() == ItemEvent.SELECTED){
+							enableButtonsAccordingToDistrict();
+							//enableButtonsAccordingToDistrict((String)event.getItem());
+							//playerSelectedDistrict =GameMaster.getInstance().getBoard().getDistrictByName((String)event.getItem());
+							//System.out.println("Player selected district "+ playerSelectedDistrict);
+						}//End if.
+					}// End itemStateChanged.
+		});// End addItemListener.
 		
 		addToCartButton = new AddToCartButton();
 	
 		buildTypeAmountSpinner = new JSpinner();
 		
 		buildShopPanel.add(buildAllowanceLabel, "cell 0 0 1 1");
-		//buildShopPanel.add(buildAllowanceTextField, "cell 1 0 2 1");
+		buildShopPanel.add(buildAllowanceTextField, "cell 1 0 2 1");
 		buildShopPanel.add(selectDistrictLabel, "cell 0 1 1 1");
-		//combo box
+		buildShopPanel.add(ownedDistrictsComboBox, "cell 1 1 3 1");
 		buildShopPanel.add(buildTypePanel, "cell 0 2 4 1");
 		buildShopPanel.add(blocksToBuildLabel, "cell 0 3 1 1");
 		buildShopPanel.add(buildTypeAmountSpinner, "cell 1 3 1 1");
@@ -175,7 +192,9 @@ public class BuildState implements GameState{
 		baseLayer.add(buildShopPanel, BorderLayout.WEST);
 		baseLayer.add(buildCartPanel, BorderLayout.EAST);
 		baseLayer.add(messageTextField, BorderLayout.SOUTH);
-	
+		
+		layeredPane.add(baseLayer);
+		
 	}// End constructor.
 	
 	@SuppressWarnings("serial")
@@ -252,148 +271,113 @@ public class BuildState implements GameState{
 	}// End constructor.
 }// End buildTypePanel.
 	
-	//private static final BuildPane BUILDPANE = new BuildPane();
-	
-	public class OwnedDistrictsComboBox extends JComboBox {
+	protected void enableButtonsAccordingToDistrict() {
 		
-		public OwnedDistrictsComboBox() {
-			ownedDistrictsComboBox = new JComboBox();
-			currentPlayer = GameMaster.getInstance().getCurrentPlayer();
-			//Put list of players owned districts name's into an array of strings.
-			playerDistricts = new String[currentPlayer.getDistricts().size()+1];
-			playerDistricts[0] = "";
-			ownedDistrictsComboBox.addItem(playerDistricts[0]);
-			for(int jj = 0; jj < currentPlayer.getDistricts().size(); jj++){
-				playerDistricts[jj+1] = currentPlayer.getDistricts().get(jj).getName();
-				ownedDistrictsComboBox.addItem(playerDistricts[jj+1]);
+		// Setting spinner max
+		String selectedDistrictName = comboBoxModel.getElementAt(ownedDistrictsComboBox.getSelectedIndex()).toString();
+		int blocksOnDistrict = GameMaster.getInstance().getBoard().getDistrictByName(selectedDistrictName).getTotalBlockCount();
+		//District selectedDistrict = GameMaster.getInstance().getBoard().getDistrictByName(selectedDistrictName);
+		playerSelectedDistrict = GameMaster.getInstance().getBoard().getDistrictByName(selectedDistrictName);
+		// residential logic
+		if(blocksOnDistrict < 8 && allowanceRemaining > 0 && currentPlayer.getCash() > playerSelectedDistrict.residentialCost)
+			residentialRadioButton.setEnabled(true);
+
+		// industrial logic
+		if(blocksOnDistrict < 8 && allowanceRemaining > 0 && currentPlayer.getCash() > playerSelectedDistrict.industrialCost)
+			industrialRadioButton.setEnabled(true);
+		
+		// Railroad logic
+		if(playerAllowance == -1 && playerSelectedDistrict.isRailRoaded() == false && StructureFactory.getInstance().railroadCount>0)
+			railroadRadioButton.setEnabled(true);
+
+		// Skyscraper logic
+		if(currentPlayer.getCash() > playerSelectedDistrict.skyscraperCost && !playerSelectedDistrict.skyscraper){
+			String selectedDistrictColor = playerSelectedDistrict.getColor();
+			int selectedDistrictColorCount = 0;
+			int expectedCount = 0;
+			for(int oo = 0; oo < currentPlayer.getDistricts().size(); oo++)
+				if(currentPlayer.getDistricts().get(oo).getColor() == selectedDistrictColor)
+					selectedDistrictColorCount++;
+
+			if(selectedDistrictColor == "brown" || selectedDistrictColor == "blue"){
+				expectedCount = 2;
+			}else
+				expectedCount = 3;
+			
+			if(selectedDistrictColorCount == expectedCount)
+				skyscraperRadioButton.setEnabled(true);
+
+		}// End if.
+		
+		//Stadium logic
+		if(currentPlayer.getCash() > 2 && StructureFactory.getInstance().stadiumCount>0){
+			String selectedDistrictColor = playerSelectedDistrict.getColor();
+			int selectedDistrictColorCount = 0;
+			for(int oo = 0; oo < currentPlayer.getDistricts().size(); oo++){
+				if(currentPlayer.getDistricts().get(oo).getColor() == selectedDistrictColor){
+					selectedDistrictColorCount++;
+				}// End if.
+			}// End for.
+			if(selectedDistrictColorCount >= 2){
+				stadiumRadioButton.setEnabled(true);
+			}// End if.
+		}// End if.
+		
+		// Monopoly tower logic
+		if(currentPlayer.getCash() > 7){
+			String selectedDistrictColor = playerSelectedDistrict.getColor();
+			int selectedDistrictColorCount = 0;
+			int expectedCount = 0;
+			int brownCount = 0;
+			int purpleCount = 0;
+			int yellowCount = 0;
+			int blueCount = 0;
+			int orangeCount = 0;
+			int redCount = 0;
+			int greenCount = 0;
+			int skyCount = 0;
+			
+			for( int oo = 0; oo < currentPlayer.getDistricts().size(); oo++){
+				if(currentPlayer.getDistricts().get(oo).getColor() == selectedDistrictColor)
+					selectedDistrictColorCount++;
+
+				String testingColor = currentPlayer.getDistricts().get(oo).getColor();
+				if(testingColor.equals("brown")){
+					brownCount++;
+				}else if(testingColor.equals("purple")){
+					purpleCount++;
+				}else if(testingColor.equals("yellow")){
+					yellowCount++;
+				}else if(testingColor.equals("blue")){
+					blueCount++;
+				}else if(testingColor.equals("orange")){
+					orangeCount++;
+				}else if(testingColor.equals("red")){
+					redCount++;
+				}else if(testingColor.equals("green")){
+					greenCount++;
+				}else if(testingColor.equals("sky")){
+					skyCount++;
+				}// End else if.
 			}// End for.
 			
-			ownedDistrictsComboBox = new JComboBox(playerDistricts);
-			ownedDistrictsComboBox.setEditable(false);	
-			//ownedDistrictsComboBox.setSelectedItem(playerDistricts[0]);
+			if(selectedDistrictColor == "brown" || selectedDistrictColor == "blue"){
+				expectedCount = 2;
+			}else{
+				expectedCount = 3;
+			}// End else.
 			
-			ownedDistrictsComboBox.addItemListener(
-					new ItemListener(){
-						public void itemStateChanged(ItemEvent event){
-							if(event.getStateChange() == ItemEvent.SELECTED){
-								
-								enableButtonsAccordingToDistrict((String)event.getItem());
-								playerSelectedDistrict =GameMaster.getInstance().getBoard().getDistrictByName((String)event.getItem());
-								System.out.println("Player selected district "+ playerSelectedDistrict);
-							}//End if.
-						}// End itemStateChanged.
-			});// End addItemListener.
-			
-			buildShopPanel.add(ownedDistrictsComboBox, "cell 1 1 3 1");
-		}// End constructor.
-			
-		private void enableButtonsAccordingToDistrict(String selectedDistrictName) {
-			
-			// Setting spinner max
-			int blocksOnDistrict = GameMaster.getInstance().getBoard().getDistrictByName(selectedDistrictName).getTotalBlockCount();
-			District selectedDistrict = GameMaster.getInstance().getBoard().getDistrictByName(selectedDistrictName);
-			
-			// residential logic
-			if(blocksOnDistrict < 8 && allowanceRemaining > 0 && currentPlayer.getCash() > selectedDistrict.residentialCost)
-				residentialRadioButton.setEnabled(true);
-
-			// industrial logic
-			if(blocksOnDistrict < 8 && allowanceRemaining > 0 && currentPlayer.getCash() > selectedDistrict.industrialCost)
-				industrialRadioButton.setEnabled(true);
-			
-			// Railroad logic
-			if(playerAllowance == -1 && selectedDistrict.isRailRoaded() == false && StructureFactory.getInstance().railroadCount>0)
-				railroadRadioButton.setEnabled(true);
-
-			// Skyscraper logic
-			if(currentPlayer.getCash() > selectedDistrict.skyscraperCost && !selectedDistrict.skyscraper){
-				String selectedDistrictColor = selectedDistrict.getColor();
-				int selectedDistrictColorCount = 0;
-				int expectedCount = 0;
-				for(int oo = 0; oo < currentPlayer.getDistricts().size(); oo++)
-					if(currentPlayer.getDistricts().get(oo).getColor() == selectedDistrictColor)
-						selectedDistrictColorCount++;
-
-				if(selectedDistrictColor == "brown" || selectedDistrictColor == "blue"){
-					expectedCount = 2;
-				}else
-					expectedCount = 3;
-				
-				if(selectedDistrictColorCount == expectedCount)
-					skyscraperRadioButton.setEnabled(true);
-
+			if(selectedDistrictColorCount == expectedCount && (brownCount == 2 || blueCount == 2 || 
+					purpleCount == 3 || yellowCount == 3 || blueCount == 3 || orangeCount == 3 || 
+					redCount == 3 || greenCount == 3 || skyCount == 3 )){
+				monopolyTowerRadioButton.setEnabled(true);
 			}// End if.
-			
-			//Stadium logic
-			if(currentPlayer.getCash() > 2 && StructureFactory.getInstance().stadiumCount>0){
-				String selectedDistrictColor = selectedDistrict.getColor();
-				int selectedDistrictColorCount = 0;
-				for(int oo = 0; oo < currentPlayer.getDistricts().size(); oo++){
-					if(currentPlayer.getDistricts().get(oo).getColor() == selectedDistrictColor){
-						selectedDistrictColorCount++;
-					}// End if.
-				}// End for.
-				if(selectedDistrictColorCount >= 2){
-					stadiumRadioButton.setEnabled(true);
-				}// End if.
-			}// End if.
-			
-			// Monopoly tower logic
-			if(currentPlayer.getCash() > 7){
-				String selectedDistrictColor = selectedDistrict.getColor();
-				int selectedDistrictColorCount = 0;
-				int expectedCount = 0;
-				int brownCount = 0;
-				int purpleCount = 0;
-				int yellowCount = 0;
-				int blueCount = 0;
-				int orangeCount = 0;
-				int redCount = 0;
-				int greenCount = 0;
-				int skyCount = 0;
-				
-				for( int oo = 0; oo < currentPlayer.getDistricts().size(); oo++){
-					if(currentPlayer.getDistricts().get(oo).getColor() == selectedDistrictColor)
-						selectedDistrictColorCount++;
-
-					String testingColor = currentPlayer.getDistricts().get(oo).getColor();
-					if(testingColor.equals("brown")){
-						brownCount++;
-					}else if(testingColor.equals("purple")){
-						purpleCount++;
-					}else if(testingColor.equals("yellow")){
-						yellowCount++;
-					}else if(testingColor.equals("blue")){
-						blueCount++;
-					}else if(testingColor.equals("orange")){
-						orangeCount++;
-					}else if(testingColor.equals("red")){
-						redCount++;
-					}else if(testingColor.equals("green")){
-						greenCount++;
-					}else if(testingColor.equals("sky")){
-						skyCount++;
-					}// End else if.
-				}// End for.
-				
-				if(selectedDistrictColor == "brown" || selectedDistrictColor == "blue"){
-					expectedCount = 2;
-				}else{
-					expectedCount = 3;
-				}// End else.
-				
-				if(selectedDistrictColorCount == expectedCount && (brownCount == 2 || blueCount == 2 || 
-						purpleCount == 3 || yellowCount == 3 || blueCount == 3 || orangeCount == 3 || 
-						redCount == 3 || greenCount == 3 || skyCount == 3 )){
-					monopolyTowerRadioButton.setEnabled(true);
-				}// End if.
-			}// End if.
-			
-			// Remove hazard logic
-			if(selectedDistrict.isHazarded() == true && currentPlayer.getCash() > (selectedDistrict.hazard.getBlockCount()*.5))
-				removeHazardRadioButton.setEnabled(true);
-		}// end enableButtonsAccordingToDistrict();					
-	}// End OwnedDistrictsComboBox.
+		}// End if.
+		
+		// Remove hazard logic
+		if(playerSelectedDistrict.isHazarded() == true && currentPlayer.getCash() > (playerSelectedDistrict.hazard.getBlockCount()*.5))
+			removeHazardRadioButton.setEnabled(true);
+	}// end enableButtonsAccordingToDistrict();	
 
 	public class BuildList extends JList {
 		
@@ -416,13 +400,8 @@ public class BuildState implements GameState{
 	public class BuildAllowanceTextField extends JTextField {
 		
 		public BuildAllowanceTextField(){
-			if(allowanceRemaining == -1){
-				setText("Railroad");
-			}else
-				setText(allowanceRemaining+" Blocks");
-			
-			setEditable(false);
-			setPreferredSize(new Dimension(250,30));
+
+
 		}// End constructor.
 		
 	}// End BuildAllowanceTextField.
@@ -443,146 +422,149 @@ public class BuildState implements GameState{
 		}// End constructor.
 		
 		private void addToCartAction() {
-			
-			//Residential logic.
-			if(currentlySelectedRadioButton.compareToIgnoreCase("residential") == 0){
-				int buildAmount = (Integer)buildTypeAmountSpinner.getValue();
-				if (allowanceRemaining > 0){
-					if(playerSelectedDistrict.getTotalBlockCount() < 8){
-						// Make sure user isn't building 0 blocks.
-						if(buildAmount != 0){
-							// Make sure there are enough blocks left.
-							if(buildAmount <= StructureFactory.getInstance().residentialCount){
-								cartListModel.addElement(playerSelectedDistrict.getName() +" "+ currentlySelectedRadioButton +" "+buildAmount);
-								buildList.setModel(cartListModel);
-								// Take away structures equal to build amount.
-								for(int ii = 0; ii < buildAmount; ii++){
-									StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("residential"));
-									System.out.println("Residential block count decreased by 1.");
-									playerSelectedDistrict.addResidentialBlock(1);
-									System.out.println("Residential block added to "+ playerSelectedDistrict.getName());
-								}// End for.	
-								System.out.println("Build place: "+ playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " buildAmount " + buildAmount + " added to cart.");
-								allowanceRemaining = allowanceRemaining - buildAmount;
-								buildAllowanceTextField.setText(""+allowanceRemaining + " Blocks");
-								projectedCosts = projectedCosts + playerSelectedDistrict.getResidentialCost()*buildAmount;
-								totalTextField.setText(""+projectedCosts+" Mil");
+
+			if(currentlySelectedRadioButton == null)
+				messageTextField.setText("Please select a build type.");
+			else{
+				//Residential logic.
+				if(currentlySelectedRadioButton.compareToIgnoreCase("residential") == 0){
+					int buildAmount = (Integer)buildTypeAmountSpinner.getValue();
+					if (allowanceRemaining > 0){
+						if(playerSelectedDistrict.getTotalBlockCount() < 8){
+							// Make sure user isn't building 0 blocks.
+							if(buildAmount != 0){
+								// Make sure there are enough blocks left.
+								if(buildAmount <= StructureFactory.getInstance().residentialCount){
+									cartListModel.addElement(playerSelectedDistrict.getName() +" "+ currentlySelectedRadioButton +" "+buildAmount);
+									buildList.setModel(cartListModel);
+									// Take away structures equal to build amount.
+									for(int ii = 0; ii < buildAmount; ii++){
+										StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("residential"));
+										System.out.println("Residential block count decreased by 1.");
+										playerSelectedDistrict.addResidentialBlock(1);
+										System.out.println("Residential block added to "+ playerSelectedDistrict.getName());
+									}// End for.	
+									System.out.println("Build place: "+ playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " buildAmount " + buildAmount + " added to cart.");
+									allowanceRemaining = allowanceRemaining - buildAmount;
+									buildAllowanceTextField.setText(""+allowanceRemaining + " Blocks");
+									projectedCosts = projectedCosts + playerSelectedDistrict.getResidentialCost()*buildAmount;
+									totalTextField.setText(""+projectedCosts+" Mil");
+								}else
+									messageTextField.setText("Not enough residential blocks left to build.");
 							}else
-								messageTextField.setText("Not enough residential blocks left to build.");
+								messageTextField.setText("Cannot build 0 blocks.");
 						}else
-							messageTextField.setText("Cannot build 0 blocks.");
+							messageTextField.setText("Maximum number of blocks allowed on district will be exceeded.");
 					}else
-						messageTextField.setText("Maximum number of blocks allowed on district will be exceeded.");
-				}else
-					messageTextField.setText("You have 0 allowance left.");
-				
-			// Industrial logic.
-			}else if(currentlySelectedRadioButton.compareToIgnoreCase("industrial") == 0){
-				int buildAmount = (Integer)buildTypeAmountSpinner.getValue();	
-				if(allowanceRemaining > 0){
-					if(playerSelectedDistrict.getTotalBlockCount() < 8){
-						// Make sure user isn't building 0 blocks.
-						if(buildAmount != 0){
-							// Make sure there are enough blocks left.
-							if(buildAmount <= StructureFactory.getInstance().industrialCount){
-								cartListModel.addElement(playerSelectedDistrict.getName() +" "+ currentlySelectedRadioButton +" "+buildAmount);
-								buildList.setModel(cartListModel);
-								// Take away structures equal to build amount.
-								for(int ii = 0; ii < buildAmount; ii++){
-									StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("industrial"));
-									System.out.println("Industrial block count decreased by 1.");
-									playerSelectedDistrict.addIndustrialBlock(1);
-									System.out.println("Industrial block added to "+ playerSelectedDistrict.getName());
-								}// End for.	
-								System.out.println("Build place: "+ playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " buildAmount " + buildAmount + " added to cart.");
-								allowanceRemaining = allowanceRemaining - buildAmount;
-								buildAllowanceTextField.setText(""+allowanceRemaining + " Blocks");
-								projectedCosts = projectedCosts + playerSelectedDistrict.getIndustrialCost()*buildAmount;
-								totalTextField.setText(""+projectedCosts+" Mil");
+						messageTextField.setText("You have 0 allowance left.");
+					
+				// Industrial logic.
+				}else if(currentlySelectedRadioButton.compareToIgnoreCase("industrial") == 0){
+					int buildAmount = (Integer)buildTypeAmountSpinner.getValue();	
+					if(allowanceRemaining > 0){
+						if(playerSelectedDistrict.getTotalBlockCount() < 8){
+							// Make sure user isn't building 0 blocks.
+							if(buildAmount != 0){
+								// Make sure there are enough blocks left.
+								if(buildAmount <= StructureFactory.getInstance().industrialCount){
+									cartListModel.addElement(playerSelectedDistrict.getName() +" "+ currentlySelectedRadioButton +" "+buildAmount);
+									buildList.setModel(cartListModel);
+									// Take away structures equal to build amount.
+									for(int ii = 0; ii < buildAmount; ii++){
+										StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("industrial"));
+										System.out.println("Industrial block count decreased by 1.");
+										playerSelectedDistrict.addIndustrialBlock(1);
+										System.out.println("Industrial block added to "+ playerSelectedDistrict.getName());
+									}// End for.	
+									System.out.println("Build place: "+ playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " buildAmount " + buildAmount + " added to cart.");
+									allowanceRemaining = allowanceRemaining - buildAmount;
+									buildAllowanceTextField.setText(""+allowanceRemaining + " Blocks");
+									projectedCosts = projectedCosts + playerSelectedDistrict.getIndustrialCost()*buildAmount;
+									totalTextField.setText(""+projectedCosts+" Mil");
+								}else
+									messageTextField.setText("Not enough industrial blocks left to build.");
 							}else
-								messageTextField.setText("Not enough industrial blocks left to build.");
+								messageTextField.setText("Cannot build 0 blocks.");
 						}else
-							messageTextField.setText("Cannot build 0 blocks.");
+							messageTextField.setText("Maximum number of blocks allowed on district will be exceeded.");
 					}else
-						messageTextField.setText("Maximum number of blocks allowed on district will be exceeded.");
-				}else
-					messageTextField.setText("You have 0 allowance left.");
-				
-			// Railroad logic.
-			}else if (currentlySelectedRadioButton.compareToIgnoreCase("railroad") == 0){
-				if(allowanceRemaining != 0){
-					if(StructureFactory.getInstance().railroadCount != 0){
-						cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
-						buildList.setModel(cartListModel);
-						System.out.println("Build place: "+ playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " added to cart.");
-						StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("railroad"));
-						playerSelectedDistrict.addRailroad();
-						System.out.println("Railroad added to "+ playerSelectedDistrict.getName());
-						allowanceRemaining = allowanceRemaining + 1;
-						buildAllowanceTextField.setText("No blocks left.");
+						messageTextField.setText("You have 0 allowance left.");
+					
+				// Railroad logic.
+				}else if (currentlySelectedRadioButton.compareToIgnoreCase("railroad") == 0){
+					if(allowanceRemaining != 0){
+						if(StructureFactory.getInstance().railroadCount != 0){
+							cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
+							buildList.setModel(cartListModel);
+							System.out.println("Build place: "+ playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " added to cart.");
+							StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("railroad"));
+							playerSelectedDistrict.addRailroad();
+							System.out.println("Railroad added to "+ playerSelectedDistrict.getName());
+							allowanceRemaining = allowanceRemaining + 1;
+							buildAllowanceTextField.setText("No blocks left.");
+						}else
+							messageTextField.setText("No railroads are left to build.");
 					}else
-						messageTextField.setText("No railroads are left to build.");
-				}else
-					messageTextField.setText("You have 0 allowance left.");
-				
-			// Stadium logic.	
-			}else if (currentlySelectedRadioButton.compareToIgnoreCase("stadium") == 0){
-				if(playerSelectedDistrict.isStadiumed() == false){
-					if(StructureFactory.getInstance().stadiumCount != 0){
+						messageTextField.setText("You have 0 allowance left.");
+					
+				// Stadium logic.	
+				}else if (currentlySelectedRadioButton.compareToIgnoreCase("stadium") == 0){
+					if(playerSelectedDistrict.isStadiumed() == false){
+						if(StructureFactory.getInstance().stadiumCount != 0){
+							cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
+							System.out.println("Build place: " + playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " added to cart.");
+							StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("stadium"));
+							System.out.println("Stadium count decreased by 1.");
+							playerSelectedDistrict.addStadium();
+							System.out.println("Stadium added to " + playerSelectedDistrict.getName());
+							projectedCosts = projectedCosts + 2;
+							totalTextField.setText(""+projectedCosts+" Mil");
+						}else
+							messageTextField.setText("No stadiums are left to build.");
+					}else
+						messageTextField.setText("District already has stadium.");
+					
+				// Skyscraper logic.
+				}else if (currentlySelectedRadioButton.compareToIgnoreCase("skyscraper") == 0){
+					if(playerSelectedDistrict.isSkyScrapered() == false){
+						if(StructureFactory.getInstance().skyscraperCount != 0){
+							cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
+							System.out.println("Build place: " + playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " added to cart.");
+							StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("skyscraper"));
+							System.out.println("Skyscraper count decreased by 1.");
+							playerSelectedDistrict.addSkyscraper();
+							System.out.println("Skyscraper added to " + playerSelectedDistrict.getName());
+							projectedCosts = projectedCosts + playerSelectedDistrict.skyscraperCost;
+							totalTextField.setText(""+projectedCosts+" Mil");
+						}else
+							messageTextField.setText("No skyscrapers are left to build.");
+					}else
+						messageTextField.setText("District already has skyscraper.");
+					
+				// Monopoly Tower logic.	
+				}else if (currentlySelectedRadioButton.compareToIgnoreCase("monopolyTower") == 0) {
+					if(StructureFactory.getInstance().monopolyTowerCount != 0){
 						cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
 						System.out.println("Build place: " + playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " added to cart.");
-						StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("stadium"));
-						System.out.println("Stadium count decreased by 1.");
-						playerSelectedDistrict.addStadium();
-						System.out.println("Stadium added to " + playerSelectedDistrict.getName());
-						projectedCosts = projectedCosts + 2;
+						StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("monopolyTower"));
+						System.out.println("Monopoly Tower count decreased by 1.");
+						playerSelectedDistrict.addMonopolyTower();
+						System.out.println("Monopoly Tower added to " + playerSelectedDistrict.getName());
+						projectedCosts = projectedCosts + 7;
 						totalTextField.setText(""+projectedCosts+" Mil");
 					}else
-						messageTextField.setText("No stadiums are left to build.");
-				}else
-					messageTextField.setText("District already has stadium.");
-				
-			// Skyscraper logic.
-			}else if (currentlySelectedRadioButton.compareToIgnoreCase("skyscraper") == 0){
-				if(playerSelectedDistrict.isSkyScrapered() == false){
-					if(StructureFactory.getInstance().skyscraperCount != 0){
-						cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
-						System.out.println("Build place: " + playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " added to cart.");
-						StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("skyscraper"));
-						System.out.println("Skyscraper count decreased by 1.");
-						playerSelectedDistrict.addSkyscraper();
-						System.out.println("Skyscraper added to " + playerSelectedDistrict.getName());
-						projectedCosts = projectedCosts + playerSelectedDistrict.skyscraperCost;
-						totalTextField.setText(""+projectedCosts+" Mil");
-					}else
-						messageTextField.setText("No skyscrapers are left to build.");
-				}else
-					messageTextField.setText("District already has skyscraper.");
-				
-			// Monopoly Tower logic.	
-			}else if (currentlySelectedRadioButton.compareToIgnoreCase("monopolyTower") == 0) {
-				if(StructureFactory.getInstance().monopolyTowerCount != 0){
+						messageTextField.setText("No monopoly towers are left to build.");
+					
+			    // Remove hazards logic.
+				}else if (currentlySelectedRadioButton.compareToIgnoreCase("removeHazard") == 0) {
+					//TODO:
 					cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
-					System.out.println("Build place: " + playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " added to cart.");
-					StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("monopolyTower"));
-					System.out.println("Monopoly Tower count decreased by 1.");
-					playerSelectedDistrict.addMonopolyTower();
-					System.out.println("Monopoly Tower added to " + playerSelectedDistrict.getName());
-					projectedCosts = projectedCosts + 7;
+					System.out.println("Remove hazard from " + playerSelectedDistrict.getName() + " added to cart.");
+					projectedCosts = projectedCosts + playerSelectedDistrict.hazard.getBlockCount()*.5;
 					totalTextField.setText(""+projectedCosts+" Mil");
-				}else
-					messageTextField.setText("No monopoly towers are left to build.");
-				
-		    // Remove hazards logic.
-			}else if (currentlySelectedRadioButton.compareToIgnoreCase("removeHazard") == 0) {
-				//TODO:
-				cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
-				System.out.println("Remove hazard from " + playerSelectedDistrict.getName() + " added to cart.");
-				projectedCosts = projectedCosts + playerSelectedDistrict.hazard.getBlockCount()*.5;
-				totalTextField.setText(""+projectedCosts+" Mil");
-			}// End else if.
-		}// End addToCartAction;
-		
+				}// End else if.
+			}// End addToCartAction;
+		}// End else.
 	}// End AddToCartButton.
 	
 	public class BuildButton extends JButton {
@@ -846,7 +828,7 @@ public class BuildState implements GameState{
 		//System.out.println("cart list "+cartListModel.getElementAt(buildList.getSelectedIndex()));
 		String deleteSelection = str;
 		String []splits = deleteSelection.split(" ");
-		
+		District districtToRemove = GameMaster.getInstance().getBoard().getDistrictByName(splits[0]);
 		
 		//Residential / Industrial delete from list logic.
 		if(splits[1].compareToIgnoreCase("residential") == 0){
@@ -856,7 +838,7 @@ public class BuildState implements GameState{
 			
 			allowanceRemaining = allowanceRemaining + Integer.parseInt(splits[2]);
 			buildAllowanceTextField.setText(""+allowanceRemaining + " Blocks");
-			projectedCosts = projectedCosts - playerSelectedDistrict.getResidentialCost()*Integer.parseInt(splits[2]);
+			projectedCosts = projectedCosts - districtToRemove.getResidentialCost()*Integer.parseInt(splits[2]);
 			totalTextField.setText(""+projectedCosts+" Mil");
 			
 			//TODO:
@@ -868,7 +850,7 @@ public class BuildState implements GameState{
 			
 			allowanceRemaining = allowanceRemaining + Integer.parseInt(splits[2]);
 			buildAllowanceTextField.setText(""+allowanceRemaining + " Blocks");
-			projectedCosts = projectedCosts - playerSelectedDistrict.getIndustrialCost()*Integer.parseInt(splits[2]);
+			projectedCosts = projectedCosts - districtToRemove.getIndustrialCost()*Integer.parseInt(splits[2]);
 			totalTextField.setText(""+projectedCosts+" Mil");
 			
 		//Railroad delete from list logic.
@@ -925,20 +907,62 @@ public class BuildState implements GameState{
 		playerCash = GameMaster.getInstance().getCurrentPlayer().getCash();
 		playerAllowance = generateAllowance();
 		allowanceRemaining = playerAllowance;
-		projectedCosts = 00;
-		totalTextField.setText(""+ projectedCosts + " Mil.");
-		ownedDistrictsComboBox = new OwnedDistrictsComboBox();
+		clearFields();
+		
+		totalTextField.setText(""+ projectedCosts + " Mil");
+
+		playerDistricts = new String[currentPlayer.getDistricts().size()+1];
+		comboBoxModel = new DefaultComboBoxModel(playerDistricts);
+		comboBoxModel.removeAllElements();
+		for(int jj = 0; jj < currentPlayer.getDistricts().size()+1; jj++){
+			if(jj == 0)
+				playerDistricts[jj] = "";
+			else
+				playerDistricts[jj] = currentPlayer.getDistricts().get(jj-1).getName();
+			comboBoxModel.addElement(playerDistricts[jj]);
+		}// End for.
+		ownedDistrictsComboBox.setModel(comboBoxModel);
+
 		playerCashTextField.setText(""+playerCash+ " Mil");
-		buildAllowanceTextField = new BuildAllowanceTextField();
-		buildShopPanel.add(buildAllowanceTextField, "cell 1 0 2 1");
+		
+		if(allowanceRemaining == -1){
+			buildAllowanceTextField.setText("Railroad");
+		}else
+			buildAllowanceTextField.setText(allowanceRemaining+" Blocks");
+		
 		mainFrame.setContentPane(layeredPane);
 		layeredPane.revalidate();
 		startMode();
 			
 	}
 	
+	private void clearFields(){
+		SpinnerNumberModel model = new SpinnerNumberModel(0,0,0,0);
+		buildTypeAmountSpinner.setModel(model);
+		buildTypeAmountSpinner.setVisible(false);
+		projectedCosts = 0;
+		cartListModel.clear();
+		
+		railroadRadioButton.setEnabled(false);
+		industrialRadioButton.setEnabled(false);
+		residentialRadioButton.setEnabled(false);
+		stadiumRadioButton.setEnabled(false);
+		monopolyTowerRadioButton.setEnabled(false);
+		skyscraperRadioButton.setEnabled(false);
+		removeHazardRadioButton.setEnabled(false);
+		
+		
+		railroadRadioButton.setSelected(false);
+		industrialRadioButton.setSelected(false);
+		residentialRadioButton.setSelected(false);
+		stadiumRadioButton.setSelected(false);
+		monopolyTowerRadioButton.setSelected(false);
+		skyscraperRadioButton.setSelected(false);
+		removeHazardRadioButton.setSelected(false);
+		
+	}
+	
 	private void startMode() {
-		layeredPane.add(baseLayer);
 		baseLayer.setVisible(true);
 	}
 		
