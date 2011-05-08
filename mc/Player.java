@@ -35,6 +35,7 @@ public class Player {
 
 	public void addDistrict(District district) {
 		districts.add(district);
+		district.setOwner(this);
 	}
 	
 	public double getCash() {
@@ -59,7 +60,7 @@ public class Player {
 	}
 	
 	public int testMove(int delta) {
-		int newPosition = (getPosition() + delta) % 39;
+		int newPosition = (getPosition() + delta) % 40;
 		previousPosition = position;
 		position = newPosition;
 		return position;
@@ -75,6 +76,7 @@ public class Player {
 	
 	public void pay(double amount) {
 		cash = cash - amount;
+		
 		// insert logic to check for bankruptcy or
 		// figure out when to check if a player can't afford something
 		// do we put it here, or in the logic before this method gets called?
@@ -150,7 +152,7 @@ public class Player {
 	
 	public String getDetails() {
 		String string = new String("");
-		string += "Name: " + getName(); 
+		string += getName(); 
 		string += "\nCash: " + Double.toString(getCash());
 		if (getCash() != getNetWorth()) {
 			string += "\nNetworth: " + getNetWorth();

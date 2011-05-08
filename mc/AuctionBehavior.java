@@ -33,7 +33,6 @@ public class AuctionBehavior implements SquareBehavior {
 //				unownedDistricts.add(district);
 //		}
 
-		gamePane.addSelectionLayer();
 		gamePane.setSelectedDistrict(0);
 		JButton startAuctionButton = new JButton("Start Auction");
 		startAuctionButton.addActionListener(

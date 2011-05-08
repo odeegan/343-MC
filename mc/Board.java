@@ -5,7 +5,7 @@ import javax.swing.JLabel;
 
 
 
-public class Board implements Drawable {
+public class Board {
 
 	//ArrayList of all the board squares
 	ArrayList<Square> squares;
@@ -521,9 +521,4 @@ public class Board implements Drawable {
 		gameBoard.add(bg);
 		return gameBoard;
 	}
-	
-	public void update() {
-		
-	}
-	
 }

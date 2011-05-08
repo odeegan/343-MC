@@ -10,6 +10,7 @@ import java.awt.event.ItemListener;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -69,14 +70,9 @@ class BuildPane extends JLayeredPane {
 	private static JButton purchaseButton;
 	private static JButton deleteButton;
 	
-	private static JPanel messagePanel;
-	private static JLabel messageLabel;
-	
 	private Player player1;
 	
 	private static String[] playerDistricts;
-	
-	private static District playerSelectedDistrict;
 	
 	private int playerAllowance;
 	private int allowanceRemaining;
@@ -158,6 +154,8 @@ class BuildPane extends JLayeredPane {
 			//ownedDistrictsComboBox = new JComboBox(playerDistricts);
 			ownedDistrictsComboBox = new JComboBox();
 			
+			
+			
 			playerDistricts = new String[player1.getDistricts().size()];
 			for(int jj = 0; jj < player1.getDistricts().size(); jj++){
 				playerDistricts[jj] = player1.getDistricts().get(jj).getName();
@@ -184,10 +182,9 @@ class BuildPane extends JLayeredPane {
 						public void itemStateChanged(ItemEvent event){
 							if(event.getStateChange() == ItemEvent.SELECTED)
 								//System.out.println("User selected district: "+playerDistricts[ownedDistrictsComboBox.getSelectedIndex()]);
+								System.out.println("index:"+event.getItem());
 								districtSelected((String)event.getItem());
-								playerSelectedDistrict =GameMaster.getInstance().getBoard().getDistrictByName((String)event.getItem());
-								System.out.println("Player selected district "+ playerSelectedDistrict);
-								//buildTypeAmountSpinner.setVisible(true);
+								
 						}
 
 						private void districtSelected(String selectedDistrictName) {
@@ -196,117 +193,49 @@ class BuildPane extends JLayeredPane {
 							int blocksOnDistrict = GameMaster.getInstance().getBoard().getDistrictByName(selectedDistrictName).getTotalBlockCount();
 							District selectedDistrict = GameMaster.getInstance().getBoard().getDistrictByName(selectedDistrictName);
 							
-							// residential logic
+							if(8 - blocksOnDistrict < allowanceRemaining){
+								SpinnerNumberModel model = new SpinnerNumberModel(0,0, 8-blocksOnDistrict, 1);
+								buildTypeAmountSpinner.setModel(model);
+							} else{
+								SpinnerNumberModel model = new SpinnerNumberModel(0, 0, allowanceRemaining, 1);
+								buildTypeAmountSpinner.setModel(model);
+							}
+							
 							if(blocksOnDistrict < 8 && allowanceRemaining > 0 && player1.getCash() > selectedDistrict.residentialCost){
 								residentialRadioButton.setEnabled(true);
 							}
-							// industrial logic
+							
 							if(blocksOnDistrict < 8 && allowanceRemaining > 0 && player1.getCash() > selectedDistrict.industrialCost){
 								industrialRadioButton.setEnabled(true);
 							}
 							
-							// Railroad logic
-							if(playerAllowance == -1 && selectedDistrict.isRailRoaded() == false && StructureFactory.getInstance().railroadCount>0){
-								railroadRadioButton.setEnabled(true);
-								railroadRadioButton.setSelected(true);
-							}
+							//Allowance is railroad
+//							if(allowanceRemaining == -1 &&  ){
+//								industrialRadioButton.setVisible(false);
+//								industrialTypeLabel.setVisible(false);
+//							}
 							
-							// Skyscraper logic
-							if(player1.getCash() > selectedDistrict.skyscraperCost){
-								String selectedDistrictColor = selectedDistrict.getColor();
-								int selectedDistrictColorCount = 0;
-								int expectedCount = 0;
-								for(int oo = 0; oo < player1.getDistricts().size(); oo++){
-									if(player1.getDistricts().get(oo).getColor() == selectedDistrictColor){
-										selectedDistrictColorCount++;
-									}
-								}
-								if(selectedDistrictColor == "brown" || selectedDistrictColor == "blue"){
-									expectedCount = 2;
-								}else{
-									expectedCount = 3;
-								}
-								if(selectedDistrictColorCount == expectedCount){
-									skyscraperRadioButton.setEnabled(true);
-								}
-							}
+							//if()
 							
-							//Stadium logic
-							if(player1.getCash() > 2 && StructureFactory.getInstance().stadiumCount>0){
-								String selectedDistrictColor = selectedDistrict.getColor();
-								int selectedDistrictColorCount = 0;
-								for(int oo = 0; oo < player1.getDistricts().size(); oo++){
-									if(player1.getDistricts().get(oo).getColor() == selectedDistrictColor){
-										selectedDistrictColorCount++;
-									}
-								}
-								if(selectedDistrictColorCount >= 2){
-									stadiumRadioButton.setEnabled(true);
-								}
-							}
 							
-							// Monopoly tower logic
-							if(player1.getCash() > selectedDistrict.getMonopolyTowerCost()){
-								String selectedDistrictColor = selectedDistrict.getColor();
-								int selectedDistrictColorCount = 0;
-								int expectedCount = 0;
-								int brownCount = 0;
-								int purpleCount = 0;
-								int yellowCount = 0;
-								int blueCount = 0;
-								int orangeCount = 0;
-								int redCount = 0;
-								int greenCount = 0;
-								int skyCount = 0;
-								
-								for( int oo = 0; oo < player1.getDistricts().size(); oo++){
-									if(player1.getDistricts().get(oo).getColor() == selectedDistrictColor){
-										selectedDistrictColorCount++;
-									}
-									String testingColor = player1.getDistricts().get(oo).getColor();
-									if(testingColor.equals("brown")){
-										brownCount++;
-									}else if(testingColor.equals("purple")){
-										purpleCount++;
-									}else if(testingColor.equals("yellow")){
-										yellowCount++;
-									}else if(testingColor.equals("blue")){
-										blueCount++;
-									}else if(testingColor.equals("orange")){
-										orangeCount++;
-									}else if(testingColor.equals("red")){
-										redCount++;
-									}else if(testingColor.equals("green")){
-										greenCount++;
-									}else if(testingColor.equals("sky")){
-										skyCount++;
-									}
-								}
-								
-								if(selectedDistrictColor == "brown" || selectedDistrictColor == "blue"){
-									expectedCount = 2;
-								}else{
-									expectedCount = 3;
-								}
-								
-								if(selectedDistrictColorCount == expectedCount && (brownCount == 2 || blueCount == 2 || 
-										purpleCount == 3 || yellowCount == 3 || blueCount == 3 || orangeCount == 3 || 
-										redCount == 3 || greenCount == 3 || skyCount == 3 )){
-									monopolyTowerRadioButton.setEnabled(true);
-								}
-							}
-							
-							// Remove hazard logic
-							if(selectedDistrict.isHazarded() == true && player1.getCash() > (selectedDistrict.hazard.getBlockCount()*.5)){
-								removeHazardRadioButton.setEnabled(true);
-							}
-						}// end districtSelected();
-						
+							//buildShopPanel.add(buildTypeAmountSpinner, "cell 1 3 1 1");
+//							residentialRadioButton.setVisible(false);
+//							residentialTypeLabel.setVisible(false);
+//							railroadRadioButton.setVisible(true);
+//							railroadTypeLabel.setVisible(true);
+//							industrialRadioButton.setVisible(false);
+//							industrialTypeLabel.setVisible(false);
+//							skyscraperRadioButton.setVisible(false);
+//							skyscraperTypeLabel.setVisible(false);
+//							stadiumRadioButton.setVisible(false);
+//							stadiumLabel.setVisible(false);	
+//							monopolyTowerRadioButton.setVisible(false);
+//							monopolyTowerLabel.setVisible(false);
+//							removeHazardRadioButton.setVisible(false);
+//							removeHazardLabel.setVisible(false);
+						}
 					}
 			);
-//			public String getSelectedDistrict(){
-//				return (String)ownedDistrictsComboBox.getItemAt(ownedDistrictsComboBox.getSelectedIndex());
-//			}
 			buildShopPanel.add(ownedDistrictsComboBox, "cell 1 1 3 1");
 			
 		}
@@ -330,8 +259,8 @@ class BuildPane extends JLayeredPane {
 	public class BuildTypeAmountSpinner extends JSpinner {
 		
 		public BuildTypeAmountSpinner() {
-			//SpinnerNumberModel model = new SpinnerNumberModel(0,0,allowanceRemaining,1);
-			//buildTypeAmountSpinner = new JSpinner(model);
+			SpinnerNumberModel model = new SpinnerNumberModel(0,0,allowanceRemaining,1);
+			buildTypeAmountSpinner = new JSpinner(model);
 			//repaint();
 			//buildShopPanel.add(buildTypeAmountSpinner, "cell 1 3 1 1");
 			//buildTypeAmountSpinner.setModel(model);
@@ -344,10 +273,10 @@ class BuildPane extends JLayeredPane {
 	public class BuildAllowanceTextField extends JTextField {
 		
 		public BuildAllowanceTextField(){
-			if(playerAllowance == -1){
+			if(playerAllowance == 0){
 				setText("Railroad");
 			}else{
-				setText(playerAllowance+" Blocks");
+				setText(allowanceRemaining+" Blocks");
 			}
 			setEditable(false);
 			setPreferredSize(new Dimension(250,30));
@@ -370,21 +299,9 @@ class BuildPane extends JLayeredPane {
 							monopolyTowerRadioButton.setSelected(false);
 							skyscraperRadioButton.setSelected(false);
 							removeHazardRadioButton.setSelected(false);
-							
-							// set block type build amount spinner
-							int blocksOnDistrict = playerSelectedDistrict.getTotalBlockCount();
-							if(8 - blocksOnDistrict < allowanceRemaining){
-								SpinnerNumberModel model = new SpinnerNumberModel(0,0, 8-blocksOnDistrict, 1);
-								buildTypeAmountSpinner.setModel(model);
-							} else{
-								SpinnerNumberModel model = new SpinnerNumberModel(0, 0, allowanceRemaining, 1);
-								buildTypeAmountSpinner.setModel(model);
-							}// End else.
-							buildTypeAmountSpinner.setVisible(true);
-							
-						}// End actionPerformed.
-					});// End addActionListener.
-		}// end constructor.
+						}
+					});
+		}
 		
 	}
 	
@@ -402,17 +319,6 @@ class BuildPane extends JLayeredPane {
 							monopolyTowerRadioButton.setSelected(false);
 							skyscraperRadioButton.setSelected(false);
 							removeHazardRadioButton.setSelected(false);
-							
-							// set block type build amount spinner
-							int blocksOnDistrict = playerSelectedDistrict.getTotalBlockCount();
-							if(8 - blocksOnDistrict < allowanceRemaining){
-								SpinnerNumberModel model = new SpinnerNumberModel(0,0, 8-blocksOnDistrict, 1);
-								buildTypeAmountSpinner.setModel(model);
-							} else{
-								SpinnerNumberModel model = new SpinnerNumberModel(0, 0, allowanceRemaining, 1);
-								buildTypeAmountSpinner.setModel(model);
-							}// End else.
-							buildTypeAmountSpinner.setVisible(true);
 						}
 					});
 		}
@@ -432,8 +338,6 @@ class BuildPane extends JLayeredPane {
 							monopolyTowerRadioButton.setSelected(false);
 							skyscraperRadioButton.setSelected(false);
 							removeHazardRadioButton.setSelected(false);
-							// Hide spinner
-							buildTypeAmountSpinner.setVisible(false);
 						}
 					});
 		}
@@ -453,8 +357,6 @@ class BuildPane extends JLayeredPane {
 							monopolyTowerRadioButton.setSelected(false);
 							skyscraperRadioButton.setSelected(true);
 							removeHazardRadioButton.setSelected(false);
-							// Hide spinner
-							buildTypeAmountSpinner.setVisible(false);
 						}
 					});
 		}
@@ -474,8 +376,6 @@ class BuildPane extends JLayeredPane {
 							monopolyTowerRadioButton.setSelected(false);
 							skyscraperRadioButton.setSelected(false);
 							removeHazardRadioButton.setSelected(false);
-							// Hide spinner
-							buildTypeAmountSpinner.setVisible(false);
 						}
 					});
 		}
@@ -495,8 +395,6 @@ class BuildPane extends JLayeredPane {
 							monopolyTowerRadioButton.setSelected(true);
 							skyscraperRadioButton.setSelected(false);
 							removeHazardRadioButton.setSelected(false);
-							// Hide spinner
-							buildTypeAmountSpinner.setVisible(false);
 						}
 					});
 		}
@@ -516,8 +414,6 @@ class BuildPane extends JLayeredPane {
 							monopolyTowerRadioButton.setSelected(false);
 							skyscraperRadioButton.setSelected(false);
 							removeHazardRadioButton.setSelected(true);
-							// Hide spinner
-							buildTypeAmountSpinner.setVisible(false);
 						}
 					});
 		}
@@ -613,7 +509,7 @@ class BuildPane extends JLayeredPane {
 		allowanceRemaining = playerAllowance;
 		
 		baseLayer = new JPanel(new BorderLayout());
-		baseLayer.setBounds(0, 0, 500, 380);
+		baseLayer.setBounds(0, 0, 500, 350);
 		baseLayer.setOpaque(true);
 
 		buildShopPanel = new JPanel();
@@ -638,7 +534,7 @@ class BuildPane extends JLayeredPane {
 		addToCartButton = new AddToCartButton();
 		
 
-		buildTypeAmountSpinner = new JSpinner();
+		buildTypeAmountSpinner = new BuildTypeAmountSpinner();
 		
 
 		buildShopPanel.add(buildAllowanceLabel, "cell 0 0 1 1");
@@ -649,8 +545,7 @@ class BuildPane extends JLayeredPane {
 		buildShopPanel.add(blocksToBuildLabel, "cell 0 3 1 1");
 		buildShopPanel.add(buildTypeAmountSpinner, "cell 1 3 1 1");
 		buildShopPanel.add(addToCartButton, "cell 2 3 1 1");
-		
-		buildTypeAmountSpinner.setVisible(false);
+
 		
 		totalCostLabel = new JLabel("Total Cost: ");
 		buildList = new BuildList();
@@ -665,18 +560,11 @@ class BuildPane extends JLayeredPane {
 		buildCartPanel.add(totalTextField, "cell 2 1 1 1");
 		buildCartPanel.add(purchaseButton, "cell 2 2 1 1");	
 		buildCartPanel.add(cancelButton, "cell 0 3 1 1");
-		deleteButton.setVisible(false);
+
 		
-		messagePanel =  new JPanel(new MigLayout());
-		messagePanel.setPreferredSize(new Dimension(500, 30));
-		messagePanel.setBorder(BorderFactory.createLineBorder(Color.lightGray));
-		messageLabel = new JLabel();
-		
-		messagePanel.add(messageLabel);
 		
 		baseLayer.add(buildShopPanel, BorderLayout.WEST);
 		baseLayer.add(buildCartPanel, BorderLayout.EAST);
-		baseLayer.add(messagePanel, BorderLayout.SOUTH);
 	
 		add(baseLayer, new Integer(1));
 	}

@@ -19,7 +19,6 @@ public class District extends Square {
 
 	int residentialBlockCount = 0;
 	int industrialBlockCount = 0;
-
 		
 	// STRUCTURES is an enum that stores type and block count
 	STRUCTURE bonus;	
@@ -34,7 +33,6 @@ public class District extends Square {
 	double residentialCost;
 	double industrialCost;
 	double skyscraperCost;
-	double monopolyTowerCost = 7.0;
 	
 	boolean isMortgaged = false;
 	
@@ -87,10 +85,6 @@ public class District extends Square {
 		this.skyscraperCost = sc;
 	}
 	
-	public double getMonopolyTowerCost() {
-		return monopolyTowerCost;
-	}
-	
 	public double getCost() {
 		return cost;
 	}
@@ -104,11 +98,7 @@ public class District extends Square {
 	}
 	
 	public int getTotalBlockCount() {
-		int sum = residentialBlockCount + industrialBlockCount;
-		if(hazard != null) {
-			sum += hazard.getBlockCount();
-		}
-		return sum;
+		return residentialBlockCount + industrialBlockCount;
 	}
 	
 	public void addIndustrialBlock(int amount) {
@@ -167,10 +157,6 @@ public class District extends Square {
 	public boolean isBonused() {
 		return bonus != null;
 	}
-	
-	public boolean isHazarded() {
-		return hazard != null;
-	}
 
 	public boolean isRailRoaded() {
 		return railroad;
@@ -197,9 +183,64 @@ public class District extends Square {
 		} else {
 			string += "\nCost: " + Double.toString(getCost());
 		}
-		
+		if (bonus != null) {
+			string += "\nBonus: " + bonus.name();			
+		}
+		if (hazard !=null) {
+			string += "\nHazard: " + hazard.name();			
+		}
+		if (residentialBlockCount > 0) {
+			string += "\nRes Blocks: " + residentialBlockCount;	
+		}
+		if (industrialBlockCount > 0) {
+			string += "\nInd Blocks: " + industrialBlockCount;			
+		}
+		if (skyscraper) {
+			string += "\nSkyScraper";			
+		}
+		if (stadium) {
+			string += "\nStadium";		
+		}
+		if (monopolyTower) {
+			string += "\nMonopolyTower";			
+		}
 		return string;
+	
 	}
 
+	public String getHTML() {
+		String string = new String("<html>");
+		string += "Name: " + getName(); 
+		if (owner != null) {
+			string += "<br>Owner: " + owner;
+			string += "<br><br>Current Rent: " + getRent();
+		} else {
+			string += "<br><br>Cost: " + Double.toString(getCost());
+		}
+		if (bonus != null) {
+			string += "<br>Bonus: " + bonus.name();			
+		}
+		if (hazard !=null) {
+			string += "<br>Hazard: " + hazard.name();			
+		}
+		if (residentialBlockCount > 0) {
+			string += "<br>Res Blocks: " + residentialBlockCount;	
+		}
+		if (industrialBlockCount > 0) {
+			string += "<br>Ind Blocks: " + industrialBlockCount;			
+		}
+		if (skyscraper) {
+			string += "<br>SkyScraper";			
+		}
+		if (stadium) {
+			string += "<br>Stadium";		
+		}
+		if (monopolyTower) {
+			string += "<br>MonopolyTower";			
+		}
+		string += "<html>";
+		return string;
+	
+	}
 	
 }

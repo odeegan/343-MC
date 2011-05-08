@@ -19,8 +19,10 @@ public class GameMaster {
 	private static ArrayList<Player> players;
 	private static Board board;
 	private static Player currentPlayer;
+	private static ChanceDeck chanceDeck;
 	
 	private boolean isPaused = false;
+	private boolean isBuilding = false;
 		
 	private static final GameMaster GAMEMASTER = new GameMaster();
 
@@ -29,6 +31,7 @@ public class GameMaster {
 		players = new ArrayList<Player>();
 		board = new Board();
 		gamePane = GamePane.getInstance();
+		chanceDeck = new ChanceDeck();
 	}
 	
 	public static GameMaster getInstance() {
@@ -46,17 +49,22 @@ public class GameMaster {
 	}
 	
 	public void startBuild() {
-		GameMaster.getInstance().isPaused = true;
+		GameMaster.getInstance().isBuilding = true;
 		gameStateMachine.setState(gameStateMachine.getBuildState());
 	}
 	
 	public void startTurn() {
-		if (isPaused) {
+		if (isPaused || currentPlayer.rolledDoubles || isBuilding) {
 			resumeTurn();
+			isPaused = false;
+			isBuilding = false;
 		}
-		
-		gamePane.enableButton(gamePane.getRollDiceButton());
-		gamePane.disableButton(gamePane.getEndTurnButton());
+		else{
+			gamePane.enableButton(gamePane.getRollDiceButton());
+			isPaused = false;
+			isBuilding = false;
+			gamePane.disableButton(gamePane.getEndTurnButton());
+		}
 		gamePane.update();
 		displayPlayerChanceCards();
 		System.out.println("--------------------------------");
@@ -69,7 +77,30 @@ public class GameMaster {
 	
 	public void resumeTurn() {
 	//TODO: resume the players turn after the GameState is handed back to us
-		
+		if(!currentPlayer.rolledDoubles){
+			if(!isBuilding){
+				gamePane.disableButton(gamePane.getRollDiceButton());
+				gamePane.enableButton(gamePane.getBuildButton());
+				gamePane.enableButton(gamePane.getEndTurnButton());
+				}
+			else{
+				gamePane.disableButton(gamePane.getRollDiceButton());
+				gamePane.disableButton(gamePane.getBuildButton());
+				gamePane.enableButton(gamePane.getEndTurnButton());
+			}
+		}
+		else{
+			if(isBuilding){
+				gamePane.disableButton(gamePane.getRollDiceButton());
+				gamePane.disableButton(gamePane.getBuildButton());
+				gamePane.enableButton(gamePane.getEndTurnButton());
+				}
+			else{
+				gamePane.enableButton(gamePane.getRollDiceButton());
+				gamePane.enableButton(gamePane.getBuildButton());
+				gamePane.disableButton(gamePane.getEndTurnButton());
+			}
+		}
 	}
 	
 	
@@ -103,8 +134,9 @@ public class GameMaster {
 	public void checkSquare(int roll) {
 		System.out.println("checking square");
 		currentPlayer.testMove(roll);
-		final Square newSquare = board.getSquare(currentPlayer.position);
 		
+		final Square newSquare = board.getSquare(currentPlayer.getPosition());
+			
 		if (currentPlayer.hasTaxiCard) {
 			gamePane.enableButton(gamePane.getTaxiButton());
 
@@ -132,6 +164,63 @@ public class GameMaster {
 			gamePane.update();	
 		}
 	}
+	
+	public void checkForRailroad() {
+		District district = board.getDistrict(currentPlayer.getPosition());
+		
+		if (district.isRailRoaded()) {
+			gamePane.setMessagePanelText(district.getName() +  " has a railroad.");
+			JButton railroadButton = new JButton("Use the RailRoad");
+			railroadButton.addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {						
+							gamePane.clearMessageLayer();
+							useRailroad();
+						}
+					});	
+			gamePane.addMessagePanelButton(railroadButton);
+		}
+		if (district.isRailRoaded()) {
+			JButton railroadButton = new JButton("Stay Put");
+			railroadButton.addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {						
+							gamePane.clearMessageLayer();
+							gamePane.update();
+						}
+					});
+			gamePane.addMessagePanelButton(railroadButton);
+		}
+	}
+	
+	
+	public void useRailroad() {
+		gamePane.clearSelectedDistrict();		
+		gamePane.setMessagePanelText("Select a District with a Railroad.");
+		
+		JButton button = new JButton("Move");
+			button.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent event) {						
+							if (gamePane.getSelectedDistrict() == -1) {
+								gamePane.addMessagePanelText("Please selected a district");
+							}
+							if (board.getDistrict(gamePane.getSelectedDistrict()).isRailRoaded() == true) {
+								int delta = gamePane.getSelectedDistrict() - currentPlayer.getPosition();
+								System.out.println("take railroad");
+								currentPlayer.testMove(delta);
+								currentPlayer.doMove();
+								gamePane.update();
+							}
+						}
+					});	
+		gamePane.addMessagePanelButton(button);
+		
+
+	}
+	
+
+	
 	
 	public void displayPlayerChanceCards() {
 		gamePane.hideButton(gamePane.getGetOutOfJailButton());
@@ -212,7 +301,9 @@ public class GameMaster {
 			checkSquare(dice[0] + dice[1]);
 			}
 		}
+		resumeTurn();
 		gamePane.update();
+
 	}
 		
 	public int[] rollDice() {
@@ -221,9 +312,9 @@ public class GameMaster {
 		int[] dice = new int[2];
 		
 		//Jumping to auction square
-		//dice[0] = 6;
-		//dice[1] = 6;
-		//return dice;
+//		dice[0] = 6;
+//		dice[1] = 6;
+//		return dice;
 		//end auction square test block
 		
 		
@@ -354,6 +445,10 @@ public class GameMaster {
 
 	public void setGameStateMachine(GameStateMachine gsm) {
 		gameStateMachine = gsm;
+	}
+
+	public ChanceDeck getChanceDeck() {
+		return chanceDeck;
 	}
 	
 	
