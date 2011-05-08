@@ -13,14 +13,19 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
 import net.miginfocom.swing.MigLayout;
@@ -654,6 +659,24 @@ class GamePane extends JLayeredPane {
 		add(messageLayer, new Integer(2));	
 		add(districtElementsPanel, new Integer(3));	
 		add(districtRollOverPanel, new Integer(4));
+		
+		
+		//AwesomeSauce Feature X100
+		
+		@SuppressWarnings("serial")
+		Action poppop = new AbstractAction(){
+			public void actionPerformed(ActionEvent evt){
+				System.out.println("about");
+				JOptionPane.showMessageDialog (messageLayer, "This Game is Brought to you by: \n\tNicholas \"The Complicatrix\" O'Deegan" +
+						"\n\tCodi \"The Sunflower\" Bonney" +
+						"\n\t and Daniel \"Won't Shut Up\" McGoldrick", "The Men Behind The Code", JOptionPane.INFORMATION_MESSAGE);
+				
+			}
+		};
+		
+		messageLayer.getInputMap(messageLayer.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"),"PopUpMenu");
+		messageLayer.getActionMap().put("PopUpMenu",poppop);
+
 
 	}
 	
@@ -753,5 +776,7 @@ class GamePane extends JLayeredPane {
 		revalidate();
 		repaint();
 	}
+	
+	
 	
 }
