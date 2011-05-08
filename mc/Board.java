@@ -31,6 +31,9 @@ public class Board {
 				"Summergate",
 				.6);
 		summergate.setRents(.02, .1, .2, .4, .8, 1.6, 2.2, 3.0, 5.5);
+		summergate.setResidentialCost(.5);
+		summergate.setIndustrialCost(1);
+		summergate.setSkyScraperCost(2);
 		summergate.setSquareBehavior(new UnownedDistrictBehavior());
 		summergate.setX(602);		
 		summergate.setY(708);
@@ -53,6 +56,9 @@ public class Board {
 				.6);
 
 		stoneside.setRents(.04, .2, .4, .8, 1.6, 2.2, 3, 4, 7);
+		stoneside.setResidentialCost(.5);
+		stoneside.setIndustrialCost(1);
+		stoneside.setSkyScraperCost(2);
 		stoneside.setSquareBehavior(new UnownedDistrictBehavior());
 		stoneside.setX(478);		
 		stoneside.setY(708);
@@ -82,6 +88,9 @@ public class Board {
 				1.0);
 
 		westlands.setRents(.06, .3, .6, 1.2, 1.8, 2.5, 3.5, 5, 7.5);
+		westlands.setResidentialCost(.5);
+		westlands.setIndustrialCost(1);
+		westlands.setSkyScraperCost(2);
 		westlands.setSquareBehavior(new UnownedDistrictBehavior());
 		westlands.setX(292);		
 		westlands.setY(708);
@@ -105,6 +114,9 @@ public class Board {
 				1);
 
 		bayviewDock.setRents(.06, .3, .6, 1.2, 1.8, 2.5, 3.5, 5, 7.5);
+		bayviewDock.setResidentialCost(.5);
+		bayviewDock.setIndustrialCost(1);
+		bayviewDock.setSkyScraperCost(2);
 		bayviewDock.setSquareBehavior(new UnownedDistrictBehavior());
 		bayviewDock.setX(168);		
 		bayviewDock.setY(708);
@@ -120,6 +132,9 @@ public class Board {
 				1.2);
 
 		brightside.setRents(.08, .4, .8, 1.5, 2.5, 3.5, 4.5, 6, 8.5);
+		brightside.setResidentialCost(.5);
+		brightside.setIndustrialCost(1);
+		brightside.setSkyScraperCost(2);
 		brightside.setSquareBehavior(new UnownedDistrictBehavior());
 		brightside.setX(106);		
 		brightside.setY(708);
@@ -142,6 +157,9 @@ public class Board {
 				1.4);
 				
 		oldTown.setRents(.1, .5, 1, 2, 3, 4, 5, 6.5, 9);
+		oldTown.setResidentialCost(1);
+		oldTown.setIndustrialCost(2);
+		oldTown.setSkyScraperCost(3);
 		oldTown.setSquareBehavior(new UnownedDistrictBehavior());
 		oldTown.setX(4);		
 		oldTown.setY(602);
@@ -164,6 +182,9 @@ public class Board {
 				1.4);
 
 		harborHeights.setRents(.1, .5, 1, 2, 3, 4, 5, 6.5, 9);
+		harborHeights.setResidentialCost(1);
+		harborHeights.setIndustrialCost(2);
+		harborHeights.setSkyScraperCost(3);
 		harborHeights.setSquareBehavior(new UnownedDistrictBehavior());
 		harborHeights.setX(4);		
 		harborHeights.setY(478);
@@ -180,6 +201,9 @@ public class Board {
 				1.6);
 
 		centralQuay.setRents(.12, .6, 1.2, 2.4, 3.5, 4.5, 5.5, 7, 9.5);
+		centralQuay.setResidentialCost(1);
+		centralQuay.setIndustrialCost(2);
+		centralQuay.setSkyScraperCost(3);
 		centralQuay.setSquareBehavior(new UnownedDistrictBehavior());
 		centralQuay.setX(4);		
 		centralQuay.setY(416);
@@ -203,6 +227,9 @@ public class Board {
 				1.8);
 
 		shineVillage.setRents(.14, .7, 1.4, 2.8, 3.8, 4.8, 6, 7.5, 10);
+		shineVillage.setResidentialCost(1);
+		shineVillage.setIndustrialCost(2);
+		shineVillage.setSkyScraperCost(3);
 		shineVillage.setSquareBehavior(new UnownedDistrictBehavior());
 		shineVillage.setX(4);		
 		shineVillage.setY(292);
@@ -225,6 +252,9 @@ public class Board {
 				1.8);
 
 		eastBank.setRents(.14, .7, 1.4, 2.8, 3.8, 4.8, 6, 7.5, 10);
+		eastBank.setResidentialCost(1);
+		eastBank.setIndustrialCost(2);
+		eastBank.setSkyScraperCost(3);
 		eastBank.setSquareBehavior(new UnownedDistrictBehavior());
 		eastBank.setX(4);		
 		eastBank.setY(168);
@@ -240,6 +270,9 @@ public class Board {
 				2);
 
 		treetopPark.setRents(.16, .8, 1.6, 3.0, 4.0, 5.0, 6.0, 8.0, 11.0);
+		treetopPark.setResidentialCost(1);
+		treetopPark.setIndustrialCost(2);
+		treetopPark.setSkyScraperCost(3);
 		treetopPark.setSquareBehavior(new UnownedDistrictBehavior());
 		treetopPark.setX(4);		
 		treetopPark.setY(106);
@@ -262,6 +295,9 @@ public class Board {
 				2.2);
 
 		seaview.setRents(.18, .9, 1.8, 3.5, 4.5, 5.5, 6.5, 8.5, 12);
+		seaview.setResidentialCost(1.5);
+		seaview.setIndustrialCost(3);
+		seaview.setSkyScraperCost(4);
 		seaview.setSquareBehavior(new UnownedDistrictBehavior());
 		seaview.setX(106);		
 		seaview.setY(4);
@@ -284,6 +320,9 @@ public class Board {
 				2.2);
 
 		theWarf.setRents(.18, .9, 1.8, 3.5, 4.5, 5.5, 6.5, 8.5, 12);
+		theWarf.setResidentialCost(1.5);
+		theWarf.setIndustrialCost(3);
+		theWarf.setSkyScraperCost(4);
 		theWarf.setSquareBehavior(new UnownedDistrictBehavior());
 		theWarf.setX(230);		
 		theWarf.setY(4);
@@ -300,6 +339,9 @@ public class Board {
 				2.4);
 
 		middleton.setRents(.2, 1, 2, 3.8, 4.8, 5.8, 6.8, 8.8, 13.5);
+		middleton.setResidentialCost(1.5);
+		middleton.setIndustrialCost(3);
+		middleton.setSkyScraperCost(4);
 		middleton.setSquareBehavior(new UnownedDistrictBehavior());
 		middleton.setX(292);		
 		middleton.setY(4);
@@ -322,6 +364,9 @@ public class Board {
 				2.6);
 
 		newTown.setRents(.22, 1.1, 2.2, 4, 5, 6, 7, 8, 14);
+		newTown.setResidentialCost(1.5);
+		newTown.setIndustrialCost(3);
+		newTown.setSkyScraperCost(4);
 		newTown.setSquareBehavior(new UnownedDistrictBehavior());
 		newTown.setX(416);		
 		newTown.setY(4);
@@ -337,6 +382,9 @@ public class Board {
 				2.6);
 
 		silverHarbor.setRents(.22, 1.1, 2.2, 4, 5, 6, 7, 10, 14);
+		silverHarbor.setResidentialCost(1.5);
+		silverHarbor.setIndustrialCost(3);
+		silverHarbor.setSkyScraperCost(4);
 		silverHarbor.setSquareBehavior(new UnownedDistrictBehavior());
 		silverHarbor.setX(478);		
 		silverHarbor.setY(4);
@@ -359,6 +407,9 @@ public class Board {
 				2.8);
 
 		centralCity.setRents(.24, 1.2, 2.4, 4.2, 5.2, 6.2, 8.2, 10.5, 15);
+		centralCity.setResidentialCost(1.5);
+		centralCity.setIndustrialCost(3);
+		centralCity.setSkyScraperCost(4);
 		centralCity.setSquareBehavior(new UnownedDistrictBehavior());
 		centralCity.setX(602);		
 		centralCity.setY(4);
@@ -381,6 +432,9 @@ public class Board {
 				3);
 
 		royalCourt.setRents(.26, 1.3, 2.6, 4.4, 5.3, 6.5, 8.5, 11, 15.5);
+		westlands.setResidentialCost(.5);
+		westlands.setIndustrialCost(1);
+		westlands.setSkyScraperCost(2);
 		royalCourt.setSquareBehavior(new UnownedDistrictBehavior());
 		royalCourt.setX(708);		
 		royalCourt.setY(104);
@@ -396,6 +450,9 @@ public class Board {
 				3);
 
 		theMarina.setRents(.26, 1.3, 2.6, 4.4, 5.3, 6.5, 8.5, 11, 15.5);
+		theMarina.setResidentialCost(2);
+		theMarina.setIndustrialCost(4);
+		theMarina.setSkyScraperCost(5);
 		theMarina.setSquareBehavior(new UnownedDistrictBehavior());
 		theMarina.setX(708);		
 		theMarina.setY(166);
@@ -418,6 +475,9 @@ public class Board {
 				3.2);
 
 		riverside.setRents(.28, 1.5, 3, 4.5, 5.5, 7, 9, 12, 16);
+		riverside.setResidentialCost(2);
+		riverside.setIndustrialCost(4);
+		riverside.setSkyScraperCost(5);
 		riverside.setSquareBehavior(new UnownedDistrictBehavior());
 		riverside.setX(708);		
 		riverside.setY(290);
@@ -447,6 +507,9 @@ public class Board {
 				3.5);
 
 		fortuneValley.setRents(.35, 1.75, 4.5, 5.5, 7, 9, 11, 16, 18);
+		fortuneValley.setResidentialCost(2);
+		fortuneValley.setIndustrialCost(4);
+		fortuneValley.setSkyScraperCost(5);
 		fortuneValley.setSquareBehavior(new UnownedDistrictBehavior());
 		fortuneValley.setX(708);		
 		fortuneValley.setY(476);
@@ -469,6 +532,9 @@ public class Board {
 				4);
 
 		diamondHills.setRents(.5, 3, 5, 8, 10, 12, 15, 18, 20);
+		diamondHills.setResidentialCost(2);
+		diamondHills.setIndustrialCost(4);
+		diamondHills.setSkyScraperCost(5);
 		diamondHills.setSquareBehavior(new UnownedDistrictBehavior());
 		diamondHills.setX(708);		
 		diamondHills.setY(602);
@@ -521,4 +587,9 @@ public class Board {
 		gameBoard.add(bg);
 		return gameBoard;
 	}
+	
+	public void update() {
+		
+	}
+	
 }

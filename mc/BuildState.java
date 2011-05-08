@@ -339,7 +339,7 @@ public class BuildState implements GameState{
 			}// End if.
 			
 			// Monopoly tower logic
-			if(currentPlayer.getCash() > selectedDistrict.getMonopolyTowerCost()){
+			if(currentPlayer.getCash() > 7){
 				String selectedDistrictColor = selectedDistrict.getColor();
 				int selectedDistrictColorCount = 0;
 				int expectedCount = 0;
@@ -925,6 +925,8 @@ public class BuildState implements GameState{
 		playerCash = GameMaster.getInstance().getCurrentPlayer().getCash();
 		playerAllowance = generateAllowance();
 		allowanceRemaining = playerAllowance;
+		projectedCosts = 00;
+		totalTextField.setText(""+ projectedCosts + " Mil.");
 		ownedDistrictsComboBox = new OwnedDistrictsComboBox();
 		playerCashTextField.setText(""+playerCash+ " Mil");
 		buildAllowanceTextField = new BuildAllowanceTextField();

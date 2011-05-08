@@ -133,6 +133,47 @@ public class District extends Square {
 		return name;
 	}
 	
+	public double getResidentialCost() {
+		return residentialCost;
+	}
+	
+	public double getIndustrialCost() {
+		return industrialCost;
+	}
+	
+	public void removeResidentialBlock(int amount) {
+		residentialBlockCount = residentialBlockCount - amount;
+	}
+	
+	public void removeIndustrialBlock(int amount) {
+		industrialBlockCount = industrialBlockCount - amount;
+	}
+	
+	public void removeStadium() {
+		stadium = false;
+	}
+	
+	public void removeSkyscraper() {
+		skyscraper = false;
+	}
+	
+	public void removeMonopolyTower() {
+		monopolyTower = false;
+	}
+	
+	public void addRailroad() {
+		railroad = true;
+	}
+	
+	public void removeRailroad() {
+		railroad = false;
+	}
+	
+/*	public void removeHazard(STRUCTURE str) {
+		hazard = str;
+	}
+*/
+	
 	public double getRent() {
 		// calculate rent based on buildings, hazards, etc.
 		if (isMortgaged) {
@@ -156,6 +197,10 @@ public class District extends Square {
 
 	public boolean isBonused() {
 		return bonus != null;
+	}
+	
+	public boolean isHazarded() {
+		return hazard != null;
 	}
 
 	public boolean isRailRoaded() {

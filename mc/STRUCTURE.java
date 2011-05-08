@@ -9,7 +9,14 @@ public enum STRUCTURE {
 	SCHOOL(2), 
 	SEWAGEPLANT(3),
 	WATERTOWER(1),
-	WINDFARM(1);
+	WINDFARM(1),
+	MONOPOLYTOWER(0),
+	SKYSCRAPER(0),
+	RAILROAD(0),
+	RESIDENTIAL(1),
+	INDUSTRIAL(1),
+	STADIUM(0);
+	
 	
 	// enum instance fields
 	private final int blockCount;
