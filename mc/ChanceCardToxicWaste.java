@@ -50,7 +50,7 @@ public class ChanceCardToxicWaste extends ChanceCard {
 		if(hasSewage){
 			gamePane.setMessagePanelText("You drew the Toxic Waste card and " +
 					"have "+ count +" sewage plant(s)!");
-			gamePane.addMessagePanelText("Now you must pay 500k.");
+			gamePane.addMessagePanelText("Now you must pay M" + count+"m.");
 			gamePane.addMessagePanelButton(payToxicWasteButton);
 		}
 		else{
@@ -63,6 +63,10 @@ public class ChanceCardToxicWaste extends ChanceCard {
 
 	protected void payToxicWasteButtonPerformed() {
 			currentPlayer.pay(((double)count));
+			payToxicWasteButton.setVisible(false);
+			gamePane.setMessagePanelText("Thanks for Paying!");
+			gamePane.update();
+			
 	}
 
 	protected void goToJailButtonPerformed() {

@@ -22,6 +22,7 @@ public class GameMaster {
 	private static ChanceDeck chanceDeck;
 	
 	private boolean isPaused = false;
+	private boolean isBuilding = false;
 		
 	private static final GameMaster GAMEMASTER = new GameMaster();
 
@@ -48,18 +49,20 @@ public class GameMaster {
 	}
 	
 	public void startBuild() {
-		GameMaster.getInstance().isPaused = true;
+		GameMaster.getInstance().isBuilding = true;
 		gameStateMachine.setState(gameStateMachine.getBuildState());
 	}
 	
 	public void startTurn() {
-		if (isPaused || currentPlayer.rolledDoubles) {
+		if (isPaused || currentPlayer.rolledDoubles || isBuilding) {
 			resumeTurn();
 			isPaused = false;
+			isBuilding = false;
 		}
 		else{
 			gamePane.enableButton(gamePane.getRollDiceButton());
 			isPaused = false;
+			isBuilding = false;
 			gamePane.disableButton(gamePane.getEndTurnButton());
 		}
 		gamePane.update();
@@ -75,12 +78,28 @@ public class GameMaster {
 	public void resumeTurn() {
 	//TODO: resume the players turn after the GameState is handed back to us
 		if(!currentPlayer.rolledDoubles){
-			gamePane.disableButton(gamePane.getRollDiceButton());
-			gamePane.enableButton(gamePane.getEndTurnButton());
+			if(!isBuilding){
+				gamePane.disableButton(gamePane.getRollDiceButton());
+				gamePane.enableButton(gamePane.getBuildButton());
+				gamePane.enableButton(gamePane.getEndTurnButton());
+				}
+			else{
+				gamePane.disableButton(gamePane.getRollDiceButton());
+				gamePane.disableButton(gamePane.getBuildButton());
+				gamePane.enableButton(gamePane.getEndTurnButton());
+			}
 		}
 		else{
-			gamePane.enableButton(gamePane.getRollDiceButton());
-			gamePane.disableButton(gamePane.getEndTurnButton());
+			if(isBuilding){
+				gamePane.enableButton(gamePane.getRollDiceButton());
+				gamePane.disableButton(gamePane.getBuildButton());
+				gamePane.disableButton(gamePane.getEndTurnButton());
+				}
+			else{
+				gamePane.disableButton(gamePane.getRollDiceButton());
+				gamePane.enableButton(gamePane.getBuildButton());
+				gamePane.disableButton(gamePane.getEndTurnButton());
+			}
 		}
 	}
 	
