@@ -58,5 +58,4 @@ public class ChanceCardPrisonOvercrowding extends ChanceCard {
 		performCard();
 	}	
 	}
-
 }
