@@ -1,13 +1,11 @@
 package mc;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
-import java.awt.*;
 
-import javax.swing.*;
-
-import java.awt.event.*;
-import net.miginfocom.swing.MigLayout;
+import javax.swing.JButton;
 
 
 public class GameMaster {

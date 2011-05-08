@@ -9,7 +9,6 @@ public class ChanceCardAdvanceToMiddleton extends ChanceCard {
 	
 	GameMaster gameMaster;
 	GamePane gamePane;
-	Player currePlayer;
 	JButton advanceToMiddletonButton;
 	
 	public ChanceCardAdvanceToMiddleton(){

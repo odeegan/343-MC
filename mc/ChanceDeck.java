@@ -26,6 +26,8 @@ public class ChanceDeck {
 		chanceCards.add(new ChanceCardToxicWaste());
 		chanceCards.add(new ChanceCardAdvanceToMiddleton());
 		chanceCards.add(new ChanceCardAdvanceToDiamondHills());
+		chanceCards.add(new ChanceCardPrisonOvercrowding());
+		chanceCards.add(new ChanceCardSewagePlant());
 		// lots more ....
 		
 		

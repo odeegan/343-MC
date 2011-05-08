@@ -52,6 +52,7 @@ public class ChanceCardInheritance extends ChanceCard {
 					gameMaster.getCurrentPlayer().pay(0.5);
 					gamePane.clearMessageLayer();
 					gamePane.setMessagePanelText("You now own " + district.getName() +"!");
+					failed = false;
 					inheritanceButton.setVisible(false);
 				}else{
 					failed = true;
