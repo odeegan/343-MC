@@ -91,12 +91,12 @@ public class GameMaster {
 		}
 		else{
 			if(isBuilding){
-				gamePane.enableButton(gamePane.getRollDiceButton());
+				gamePane.disableButton(gamePane.getRollDiceButton());
 				gamePane.disableButton(gamePane.getBuildButton());
-				gamePane.disableButton(gamePane.getEndTurnButton());
+				gamePane.enableButton(gamePane.getEndTurnButton());
 				}
 			else{
-				gamePane.disableButton(gamePane.getRollDiceButton());
+				gamePane.enableButton(gamePane.getRollDiceButton());
 				gamePane.enableButton(gamePane.getBuildButton());
 				gamePane.disableButton(gamePane.getEndTurnButton());
 			}
@@ -301,7 +301,9 @@ public class GameMaster {
 			checkSquare(dice[0] + dice[1]);
 			}
 		}
+		resumeTurn();
 		gamePane.update();
+
 	}
 		
 	public int[] rollDice() {
@@ -355,13 +357,6 @@ public class GameMaster {
 	
 	
 	public void endTurn() {
-		
-		//I don't know if this was necessary
-		currentPlayer.rolledDoubles = false;
-		currentPlayer.numDoubles = 0;
-		
-		
-		
 		currentPlayer = getNextPlayer();
 		gamePane.clearMessageLayer();
 		gamePane.update();
