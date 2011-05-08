@@ -891,12 +891,6 @@ public class BuildState implements GameState{
 	public void enter() {
 		System.out.println("This is the Build State.");
 		currentPlayer = GameMaster.getInstance().getCurrentPlayer();
-		// Player has no districts to build on.
-		if(currentPlayer.getDistricts().size() < 2){
-			System.out.println(currentPlayer.getDistricts().size());
-			gameStateMachine.setState(gameStateMachine.getGamePlayState());
-		}
-		System.out.println(currentPlayer.getDistricts().size());
 		playerCash = GameMaster.getInstance().getCurrentPlayer().getCash();
 		playerAllowance = generateAllowance();
 		allowanceRemaining = playerAllowance;
