@@ -19,7 +19,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
@@ -40,7 +39,7 @@ class GamePane extends JLayeredPane {
 	
 	private static JPanel messageLayer;
 	private static MessagePanel messagePanel;
-
+	private static JPanel dicePanel;
 	
 	private static JPanel hudButtonPanel;
 	private static JPanel hudPanel0;
@@ -70,7 +69,6 @@ class GamePane extends JLayeredPane {
 	public class NetworthPanel extends JPanel {
 		
 		public NetworthPanel() {
-			//setLayout();
 			setPreferredSize(new Dimension(432,120));
 		}
 		
@@ -160,8 +158,6 @@ class GamePane extends JLayeredPane {
 						}
 						add(railroad);
 					}
-					
-				
 				}
 			}
 		}
@@ -570,6 +566,7 @@ class GamePane extends JLayeredPane {
 	}
 	
 	
+	
 	private GamePane() {
 		
 		baseLayer = new JPanel(new BorderLayout());
@@ -640,11 +637,15 @@ class GamePane extends JLayeredPane {
 		mainHudPanel.add(hudPanel3);
 		
 		
-		messageLayer = new JPanel(new GridBagLayout());
+		messageLayer = new JPanel();
+		messageLayer.setLayout(new GridBagLayout());
 		messageLayer.setBounds(0, 0, 768, 767);
 		messageLayer.setOpaque(false);
 		
 		messagePanel = new MessagePanel();
+		dicePanel = new JPanel();
+		dicePanel.setOpaque(false);
+		dicePanel.setBounds(290, 150, 200, 100);
 		
 		messageLayer.add(messagePanel);
 		
@@ -659,7 +660,7 @@ class GamePane extends JLayeredPane {
 		add(messageLayer, new Integer(2));	
 		add(districtElementsPanel, new Integer(3));	
 		add(districtRollOverPanel, new Integer(4));
-		
+		add(dicePanel, new Integer(5));
 		
 		//AwesomeSauce Feature X100
 		
@@ -676,14 +677,21 @@ class GamePane extends JLayeredPane {
 		
 		messageLayer.getInputMap(messageLayer.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("ESCAPE"),"PopUpMenu");
 		messageLayer.getActionMap().put("PopUpMenu",poppop);
-
-
 	}
 	
 
 	
 	public static GamePane getInstance() {
 		return GAMEPANE;
+	}
+	
+	public void setDice(JPanel dice) {
+		clearDice();
+		dicePanel.add(dice);
+	}
+	
+	public void clearDice() {
+		dicePanel.removeAll();
 	}
 	
 	public void clearMessageLayer() {

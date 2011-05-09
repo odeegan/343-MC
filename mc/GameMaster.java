@@ -5,7 +5,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 
 public class GameMaster {
@@ -316,16 +319,17 @@ public class GameMaster {
 		
 		Random generator = new Random();
 		int[] dice = new int[2];
-		
-		//Jumping to auction square
-//		dice[0] = 6;
-//		dice[1] = 6;
-//		return dice;
-		//end auction square test block
-		
-		
 		dice[0] = generator.nextInt(6) + 1;
 		dice[1] = generator.nextInt(6) + 1;
+		
+		JPanel diceBox = new JPanel();
+		diceBox.setOpaque(false);
+		for (int i = 0; i < 2; i++) {
+			JLabel die = new JLabel(new ImageIcon("images/" + dice[i] + ".png"));
+			diceBox.add(die);
+		}
+		gamePane.setDice(diceBox);
+		
 		return dice;
 	}
 	
@@ -365,6 +369,7 @@ public class GameMaster {
 	public void endTurn() {
 		currentPlayer = getNextPlayer();
 		gamePane.clearMessageLayer();
+		gamePane.clearDice();
 		gamePane.update();
 		startTurn();
 	}
