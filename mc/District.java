@@ -44,6 +44,17 @@ public class District extends Square {
 		this.color = color;
 		this.cost = cost;
 	}
+
+	public void reset() {
+		residentialBlockCount = 0;
+		industrialBlockCount = 0;
+		skyscraper = false;
+		stadium = false;
+		monopolyTower = false;
+		owner = null;
+		squareBehavior = new UnownedDistrictBehavior();
+		railroad = false;
+	}
 	
 	public String getColor() {
 		return color;
@@ -287,5 +298,6 @@ public class District extends Square {
 		return string;
 	
 	}
+
 	
 }
