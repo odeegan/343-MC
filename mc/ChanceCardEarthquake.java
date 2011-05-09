@@ -113,6 +113,7 @@ public class ChanceCardEarthquake extends ChanceCard {
 				}
 				district = (District)selectedSquare;
 				sf.get(sf.getStructureByName(hazard));
+				district.addHazard(sf.getStructureByName(hazard));
 				gamePane.update();
 				destroyBonusButton.setVisible(false);
 				gamePane.clearMessageLayer();
