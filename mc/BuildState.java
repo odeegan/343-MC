@@ -259,11 +259,11 @@ public class BuildState implements GameState{
 		//District selectedDistrict = GameMaster.getInstance().getBoard().getDistrictByName(selectedDistrictName);
 		playerSelectedDistrict = GameMaster.getInstance().getBoard().getDistrictByName(selectedDistrictName);
 		// residential logic
-		if(blocksOnDistrict < 8 && allowanceRemaining > 0 && currentPlayer.getCash() > playerSelectedDistrict.residentialCost)
+		if(blocksOnDistrict < 8 && allowanceRemaining > 0 && currentPlayer.getCash() > playerSelectedDistrict.residentialCost && StructureFactory.getInstance().residentialCount > 0)
 			residentialRadioButton.setEnabled(true);
 
 		// industrial logic
-		if(blocksOnDistrict < 8 && allowanceRemaining > 0 && currentPlayer.getCash() > playerSelectedDistrict.industrialCost)
+		if(blocksOnDistrict < 8 && allowanceRemaining > 0 && currentPlayer.getCash() > playerSelectedDistrict.industrialCost && StructureFactory.getInstance().industrialCount > 0)
 			industrialRadioButton.setEnabled(true);
 		
 		// Railroad logic
@@ -271,7 +271,7 @@ public class BuildState implements GameState{
 			railroadRadioButton.setEnabled(true);
 
 		// Skyscraper logic
-		if(currentPlayer.getCash() > playerSelectedDistrict.skyscraperCost && !playerSelectedDistrict.skyscraper){
+		if(currentPlayer.getCash() > playerSelectedDistrict.skyscraperCost && !playerSelectedDistrict.skyscraper && StructureFactory.getInstance().skyscraperCount > 0){
 			String selectedDistrictColor = playerSelectedDistrict.getColor();
 			int selectedDistrictColorCount = 0;
 			int expectedCount = 0;
@@ -304,7 +304,7 @@ public class BuildState implements GameState{
 		}// End if.
 		
 		// Monopoly tower logic
-		if(currentPlayer.getCash() > 7){
+		if(currentPlayer.getCash() > 7 && StructureFactory.getInstance().monopolyTowerCount > 0){
 			String selectedDistrictColor = playerSelectedDistrict.getColor();
 			int selectedDistrictColorCount = 0;
 			int expectedCount = 0;
@@ -376,15 +376,6 @@ public class BuildState implements GameState{
 			});// End addListSelectionListener.
 		}// End constructor.
 	}// End BuildList.
-
-	public class BuildAllowanceTextField extends JTextField {
-		
-		public BuildAllowanceTextField(){
-
-
-		}// End constructor.
-		
-	}// End BuildAllowanceTextField.
 
 	public class AddToCartButton extends JButton {
 		
@@ -703,7 +694,7 @@ public class BuildState implements GameState{
 							
 							//Currently selected radio button
 							currentlySelectedRadioButton = new String("railroad");
-							
+				
 							// Hide spinner
 							buildTypeAmountSpinner.setVisible(false);
 						}// End actionPerformed.
