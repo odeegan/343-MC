@@ -18,18 +18,19 @@ public class ChanceDeck {
 		// init all the chance cards here
 		// ...
 		// ...
-//		chanceCards.add(new ChanceCardEasyMoney());
-//		chanceCards.add(new ChanceCardAuctionUnowned());
-//		chanceCards.add(new ChanceCardInheritance());
-//		chanceCards.add(new ChanceCardGoToJail());
-//		chanceCards.add(new ChanceCardAdvanceToGo());
-//		chanceCards.add(new ChanceCardToxicWaste());
-//		chanceCards.add(new ChanceCardAdvanceToMiddleton());
-//		chanceCards.add(new ChanceCardAdvanceToDiamondHills());
-//		chanceCards.add(new ChanceCardPrisonOvercrowding());
-//		chanceCards.add(new ChanceCardSewagePlant());
-//		chanceCards.add(new ChanceCardFreeBuild());
+		chanceCards.add(new ChanceCardEasyMoney());
+		chanceCards.add(new ChanceCardAuctionUnowned());
+		chanceCards.add(new ChanceCardInheritance());
+		chanceCards.add(new ChanceCardGoToJail());
+		chanceCards.add(new ChanceCardAdvanceToGo());
+		chanceCards.add(new ChanceCardToxicWaste());
+		chanceCards.add(new ChanceCardAdvanceToMiddleton());
+		chanceCards.add(new ChanceCardAdvanceToDiamondHills());
+		chanceCards.add(new ChanceCardPrisonOvercrowding());
+		chanceCards.add(new ChanceCardSewagePlant());
+		chanceCards.add(new ChanceCardFreeBuild());
 		chanceCards.add(new ChanceCardRepossessed());
+		chanceCards.add(new ChanceCardRailroad());
 		// lots more ....
 		
 		
