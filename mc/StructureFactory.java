@@ -45,8 +45,22 @@ public class StructureFactory {
 			return STRUCTURE.STADIUM;
 		else if (stName.compareToIgnoreCase("monopolyTower") == 0)
 			return STRUCTURE.MONOPOLYTOWER;
-		else if (stName.compareToIgnoreCase("skyscraper") == 0)
-			return STRUCTURE.SKYSCRAPER;
+		else if (stName.compareToIgnoreCase("POWERSTATION") == 0)
+			return STRUCTURE.POWERSTATION;
+		else if (stName.compareToIgnoreCase("PRISON") == 0)
+			return STRUCTURE.PRISON;
+		else if (stName.compareToIgnoreCase("RUBBISHDUMP") == 0)
+			return STRUCTURE.RUBBISHDUMP;
+		else if (stName.compareToIgnoreCase("SCHOOL") == 0)
+			return STRUCTURE.SCHOOL;
+		else if (stName.compareToIgnoreCase("SEWAGEPLANT") == 0)
+			return STRUCTURE.SEWAGEPLANT;
+		else if (stName.compareToIgnoreCase("WATERTOWER") == 0)
+			return STRUCTURE.WATERTOWER;
+		else if (stName.compareToIgnoreCase("WINDFARM") == 0)
+			return STRUCTURE.WINDFARM;
+		else if (stName.compareToIgnoreCase("PARK") == 0)
+			return STRUCTURE.PARK;
 		else
 			return null;
 	}
