@@ -9,6 +9,7 @@ public class IndustryTaxBehavior implements SquareBehavior {
 
 	
 	Player currentPlayer;
+	JButton payFineButton;
 	
 	public IndustryTaxBehavior() {
 		// TODO Auto-generated constructor stub
@@ -28,12 +29,11 @@ public class IndustryTaxBehavior implements SquareBehavior {
 		
 		if (hasBlocks) {
 			gamePane.addMessagePanelText("Pay $2M for your industrial buildings");
-			JButton payFineButton = new JButton("Pay $2M");
+			payFineButton = new JButton("Pay $2M");
 			payFineButton.addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
-							currentPlayer.pay(2);
-							GamePane.getInstance().update();
+							payFineButtonActionPerformed();
 							}
 					});
 			gamePane.addMessagePanelButton(payFineButton);
@@ -49,6 +49,12 @@ public class IndustryTaxBehavior implements SquareBehavior {
 		
 		
 
+	}
+
+	protected void payFineButtonActionPerformed() {
+		currentPlayer.pay(2);
+		GamePane.getInstance().update();
+		payFineButton.setVisible(false);
 	}
 
 }
