@@ -32,6 +32,7 @@ public class ChanceDeck {
 		chanceCards.add(new ChanceCardRepossessed());
 		chanceCards.add(new ChanceCardRailroad());
 		chanceCards.add(new ChanceCardSteal());
+		chanceCards.add(new ChanceCardEarthquake());
 		// lots more ....
 		
 		
