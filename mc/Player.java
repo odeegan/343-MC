@@ -157,16 +157,6 @@ public class Player {
 		if (getCash() != getNetWorth()) {
 			string += "\nNetworth: " + getNetWorth();
 		}
-		
-		if (districts.size() > 0) {
-			string += "\nDistricts: ";
-		}
-		
-		for (District district: districts) {
-			string += district.getName() + ",  ";
-		}
-		
-		
 		return string;
 	}
 	

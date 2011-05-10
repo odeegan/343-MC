@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
 
 import javax.swing.AbstractAction;
@@ -19,13 +21,19 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+
 
 import net.miginfocom.swing.MigLayout;
 
@@ -42,13 +50,11 @@ class GamePane extends JLayeredPane {
 	private static JPanel dicePanel;
 	
 	private static JPanel hudButtonPanel;
-	private static JPanel hudPanel0;
-	private static JPanel hudPanel1;
-	private static JPanel hudPanel2;
+	private static JTabbedPane hudPanel1;
 	private static JPanel hudPanel3;
 	private static NetworthPanel networthPanel;
 	private static CurrentPlayerPanel currentPlayerPanel;
-	private static CurrentSquarePanel currentSquarePanel;
+	private static DistrictsPanel districtsPanel;
 	private static DistrictElementsPanel districtElementsPanel;
 	
 	private static JButton rollDiceButton;
@@ -383,7 +389,7 @@ class GamePane extends JLayeredPane {
 		
 		public RollDiceButton() {
 			setText("Roll Dice");
-			setPreferredSize(new Dimension(120, 35));
+			setPreferredSize(new Dimension(120, 50));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
@@ -399,7 +405,7 @@ class GamePane extends JLayeredPane {
 		
 		public BuildButton() {
 			setText("Build");
-			setPreferredSize(new Dimension(120,35));
+			setPreferredSize(new Dimension(120,50));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
@@ -416,7 +422,7 @@ class GamePane extends JLayeredPane {
 		
 		public EndTurnButton() {
 			setText("End Turn");
-			setPreferredSize(new Dimension(120,35));
+			setPreferredSize(new Dimension(120,50));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
@@ -457,28 +463,48 @@ class GamePane extends JLayeredPane {
 		
 	}
 	
-	public class CurrentSquarePanel extends JPanel {
+	public class DistrictsPanel extends JPanel {
 		
-		JTextArea squareDetails;
 		
-		public CurrentSquarePanel() {
-			setLayout(new MigLayout());
-			squareDetails = new JTextArea();
-			setPreferredSize(new Dimension(370,170));
-			setOpaque(true);
-			add(squareDetails, "cell 0 0");
-
+		public DistrictsPanel() {
+			setLayout(new MigLayout("wrap"));
 		}
 		
 		public void update() {
+			removeAll();
 			Board board = GameMaster.getInstance().getBoard();
 			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
-			squareDetails.setText(board.getSquare(currentPlayer.getPosition()).toString());
-			squareDetails.setFont(new Font("Verdana", Font.BOLD, 14));
-			squareDetails.setLineWrap(true);
-			squareDetails.setWrapStyleWord(true);
-			squareDetails.setBounds(5, 5, 360, 160);
-			squareDetails.setOpaque(false);
+			ArrayList<District> districts = currentPlayer.getDistricts();
+			Collections.sort(districts);
+			for (District district: districts) {
+				final District fDistrict = district;
+				if (fDistrict.isMortgaged == true) {
+					JToggleButton button = new JToggleButton(fDistrict.getName() + "[Mortgaged]");
+					button.addItemListener(
+							new ItemListener() {
+						      public void itemStateChanged(ItemEvent itemEvent) {
+						    	  fDistrict.isMortgaged = false;
+						    	  GamePane.getInstance().update();
+						      }
+						    });
+					button.getModel().isSelected();
+					add(button);
+				} else {
+					System.out.println("what the hell");
+					JToggleButton button = new JToggleButton(fDistrict.getName());
+					button.addItemListener(
+							new ItemListener() {
+						      public void itemStateChanged(ItemEvent itemEvent) {
+						    	  fDistrict.isMortgaged = true;
+						    	  GamePane.getInstance().update();
+						      }
+						    });	
+					button.getModel();
+					add(button);
+					}
+			}
+			
+			
 			revalidate();
 			repaint();
 		}
@@ -592,25 +618,21 @@ class GamePane extends JLayeredPane {
 		networthPanel.setBorder(BorderFactory.createTitledBorder("Networth"));		
 		
 		
-		hudPanel1 = new JPanel();
-		hudPanel1.setBounds(0, 120, 426, 200);
+		hudPanel1 = new JTabbedPane();
+		hudPanel1.setBounds(0, 120, 426, 400);
 		hudPanel1.setBorder(BorderFactory.createTitledBorder("Current Player"));		
 		currentPlayerPanel = new CurrentPlayerPanel();
-		hudPanel1.add(currentPlayerPanel);
-
-		hudPanel2 = new JPanel();
-		hudPanel2.setBounds(0, 321, 426, 200);
-		hudPanel2.setBorder(BorderFactory.createTitledBorder("Current Square"));
-		currentSquarePanel = new CurrentSquarePanel();
-		hudPanel2.add(currentSquarePanel);
-
+		hudPanel1.addTab("Player", (JComponent)currentPlayerPanel);
+		districtsPanel = new DistrictsPanel();
+		hudPanel1.addTab("Disricts", (JComponent)districtsPanel);
+		
 		
 		rollDiceButton = new RollDiceButton();
 		buildButton = new BuildButton();
 		endTurnButton = new EndTurnButton();
 		
 		hudButtonPanel = new JPanel();
-		hudButtonPanel.setBounds(0, 521, 426, 50);
+		hudButtonPanel.setBounds(0, 521, 426, 100);
 		hudButtonPanel.add(rollDiceButton);
 		hudButtonPanel.add(buildButton);
 		hudButtonPanel.add(endTurnButton);
@@ -623,7 +645,7 @@ class GamePane extends JLayeredPane {
 		taxDodgeButton = new TaxDodgeButton();
 		
 		hudPanel3 = new JPanel();
-		hudPanel3.setBounds(0, 571, 430, 118);
+		hudPanel3.setBounds(0, 652, 430, 118);
 		hudPanel3.setBorder(BorderFactory.createTitledBorder("Chance Cards"));
 		hudPanel3.add(getOutOfJailButton);
 		hudPanel3.add(rentDodgeButton);
@@ -633,7 +655,7 @@ class GamePane extends JLayeredPane {
 		mainHudPanel.add(networthPanel);
 		mainHudPanel.add(hudPanel1);
 		mainHudPanel.add(hudButtonPanel);
-		mainHudPanel.add(hudPanel2);
+		//mainHudPanel.add(hudPanel2);
 		mainHudPanel.add(hudPanel3);
 		
 		
@@ -776,11 +798,11 @@ class GamePane extends JLayeredPane {
 	
 	public void update() {
 		currentPlayerPanel.update();
-		currentSquarePanel.update();
 		playerTokensLayer.update();
 		districtElementsPanel.update();
 		districtRollOverPanel.update();
 		networthPanel.update();
+		districtsPanel.update();
 		revalidate();
 		repaint();
 	}

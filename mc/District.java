@@ -1,7 +1,7 @@
 package mc;
 
 
-public class District extends Square {
+public class District extends Square implements Comparable<District> {
 
 	SQUARETYPE type;
 	
@@ -299,5 +299,8 @@ public class District extends Square {
 	
 	}
 
+	public int compareTo(District d1) {
+		return this.getName().compareTo(d1.getName());
+	}
 	
 }
