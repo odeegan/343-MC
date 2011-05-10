@@ -55,6 +55,10 @@ public class GameStateMachine {
 		return buildState;
 	}
 	
+	public GameState getTradeState() {
+		return tradeState;
+	}
+	
 	
 	/*
 	 * Creates and sets the dimenisions of the main game window
