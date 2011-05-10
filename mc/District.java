@@ -1,5 +1,7 @@
 package mc;
 
+import java.text.DecimalFormat;
+
 
 public class District extends Square implements Comparable<District> {
 
@@ -186,21 +188,25 @@ public class District extends Square implements Comparable<District> {
 */
 	
 	public double getRent() {
-		// calculate rent based on buildings, hazards, etc.
+		
 		if (isMortgaged) {
 			return 0.0;
 		}
 		
 		if (hazard != null) {
-			return new Double(rents[industrialBlockCount]);
+			return rents[industrialBlockCount];
 		} else {
-			return new Double(rents[residentialBlockCount + industrialBlockCount]);
+			return rents[residentialBlockCount + industrialBlockCount];
 		}
-
 	}	
 	
 	public double getMortgageValue() {
-		return getRent();
+
+		if (hazard != null) {
+			return rents[industrialBlockCount];
+		} else {
+			return rents[residentialBlockCount + industrialBlockCount];
+		}
 	}
 	
 	public boolean isOwned() {
