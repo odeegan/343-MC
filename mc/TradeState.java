@@ -203,6 +203,7 @@ public class TradeState implements GameState{
 					public void actionPerformed(ActionEvent event) {
 						System.out.println("Current player clicked cancel button.");
 						//currentPlayerCancelButtonActionPerformed();
+						gameStateMachine.setState(gameStateMachine.getGamePlayState());
 					}
 				});
 		
@@ -329,6 +330,7 @@ public class TradeState implements GameState{
 					public void actionPerformed(ActionEvent event) {
 						System.out.println("Trade partner clicked cancel button.");
 						//tradePartnerCancelButtonActionPerformed();
+						gameStateMachine.setState(gameStateMachine.getGamePlayState());
 					}
 				});
 		
