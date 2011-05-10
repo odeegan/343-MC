@@ -56,6 +56,10 @@ public class GameMaster {
 		gameStateMachine.setState(gameStateMachine.getBuildState());
 	}
 	
+	public void startTrade() {
+		gameStateMachine.setState(gameStateMachine.getTradeState());
+	}
+	
 	public void startTurn() {
 		if (isPaused || currentPlayer.rolledDoubles || isBuilding) {
 			resumeTurn();

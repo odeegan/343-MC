@@ -11,6 +11,7 @@ public class GameStateMachine {
 	GameState gamePlayState;
 	GameState auctionState;
 	GameState buildState;
+	GameState tradeState;
 	GameState state;
 
 	JFrame mainFrame;
@@ -24,6 +25,7 @@ public class GameStateMachine {
 		gamePlayState = new GamePlayState(this, mainFrame);
 		auctionState = new AuctionState(this, mainFrame);
 		buildState = new BuildState(this, mainFrame);
+		tradeState = new TradeState(this, mainFrame);
 		System.out.println("Starting the GameStateMachine.");
 	}
 
@@ -51,6 +53,10 @@ public class GameStateMachine {
 	
 	public GameState getBuildState() {
 		return buildState;
+	}
+	
+	public GameState getTradeState() {
+		return tradeState;
 	}
 	
 	
