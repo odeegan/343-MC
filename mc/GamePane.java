@@ -59,6 +59,7 @@ class GamePane extends JLayeredPane {
 	
 	private static JButton rollDiceButton;
 	private static JButton buildButton;
+	private static JButton tradeButton;
 	private static JButton endTurnButton;
 	
 	private static JButton getOutOfJailButton;
@@ -433,7 +434,20 @@ class GamePane extends JLayeredPane {
 		}
 	}	
 	
-	
+	public class TradeButton extends JButton {
+		
+		public TradeButton() {
+			setText("Make a Deal");
+			setPreferredSize(new Dimension(120,50));
+			addActionListener(
+					new ActionListener() {
+						public void actionPerformed(ActionEvent event) {
+							System.out.println("User clicked Trade Button");
+							GameMaster.getInstance().startTrade();
+						}
+					});
+		}
+	}
 	public class CurrentPlayerPanel extends JPanel {
 		
 		JTextArea playerDetails;
@@ -479,7 +493,7 @@ class GamePane extends JLayeredPane {
 			for (District district: districts) {
 				final District fDistrict = district;
 				if (fDistrict.isMortgaged == true) {
-					JToggleButton button = new JToggleButton(fDistrict.getName() + "[Mortgaged]");
+					JToggleButton button = new JToggleButton(fDistrict.getName() + "[ Mortgaged]");
 					button.addItemListener(
 							new ItemListener() {
 						      public void itemStateChanged(ItemEvent itemEvent) {

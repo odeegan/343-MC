@@ -24,7 +24,8 @@ public class GameMaster {
 	
 	private boolean isPaused = false;
 	private boolean isBuilding = false;
-//this should be in gamepane but I had to modify it to work properly
+	private boolean isTrading = false;
+	//this should be in gamepane but I had to modify it to work properly
 	private JButton railButton;
 		
 	private static final GameMaster GAMEMASTER = new GameMaster();
@@ -46,22 +47,23 @@ public class GameMaster {
 	}
 	
 	public void startAuction() {
-		GameMaster.getInstance().isPaused = true;
+		isPaused = true;
 		GamePane.getInstance().clearMessageLayer();
 		gameStateMachine.setState(gameStateMachine.getAuctionState());
 	}
 	
 	public void startBuild() {
-		GameMaster.getInstance().isBuilding = true;
+		isBuilding = true;
 		gameStateMachine.setState(gameStateMachine.getBuildState());
 	}
 	
 	public void startTrade() {
+		isTrading = true;
 		gameStateMachine.setState(gameStateMachine.getTradeState());
 	}
 	
 	public void startTurn() {
-		if (isPaused || currentPlayer.rolledDoubles || isBuilding) {
+		if (isPaused || currentPlayer.rolledDoubles || isBuilding || isTrading) {
 			resumeTurn();
 			isPaused = false;
 			isBuilding = false;
