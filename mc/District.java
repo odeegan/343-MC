@@ -188,7 +188,7 @@ public class District extends Square implements Comparable<District> {
 	public double getRent() {
 		// calculate rent based on buildings, hazards, etc.
 		if (isMortgaged) {
-			return getCost();
+			return 0.0;
 		}
 		
 		if (hazard != null) {
@@ -196,6 +196,7 @@ public class District extends Square implements Comparable<District> {
 		} else {
 			return new Double(rents[residentialBlockCount + industrialBlockCount]);
 		}
+
 	}	
 	
 	public double getMortgageValue() {
@@ -259,6 +260,9 @@ public class District extends Square implements Comparable<District> {
 		}
 		if (monopolyTower) {
 			string += "\nMonopolyTower";			
+		}
+		if (isMortgaged) {
+			string += "\n MORTGAGED";
 		}
 		return string;
 	

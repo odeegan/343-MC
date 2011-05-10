@@ -438,7 +438,7 @@ class GamePane extends JLayeredPane {
 		
 		public TradeButton() {
 			setText("Make a Deal");
-			setPreferredSize(new Dimension(120,50));
+			setPreferredSize(new Dimension(180,50));
 			addActionListener(
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {
@@ -448,6 +448,7 @@ class GamePane extends JLayeredPane {
 					});
 		}
 	}
+	
 	public class CurrentPlayerPanel extends JPanel {
 		
 		JTextArea playerDetails;
@@ -486,30 +487,32 @@ class GamePane extends JLayeredPane {
 		
 		public void update() {
 			removeAll();
-			Board board = GameMaster.getInstance().getBoard();
-			Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
+			final Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
 			ArrayList<District> districts = currentPlayer.getDistricts();
 			Collections.sort(districts);
 			for (District district: districts) {
 				final District fDistrict = district;
 				if (fDistrict.isMortgaged == true) {
-					JToggleButton button = new JToggleButton(fDistrict.getName() + "[ Mortgaged]");
+					JToggleButton button = new JToggleButton(fDistrict.getName() + "  [Mortgaged]");
 					button.addItemListener(
 							new ItemListener() {
 						      public void itemStateChanged(ItemEvent itemEvent) {
 						    	  fDistrict.isMortgaged = false;
+						    	  //should be in GameMaster
+						    	  currentPlayer.pay(fDistrict.getRent());
 						    	  GamePane.getInstance().update();
 						      }
 						    });
 					button.getModel().isSelected();
 					add(button);
 				} else {
-					System.out.println("what the hell");
 					JToggleButton button = new JToggleButton(fDistrict.getName());
 					button.addItemListener(
 							new ItemListener() {
 						      public void itemStateChanged(ItemEvent itemEvent) {
 						    	  fDistrict.isMortgaged = true;
+						    	  //should be in GameMaster
+						    	  currentPlayer.collect(fDistrict.getRent());
 						    	  GamePane.getInstance().update();
 						      }
 						    });	
@@ -644,13 +647,14 @@ class GamePane extends JLayeredPane {
 		rollDiceButton = new RollDiceButton();
 		buildButton = new BuildButton();
 		endTurnButton = new EndTurnButton();
+		tradeButton = new TradeButton();
 		
 		hudButtonPanel = new JPanel();
-		hudButtonPanel.setBounds(0, 521, 426, 100);
+		hudButtonPanel.setBounds(0, 521, 426, 120);
 		hudButtonPanel.add(rollDiceButton);
 		hudButtonPanel.add(buildButton);
 		hudButtonPanel.add(endTurnButton);
-
+		hudButtonPanel.add(tradeButton);
 
 		
 		getOutOfJailButton = new GetOutOfJailButton();
@@ -669,7 +673,6 @@ class GamePane extends JLayeredPane {
 		mainHudPanel.add(networthPanel);
 		mainHudPanel.add(hudPanel1);
 		mainHudPanel.add(hudButtonPanel);
-		//mainHudPanel.add(hudPanel2);
 		mainHudPanel.add(hudPanel3);
 		
 		
@@ -812,11 +815,11 @@ class GamePane extends JLayeredPane {
 	
 	public void update() {
 		currentPlayerPanel.update();
+		districtsPanel.update();
 		playerTokensLayer.update();
 		districtElementsPanel.update();
 		districtRollOverPanel.update();
 		networthPanel.update();
-		districtsPanel.update();
 		revalidate();
 		repaint();
 	}

@@ -110,6 +110,11 @@ public class GameMaster {
 				gamePane.disableButton(gamePane.getEndTurnButton());
 			}
 		}
+		if (currentPlayer.getNumDoubles() > 2) {
+			gamePane.disableButton(gamePane.getBuildButton());
+			gamePane.disableButton(gamePane.getRollDiceButton());
+			gamePane.enableButton(gamePane.getEndTurnButton());
+		}
 	}
 	
 	
@@ -289,16 +294,8 @@ public class GameMaster {
 				// send player to jail
 				currentPlayer.setIsInJail(true);
 				// disable build button when player is sent directly to jail
-				gamePane.disableButton(gamePane.getBuildButton());
 				gamePane.setMessagePanelText(
 						"You rolled doubles 3 times! You're going to JAIL!");
-				JButton button = new JButton("Cuff Me");
-				button.addActionListener(
-						new ActionListener() {
-							public void actionPerformed(ActionEvent event) {
-								endTurn();
-							}
-				});
 			}
 			// rolled doubles, has not rolled doubles three times
 			// and is not in jail
@@ -327,6 +324,9 @@ public class GameMaster {
 		int[] dice = new int[2];
 		dice[0] = generator.nextInt(6) + 1;
 		dice[1] = generator.nextInt(6) + 1;
+		
+//		dice[0] = 5;
+//		dice[1] = 5;
 		
 		JPanel diceBox = new JPanel();
 		diceBox.setOpaque(false);
