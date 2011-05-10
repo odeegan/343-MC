@@ -16,5 +16,7 @@ chpt 17, 12, 8
 [ ] don't allow people to roll or end turn their way out of game logic
 [ ] fix railroads
 [ ] trade
+[ ] resume turn properly from trade
+[ ] player token jitter
 
 

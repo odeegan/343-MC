@@ -220,12 +220,7 @@ public class GameMaster {
 						}
 					});	
 		gamePane.addMessagePanelButton(railButton);
-		
-
 	}
-	
-
-	
 	
 	protected void railroadButtonClicked() {
 		
