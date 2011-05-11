@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.BorderFactory;
@@ -94,6 +96,8 @@ public class BuildState implements GameState{
 	private Player currentPlayer;
 	
 	private String currentlySelectedRadioButton;
+	
+	Map<District, STRUCTURE> m;
 	
 	public BuildState(GameStateMachine gsm, JFrame mf) {
 		gameMaster = GameMaster.getInstance();
@@ -363,6 +367,7 @@ public class BuildState implements GameState{
 			removeHazardRadioButton.setEnabled(true);
 	}// end enableButtonsAccordingToDistrict();	
 
+	@SuppressWarnings("serial")
 	public class BuildList extends JList {
 		
 		public BuildList() {
@@ -381,6 +386,7 @@ public class BuildState implements GameState{
 		}// End constructor.
 	}// End BuildList.
 
+	@SuppressWarnings("serial")
 	public class AddToCartButton extends JButton {
 		
 		public AddToCartButton() {
@@ -425,6 +431,8 @@ public class BuildState implements GameState{
 									projectedCosts = projectedCosts + playerSelectedDistrict.getResidentialCost()*buildAmount;
 									totalTextField.setText(""+projectedCosts+" Mil");
 									clearRadio();
+									ownedDistrictsComboBox.setSelectedIndex(-1);
+
 								}else
 									messageTextField.setText("Not enough residential blocks left to build.");
 							}else
@@ -458,6 +466,8 @@ public class BuildState implements GameState{
 									projectedCosts = projectedCosts + playerSelectedDistrict.getIndustrialCost()*buildAmount;
 									totalTextField.setText(""+projectedCosts+" Mil");
 									clearRadio();
+									ownedDistrictsComboBox.setSelectedIndex(-1);
+
 								}else
 									messageTextField.setText("Not enough industrial blocks left to build.");
 							}else
@@ -480,6 +490,8 @@ public class BuildState implements GameState{
 							allowanceRemaining = allowanceRemaining + 1;
 							buildAllowanceTextField.setText("No blocks left.");
 							clearRadio();
+							ownedDistrictsComboBox.setSelectedIndex(-1);
+
 						}else
 							messageTextField.setText("No railroads are left to build.");
 					}else
@@ -498,6 +510,8 @@ public class BuildState implements GameState{
 							projectedCosts = projectedCosts + 2;
 							totalTextField.setText(""+projectedCosts+" Mil");
 							clearRadio();
+							ownedDistrictsComboBox.setSelectedIndex(-1);
+
 						}else
 							messageTextField.setText("No stadiums are left to build.");
 					}else
@@ -516,6 +530,8 @@ public class BuildState implements GameState{
 							projectedCosts = projectedCosts + playerSelectedDistrict.skyscraperCost;
 							totalTextField.setText(""+projectedCosts+" Mil");
 							clearRadio();
+							ownedDistrictsComboBox.setSelectedIndex(-1);
+
 						}else
 							messageTextField.setText("No skyscrapers are left to build.");
 					}else
@@ -533,21 +549,27 @@ public class BuildState implements GameState{
 						projectedCosts = projectedCosts + 7;
 						totalTextField.setText(""+projectedCosts+" Mil");
 						clearRadio();
+						ownedDistrictsComboBox.setSelectedIndex(-1);
 					}else
 						messageTextField.setText("No monopoly towers are left to build.");
 					
 			    // Remove hazards logic.
 				}else if (currentlySelectedRadioButton.compareToIgnoreCase("removeHazard") == 0) {
-					//TODO:
-					cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
+					cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton + " " + playerSelectedDistrict.hazard.getBlockCount() + " blocks");
 					System.out.println("Remove hazard from " + playerSelectedDistrict.getName() + " added to cart.");
+					m.put(playerSelectedDistrict, playerSelectedDistrict.hazard);
 					projectedCosts = projectedCosts + playerSelectedDistrict.hazard.getBlockCount()*.5;
+					StructureFactory.getInstance().scrap(playerSelectedDistrict.hazard);
+					playerSelectedDistrict.removeHazard();
 					totalTextField.setText(""+projectedCosts+" Mil");
+					clearRadio();
+					ownedDistrictsComboBox.setSelectedIndex(-1);
 				}// End else if.
 			}// End addToCartAction;
 		}// End else.
 	}// End AddToCartButton.
 	
+	@SuppressWarnings("serial")
 	public class BuildButton extends JButton {
 		
 		public BuildButton() {
@@ -558,7 +580,7 @@ public class BuildState implements GameState{
 						public void actionPerformed(ActionEvent event) {
 							System.out.println("User attempted to build cart items.");
 							if(playerCash > projectedCosts){
-
+								
 								currentPlayer.pay(projectedCosts);
 								gameStateMachine.setState(gameStateMachine.getGamePlayState());
 							}else
@@ -569,6 +591,7 @@ public class BuildState implements GameState{
 		}// End constructor.
 	}// End BuildButton.
 	
+	@SuppressWarnings("serial")
 	public class DeleteButton extends JButton {
 		
 		public DeleteButton() {
@@ -591,6 +614,7 @@ public class BuildState implements GameState{
 		}// End constructor.
 	}// End DeleteButton.
 	
+	@SuppressWarnings("serial")
 	public class CancelButton extends JButton {
 		
 		public CancelButton() {
@@ -612,6 +636,7 @@ public class BuildState implements GameState{
 		}// End constructor.
 	}// End CancelButton.
 	
+	@SuppressWarnings("serial")
 	public class ResidentialRadioButton extends JRadioButton {
 		
 		public ResidentialRadioButton() {
@@ -648,6 +673,7 @@ public class BuildState implements GameState{
 		
 	}
 	
+	@SuppressWarnings("serial")
 	public class IndustrialRadioButton extends JRadioButton {
 	
 		public IndustrialRadioButton() {
@@ -681,6 +707,7 @@ public class BuildState implements GameState{
 		}// End constructor.
 	}// End IndustrialRadioButton.
 	
+	@SuppressWarnings("serial")
 	public class RailroadRadioButton extends JRadioButton {
 		
 		public RailroadRadioButton() {
@@ -706,6 +733,7 @@ public class BuildState implements GameState{
 		}// End constructor.
 	}// End RailroadRadioButton.
 	
+	@SuppressWarnings("serial")
 	public class SkyscraperRadioButton extends JRadioButton {
 		
 		public SkyscraperRadioButton() {
@@ -731,6 +759,7 @@ public class BuildState implements GameState{
 		}// End constructor.
 	}// End SkyscraperRadioButton.
 	
+	@SuppressWarnings("serial")
 	public class StadiumRadioButton extends JRadioButton {
 		
 		public StadiumRadioButton() {
@@ -756,6 +785,7 @@ public class BuildState implements GameState{
 		}// End constructor.
 	}// End StadiumRadioButton.
 	
+	@SuppressWarnings("serial")
 	public class MonopolyTowerRadioButton extends JRadioButton {
 		
 		public MonopolyTowerRadioButton() {
@@ -781,6 +811,7 @@ public class BuildState implements GameState{
 		}// End constructor.
 	}// End MonopolyTowerRadioButton.
 	
+	@SuppressWarnings("serial")
 	public class RemoveHazardRadioButton extends JRadioButton {
 		
 		public RemoveHazardRadioButton() {
@@ -823,7 +854,6 @@ public class BuildState implements GameState{
 			projectedCosts = projectedCosts - districtToRemove.getResidentialCost()*Integer.parseInt(splits[2]);
 			totalTextField.setText(""+projectedCosts+" Mil");
 			
-			//TODO:
 		//Industrial delete from list logic.
 		}else if(splits[1].compareToIgnoreCase("industrial") == 0){
 			GameMaster.getInstance().getBoard().getDistrictByName(splits[0]).removeIndustrialBlock(Integer.parseInt(splits[2]));
@@ -865,9 +895,8 @@ public class BuildState implements GameState{
 			
 		//Remove hazard delete from list logic.
 		}else if(splits[0].compareToIgnoreCase("removeHazard") == 0){
-			//TODO;
-			//GameMaster.getInstance().getBoard().getDistrictByName(splits[0]).removeHazard();
-			//StructureFactory.getInstance().scrap(StructureFactory.getInstance().getStructureByName("hazard"));
+			StructureFactory.getInstance().get(m.get(GameMaster.getInstance().getBoard().getDistrictByName(splits[0])));
+			GameMaster.getInstance().getBoard().getDistrictByName(splits[0]).addHazard(m.get(GameMaster.getInstance().getBoard().getDistrictByName(splits[0])));
 			projectedCosts = projectedCosts - .5 * GameMaster.getInstance().getBoard().getDistrictByName(splits[0]).hazard.getBlockCount();
 			totalTextField.setText(""+projectedCosts+" Mil");
 		}// End else if.
@@ -890,7 +919,7 @@ public class BuildState implements GameState{
 		playerAllowance = generateAllowance();
 		allowanceRemaining = playerAllowance;
 		clearFields();
-		
+		m = new HashMap<District, STRUCTURE>();
 		totalTextField.setText(""+ projectedCosts + " Mil");
 
 		playerDistricts = new String[currentPlayer.getDistricts().size()+1];

@@ -76,7 +76,7 @@ public class ChanceCardEarthquake extends ChanceCard {
 				district = (District)selectedSquare;
 				if(district.isBonused()){
 					// remove district's bonus
-					//district.bonus.name();
+					district.removeBonus();
 					gamePane.update();
 					GameMaster.getInstance().setPerformed(true);
 					destroyBonusButton.setVisible(false);
