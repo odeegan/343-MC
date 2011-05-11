@@ -21,12 +21,12 @@ public class GameMaster {
 	private static Board board;
 	private static Player currentPlayer;
 	private static ChanceDeck chanceDeck;
+	private static int counter;
 	
 	private boolean isPaused = false;
 	private boolean isBuilding = false;
 	private boolean hasRolled = false;
 	private boolean hasPerformed = false;	
-	
 	
 	//this should be in gamepane but I had to modify it to work properly
 	private JButton railButton;
@@ -65,6 +65,7 @@ public class GameMaster {
 	}
 	
 	public void startTurn() {
+		counter = 0;
 //		if (isPaused || currentPlayer.rolledDoubles || isBuilding || isTrading) {
 			resumeTurn();
 //			isPaused = false;
@@ -91,7 +92,13 @@ public class GameMaster {
 		//no
 		//ROLL PUNK
 		if(isPaused) isPaused = false;
+		if(currentPlayer.rolledDoubles){
+			if(counter == currentPlayer.numDoubles)
+				return;
+			counter++;
+		}
 		
+
 		
 		if(!hasRolled){
 			gamePane.enableButton(gamePane.getRollDiceButton());
