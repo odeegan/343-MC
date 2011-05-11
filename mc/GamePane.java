@@ -851,10 +851,10 @@ class GamePane extends JLayeredPane {
 		structureCountPanel = new StructureCountPanel();
 		
 		add(baseLayer, new Integer(0));
-		add(playerTokensLayer, new Integer(1));
-		add(messageLayer, new Integer(2));	
-		add(districtElementsPanel, new Integer(3));	
-		add(structureCountPanel, new Integer(4));
+		add(messageLayer, new Integer(1));	
+		add(districtElementsPanel, new Integer(2));	
+		add(structureCountPanel, new Integer(3));
+		add(playerTokensLayer, new Integer(4));
 		add(districtRollOverPanel, new Integer(5));
 		add(dicePanel, new Integer(6));
 		
@@ -867,7 +867,6 @@ class GamePane extends JLayeredPane {
 				JOptionPane.showMessageDialog (messageLayer, "This Game is Brought to you by: \n\tNicholas \"The Complicatrix\" O'Deegan" +
 						"\n\tCodi \"The Sunflower\" Bonney" +
 						"\n\t and Daniel \"Won't Shut Up\" McGoldrick", "The Men Behind The Code", JOptionPane.INFORMATION_MESSAGE);
-				
 			}
 		};
 		
