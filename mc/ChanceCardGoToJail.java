@@ -35,6 +35,7 @@ public class ChanceCardGoToJail extends ChanceCard {
 		Player currentPlayer = gameMaster.getCurrentPlayer();
 		currentPlayer.setPosition(10);
 		currentPlayer.setIsInJail(true);
+		GameMaster.getInstance().setPerformed(true);
 		gamePane.update();
 		gameMaster.endTurn();
 	}

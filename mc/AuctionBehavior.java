@@ -51,8 +51,9 @@ public class AuctionBehavior implements SquareBehavior {
 			District district;
 			if(selectedSquare.getType() == SQUARETYPE.DISTRICT){
 				district = (District)selectedSquare;
-				if(!district.isOwned())
-					gameMaster.startAuction();
+				if(!district.isOwned()){
+					GameMaster.getInstance().setPerformed(true);
+					gameMaster.startAuction();}
 				else{
 					failed = true;
 					execute();

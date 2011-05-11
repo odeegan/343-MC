@@ -47,6 +47,7 @@ public class ChanceCardPrisonOvercrowding extends ChanceCard {
 					district.hazard = STRUCTURE.PRISON;
 					gamePane.setMessagePanelText(district.getName() +" now has a Prison!");
 					failed = false;
+					GameMaster.getInstance().setPerformed(true);
 					prisonOvercrowdingButton.setVisible(false);
 				}else{
 					failed = true;

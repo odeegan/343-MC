@@ -48,7 +48,9 @@ public class ChanceCardSewagePlant extends ChanceCard {
 					district.hazard = STRUCTURE.SEWAGEPLANT;
 					gamePane.setMessagePanelText(district.getName() +" now has a Sewage Plant!");
 					failed = false;
+					GameMaster.getInstance().setPerformed(true);
 					sewagePlantButton.setVisible(false);
+					gamePane.update();
 				}else{
 					failed = true;
 					performCard();

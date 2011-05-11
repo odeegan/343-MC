@@ -46,6 +46,7 @@ public class ChanceCardAuctionUnowned extends ChanceCard {
 			if(selectedSquare.getType() == SQUARETYPE.DISTRICT){
 				district = (District)selectedSquare;
 				if(!district.isOwned()){
+					GameMaster.getInstance().setPerformed(true);
 					gameMaster.startAuction();
 				}else{
 					failed = true;

@@ -78,6 +78,7 @@ public class ChanceCardEarthquake extends ChanceCard {
 					// remove district's bonus
 					//district.bonus.name();
 					gamePane.update();
+					GameMaster.getInstance().setPerformed(true);
 					destroyBonusButton.setVisible(false);
 					gamePane.clearMessageLayer();
 				}else{
@@ -114,6 +115,7 @@ public class ChanceCardEarthquake extends ChanceCard {
 				district = (District)selectedSquare;
 				sf.get(sf.getStructureByName(hazard));
 				district.addHazard(sf.getStructureByName(hazard));
+				GameMaster.getInstance().setPerformed(true);
 				gamePane.update();
 				destroyBonusButton.setVisible(false);
 				gamePane.clearMessageLayer();

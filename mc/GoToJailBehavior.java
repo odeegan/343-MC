@@ -28,6 +28,7 @@ public class GoToJailBehavior implements SquareBehavior {
 					public void actionPerformed(ActionEvent event) {
 						GameMaster.getInstance().getCurrentPlayer().setPosition(10);
 						currentPlayer.setIsInJail(true);
+						GameMaster.getInstance().setPerformed(true);
 						GamePane.getInstance().update();
 						GameMaster.getInstance().endTurn();
 						}

@@ -26,6 +26,7 @@ public class UnownedDistrictBehavior implements SquareBehavior{
 						district.setOwner(currentPlayer);
 						district.setSquareBehavior(new OwnedDistrictBehavior());
 						gamePane.clearMessageLayer();
+						GameMaster.getInstance().setPerformed(true);
 						gamePane.update();
 						GameMaster.getInstance().checkForRailroad();
 					}
@@ -37,6 +38,7 @@ public class UnownedDistrictBehavior implements SquareBehavior{
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
 						GameMaster.getInstance().checkForRailroad();
+						GameMaster.getInstance().setPerformed(true);
 						GameMaster.getInstance().startAuction();
 						}
 				});

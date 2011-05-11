@@ -38,6 +38,7 @@ public class ChanceCardGoBackThree extends ChanceCard {
 }
 
 	protected void continueButtonPerformed() {		
+		GameMaster.getInstance().setPerformed(true);
 		gp.update();
 		gm.checkSquare(0);
 	}

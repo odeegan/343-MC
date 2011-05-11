@@ -177,7 +177,8 @@ public class PlanningPermissionBehavior implements SquareBehavior {
 							district.addBonus(
 									StructureFactory.getInstance().get(STRUCTURE.WINDFARM));
 						}
-					
+						GameMaster.getInstance().setPerformed(true);
+						gamePane.update();
 					}
 				});
 

@@ -36,6 +36,7 @@ public class ChanceCardAdvanceToGo extends ChanceCard {
 		Player currentPlayer = gameMaster.getCurrentPlayer();
 		currentPlayer.setPosition(0);
 		currentPlayer.collect(2);
+		GameMaster.getInstance().setPerformed(true);
 		gamePane.update();
 		gamePane.clearMessageLayer();
 		gamePane.setMessagePanelText("Welcome to Go!");

@@ -65,6 +65,7 @@ public class ChanceCardToxicWaste extends ChanceCard {
 			currentPlayer.pay(((double)count));
 			payToxicWasteButton.setVisible(false);
 			gamePane.setMessagePanelText("Thanks for Paying!");
+			GameMaster.getInstance().setPerformed(true);
 			gamePane.update();
 			
 	}
@@ -72,6 +73,7 @@ public class ChanceCardToxicWaste extends ChanceCard {
 	protected void goToJailButtonPerformed() {
 			currentPlayer.setPosition(10);
 			currentPlayer.setIsInJail(true);
+			GameMaster.getInstance().setPerformed(true);
 			gamePane.update();
 			gameMaster.endTurn();
 	}

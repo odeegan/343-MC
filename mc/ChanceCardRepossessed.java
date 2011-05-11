@@ -35,6 +35,7 @@ public class ChanceCardRepossessed extends ChanceCard {
 			gamePane.setMessagePanelText("You drew the Repossessed card but own no Districts!");
 			gamePane.addMessagePanelText("You pay M1m.");
 			currentPlayer.pay(1);
+			GameMaster.getInstance().setPerformed(true);
 			gamePane.update();
 		}
 		else{
@@ -66,6 +67,7 @@ protected void repossessedButtonPerformed() {
 					gamePane.clearMessageLayer();
 					gamePane.clearSelectedDistrict();
 					gamePane.setMessagePanelText(district.getName() +" has been repossessed.");
+					GameMaster.getInstance().setPerformed(true);
 					gamePane.update();
 					return;
 				}else failed = true;

@@ -31,6 +31,7 @@ public class ChanceCardEasyMoney extends ChanceCard{
 		gm.getNextPlayer().pay(1, gm.getCurrentPlayer());
 		gp.addMessagePanelText("You drew " + this.name + "!");
 		gp.addMessagePanelText(gm.getNextPlayer().getName() +" has paid you 1m!");
+		GameMaster.getInstance().setPerformed(true);
 		gp.update();
 //		JButton continueButton = new JButton();
 //		continueButton.addActionListener(

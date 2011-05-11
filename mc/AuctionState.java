@@ -301,11 +301,15 @@ public class AuctionState implements GameState {
 		Square wonSquare = gameMaster.getBoard().getSquare(currentPlayer.getPosition());
 		if(wonSquare.getType() == SQUARETYPE.DISTRICT){
 			District wonDistrict = (District)wonSquare;
+			wonDistrict.setSquareBehavior(new OwnedDistrictBehavior());
+			gameMaster.setPerformed(true);
 			winner.addDistrict(wonDistrict);
 		}else{
 			wonSquare = gameMaster.getBoard().getSquare(GamePane.getInstance().getSelectedDistrict());
 			District wonDistrict = (District)wonSquare;
 			winner.addDistrict(wonDistrict);
+			wonDistrict.setSquareBehavior(new OwnedDistrictBehavior());
+			gameMaster.setPerformed(true);
 			GamePane.getInstance().clearSelectedDistrict();
 		}
 	}

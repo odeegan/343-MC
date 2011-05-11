@@ -33,6 +33,7 @@ public class FreeParkingBehavior implements SquareBehavior {
 			GamePane.getInstance().addMessagePanelText(
 					"\nYou get to take the Rent Dodge Card.");	
 		}
+		GameMaster.getInstance().setPerformed(true);
 		GameMaster.getInstance().getCurrentPlayer().hasRentDodgeCard = true;
 	}
 

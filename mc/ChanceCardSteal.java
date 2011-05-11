@@ -52,6 +52,7 @@ public class ChanceCardSteal extends ChanceCard {
 					gamePane.clearMessageLayer();
 					gamePane.setMessagePanelText("You have stolen "+district.getName());
 					stealButton.setVisible(false);
+					GameMaster.getInstance().setPerformed(true);
 					gamePane.update();
 				}else{
 					failed = true;
