@@ -46,6 +46,7 @@ public class IndustryTaxBehavior implements SquareBehavior {
 			gamePane.addMessagePanelText("You do not have industrial buildings."
 						+ " Pay nothing.");
 			GameMaster.getInstance().setPerformed(true);
+			GamePane.getInstance().update();
 		}
 		
 		

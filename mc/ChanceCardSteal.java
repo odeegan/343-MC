@@ -21,10 +21,29 @@ public class ChanceCardSteal extends ChanceCard {
 		gameMaster = GameMaster.getInstance();
 		gamePane = GamePane.getInstance();
 		gamePane.clearMessageLayer();
+		
+		
+		boolean noneOwned = true;
+		
+		for(Player player: gameMaster.getPlayers())
+			if(player.getDistricts().size() > 0)
+				noneOwned = false;
+		
+		if(noneOwned){
+			gamePane.setMessagePanelText("You drew the Steal card but no districts " +
+					"are currently owned! Better Luck next time.");
+			gameMaster.setPerformed(true);
+			gamePane.update();
+			return;
+			
+		}
+		
 		if(!failed)	gamePane.setMessagePanelText("You drew the Steal Card!");
 		else gamePane.setMessagePanelText("Invalid District.");
 		gamePane.addMessagePanelText("Select an Owned District to Steal.");
 
+		
+		
 		gamePane.clearSelectedDistrict();
 		stealButton = new JButton("Steal District");
 		stealButton.addActionListener(
@@ -52,7 +71,7 @@ public class ChanceCardSteal extends ChanceCard {
 					gamePane.clearMessageLayer();
 					gamePane.setMessagePanelText("You have stolen "+district.getName());
 					stealButton.setVisible(false);
-					GameMaster.getInstance().setPerformed(true);
+					gameMaster.setPerformed(true);
 					gamePane.update();
 				}else{
 					failed = true;
