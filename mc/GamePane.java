@@ -867,7 +867,6 @@ class GamePane extends JLayeredPane {
 				JOptionPane.showMessageDialog (messageLayer, "This Game is Brought to you by: \n\tNicholas \"The Complicatrix\" O'Deegan" +
 						"\n\tCodi \"The Sunflower\" Bonney" +
 						"\n\t and Daniel \"Won't Shut Up\" McGoldrick", "The Men Behind The Code", JOptionPane.INFORMATION_MESSAGE);
-				
 			}
 		};
 		
