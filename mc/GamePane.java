@@ -851,10 +851,10 @@ class GamePane extends JLayeredPane {
 		structureCountPanel = new StructureCountPanel();
 		
 		add(baseLayer, new Integer(0));
-		add(playerTokensLayer, new Integer(1));
-		add(messageLayer, new Integer(2));	
-		add(districtElementsPanel, new Integer(3));	
-		add(structureCountPanel, new Integer(4));
+		add(messageLayer, new Integer(1));	
+		add(districtElementsPanel, new Integer(2));	
+		add(structureCountPanel, new Integer(3));
+		add(playerTokensLayer, new Integer(4));
 		add(districtRollOverPanel, new Integer(5));
 		add(dicePanel, new Integer(6));
 		
