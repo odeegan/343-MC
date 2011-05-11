@@ -137,16 +137,17 @@ public class BuildState implements GameState{
 				new ItemListener(){
 					public void itemStateChanged(ItemEvent event){
 						if(event.getStateChange() == ItemEvent.SELECTED){
-
-							enableButtonsAccordingToDistrict();
-							//enableButtonsAccordingToDistrict((String)event.getItem());
-							//playerSelectedDistrict =GameMaster.getInstance().getBoard().getDistrictByName((String)event.getItem());
-							//System.out.println("Player selected district "+ playerSelectedDistrict);
+							if(ownedDistrictsComboBox.getSelectedIndex() != 0)
+								enableButtonsAccordingToDistrict();
+							else
+								messageTextField.setText("Select a valid district.");
 						}//End if.
 					}// End itemStateChanged.
 		});// End addItemListener.
 		
 		addToCartButton = new AddToCartButton();
+		addToCartButton.setRolloverEnabled(true);
+
 	
 		buildTypeAmountSpinner = new JSpinner();
 		
@@ -168,8 +169,11 @@ public class BuildState implements GameState{
 		totalTextField.setPreferredSize(new Dimension(250, 30));
 		totalTextField.setEditable(false);
 		buildButton = new BuildButton();
+		buildButton.setRolloverEnabled(true);
 		deleteButton = new DeleteButton();
+		deleteButton.setRolloverEnabled(true);
 		cancelButton = new CancelButton();
+		cancelButton.setRolloverEnabled(true);
 		playerCashTextField = new JTextField();
 		playerCashTextField.setPreferredSize(new Dimension(250, 30));
 		playerCashTextField.setEditable(false);

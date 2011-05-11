@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -21,6 +22,11 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -41,6 +47,7 @@ public class TradeState implements GameState{
 	private static JPanel currentPlayerCashPanel;
 	private static JPanel currentPlayerButtonPanel;
 	private static JPanel currentPlayerListPanel;
+	private static JPanel messagePanel;
 	
 	private static JLabel currentPlayerNameLabel;
 	private static JLabel currentPlayerSelectDistrictLabel;
@@ -51,7 +58,7 @@ public class TradeState implements GameState{
 	private static JButton currentPlayerDeleteButton;
 	private static JButton currentPlayerAddButton;
 	private static JButton currentPlayerCancelButton;
-	private static JButton currentPlayerAgreeButton;
+	private static JToggleButton currentPlayerAgreeButton;
 	
 	private static JSlider currentPlayerCashSlider;
 	
@@ -84,7 +91,7 @@ public class TradeState implements GameState{
 	private static JButton tradePartnerDeleteButton;
 	private static JButton tradePartnerAddButton;
 	private static JButton tradePartnerCancelButton;
-	private static JButton tradePartnerAgreeButton;
+	private static JToggleButton tradePartnerAgreeButton;
 	
 	private static JSlider tradePartnerCashSlider;
 	
@@ -93,12 +100,11 @@ public class TradeState implements GameState{
 	private static JList tradePartnerTradeList;
 	private DefaultListModel tradePartnerTradeListModel;
 	
-	private static String[] tradePartnerDistricts;
-	
+	private static JTextField messageTextField;
 
-	private double tradePartnerCash;
 	
-
+	private double tradePartnerCash;	
+	private static final DecimalFormat money = new DecimalFormat("###,###,###,###");
 	private Player currentPlayer;
 	private Player tradePartner;
 	private ArrayList<Player> players;
@@ -158,6 +164,11 @@ public class TradeState implements GameState{
 		currentPlayerButtonPanel.setPreferredSize(new Dimension(400,75));
 		currentPlayerButtonPanel.setBorder(BorderFactory.createLineBorder(null));
 		
+		messagePanel = new JPanel();
+		messagePanel.setLayout(new MigLayout());
+		messagePanel.setPreferredSize(new Dimension(800,30));
+		messagePanel.setBorder(BorderFactory.createLineBorder(null));
+		
 		
 		currentPlayerNameLabel = new JLabel("Name:");
 
@@ -185,27 +196,39 @@ public class TradeState implements GameState{
 		
 		
 		currentPlayerAddButton = new JButton("Add");
+		currentPlayerAddButton.setRolloverEnabled(true);
 		currentPlayerAddButton.setPreferredSize(new Dimension(50,35));
 		currentPlayerAddButton.addActionListener(
-						new ActionListener() {
-							public void actionPerformed(ActionEvent event) {
-								System.out.println("Current player clicked add button.");
-								//currentPlayerAddButtonActionPerformed();
-							}
-						});
+				new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
+						System.out.println("Current player clicked add button.");
+						currentPlayerAddButtonActionPerformed();
+					}
+				});
 		
 		currentPlayerDeleteButton = new JButton("Delete");
+		currentPlayerDeleteButton.setRolloverEnabled(true);
 		currentPlayerDeleteButton.setPreferredSize(new Dimension(50,35));
 		currentPlayerDeleteButton.setVisible(false);
 		currentPlayerDeleteButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
 						System.out.println("Current player clicked delete button.");
-						//currentPlayerDeleteButtonActionPerformed();
+						currentPlayerDeleteButtonActionPerformed();
 					}
 				});
 		
 		currentPlayerCashSlider = new JSlider();
+		currentPlayerCashSlider.setMinimum(0);
+		currentPlayerCashSlider.setValue(100000);
+		currentPlayerCashSlider.setMinorTickSpacing(100000);
+		currentPlayerCashSlider.setMajorTickSpacing(1000000);
+		currentPlayerCashSlider.setSnapToTicks(true);
+		currentPlayerCashSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent changeEvent) {
+				currentPlayerCashTextField.setText(money.format(currentPlayerCashSlider.getValue()));
+			}
+		});
 		
 		currentPlayerCashTextField = new JTextField();
 		currentPlayerCashTextField.setEditable(false);
@@ -217,24 +240,32 @@ public class TradeState implements GameState{
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
 						System.out.println("Current player clicked cancel button.");
-						//currentPlayerCancelButtonActionPerformed();
-						gameStateMachine.setState(gameStateMachine.getGamePlayState());
+						currentPlayerCancelButtonActionPerformed();
 					}
 				});
 		
-		currentPlayerAgreeButton = new JButton("Agree");
+		currentPlayerAgreeButton = new JToggleButton("Agree");
+		currentPlayerAgreeButton.setRolloverEnabled(true);
 		currentPlayerAgreeButton.setPreferredSize(new Dimension(100,50));
 		currentPlayerAgreeButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
 						System.out.println("Current player clicked agree button.");
-						//currentPlayerAgreeButtonActionPerformed();
+						currentPlayerAgreeButtonActionPerformed();
 					}
 				});
 		
 		currentPlayerTradeList = new JList();
 		currentPlayerTradeList.setPreferredSize(new Dimension(200,200));
 		currentPlayerTradeListModel = new DefaultListModel();
+		currentPlayerTradeList.addListSelectionListener(new ListSelectionListener(){
+				public void valueChanged(ListSelectionEvent e){
+					if(currentPlayerTradeList.getSelectedIndex() == -1){
+						currentPlayerDeleteButton.setVisible(false);
+					}else
+						currentPlayerDeleteButton.setVisible(true);
+				}// End valueChanged.
+			});// End addListSelectionListener.
 
 		currentPlayerNamePanel.add(currentPlayerNameLabel, "cell 0 0 1 1");
 		currentPlayerNamePanel.add(currentPlayerNameTextField, "cell 1 0 3 1");
@@ -306,7 +337,7 @@ public class TradeState implements GameState{
 							selectTradePartnerComboBoxActionPerformed();
 						}//End if.
 					}// End itemStateChanged.
-		});// End addItemListener.
+				});// End addItemListener.
 
 		
 		tradePartnerSelectDistrictLabel = new JLabel("District:");
@@ -325,56 +356,77 @@ public class TradeState implements GameState{
 		});// End addItemListener.
 */		
 		tradePartnerAddButton = new JButton("Add");
+		tradePartnerAddButton.setRolloverEnabled(true);
 		tradePartnerAddButton.setPreferredSize(new Dimension(50,35));
 		tradePartnerAddButton.addActionListener(
-						new ActionListener() {
-							public void actionPerformed(ActionEvent event) {
-								System.out.println("Trade partner clicked add button.");
-								//tradePartnerAddButtonActionPerformed();
-							}
-						});
+				new ActionListener() {
+					public void actionPerformed(ActionEvent event) {
+						System.out.println("Trade partner clicked add button.");
+						tradePartnerAddButtonActionPerformed();
+					}
+				});
 		
 		tradePartnerDeleteButton = new JButton("Delete");
+		tradePartnerDeleteButton.setRolloverEnabled(true);
 		tradePartnerDeleteButton.setPreferredSize(new Dimension(50,35));
 		tradePartnerDeleteButton.setVisible(false);
 		tradePartnerDeleteButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
 						System.out.println("Trade partner clicked delete button.");
-						//tradePartnerDeleteButtonActionPerformed();
+						tradePartnerDeleteButtonActionPerformed();
 					}
 				});
 		
 		tradePartnerCashSlider = new JSlider();
+		tradePartnerCashSlider.setMinimum(0);
+		tradePartnerCashSlider.setValue(100000);
+		tradePartnerCashSlider.setMinorTickSpacing(100000);
+		tradePartnerCashSlider.setMajorTickSpacing(1000000);
+		tradePartnerCashSlider.setSnapToTicks(true);
+		tradePartnerCashSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent changeEvent) {
+				tradePartnerCashTextField.setText(money.format(tradePartnerCashSlider.getValue()));
+			}
+		});
 		
 		tradePartnerCashTextField = new JTextField();
 		tradePartnerCashTextField.setEditable(false);
 		tradePartnerCashTextField.setPreferredSize(new Dimension(100,30));
 		
 		tradePartnerCancelButton = new JButton("Cancel");
+		tradePartnerCancelButton.setRolloverEnabled(true);
 		tradePartnerCancelButton.setPreferredSize(new Dimension(100,50));
 		tradePartnerCancelButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
 						System.out.println("Trade partner clicked cancel button.");
-						//tradePartnerCancelButtonActionPerformed();
-						gameStateMachine.setState(gameStateMachine.getGamePlayState());
+						tradePartnerCancelButtonActionPerformed();
 					}
 				});
 		
-		tradePartnerAgreeButton = new JButton("Agree");
+		tradePartnerAgreeButton = new JToggleButton("Agree");
+		tradePartnerAgreeButton.setRolloverEnabled(true);
 		tradePartnerAgreeButton.setPreferredSize(new Dimension(100,50));
 		tradePartnerAgreeButton.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent event) {
 						System.out.println("Trade partner clicked agree button.");
-						//tradePartnerAgreeButtonActionPerformed();
+						tradePartnerAgreeButtonActionPerformed();
 					}
 				});
 		
 		tradePartnerTradeList = new JList();
 		tradePartnerTradeList.setPreferredSize(new Dimension(200,200));
 		tradePartnerTradeListModel = new DefaultListModel();
+		tradePartnerTradeList.addListSelectionListener(new ListSelectionListener(){
+			public void valueChanged(ListSelectionEvent e){
+				if(tradePartnerTradeList.getSelectedIndex() == -1){
+					tradePartnerDeleteButton.setVisible(false);
+				}else
+					tradePartnerDeleteButton.setVisible(true);
+			}// End valueChanged.
+		});// End addListSelectionListener.
 
 		tradePartnerNamePanel.add(selectTradePartnerLabel, "cell 0 0 1 1");
 		tradePartnerNamePanel.add(selectTradePartnerComboBox, "cell 1 0 1 1");
@@ -397,37 +449,147 @@ public class TradeState implements GameState{
 		tradePartnerPanel.add(tradePartnerListPanel, "cell 1 1 1 1");
 		tradePartnerPanel.add(tradePartnerCashPanel, "cell 0 2 4 1");
 		tradePartnerPanel.add(tradePartnerButtonPanel, "cell 0 3 4 1");
-				
+		
+		messageTextField = new JTextField();
+		messageTextField.setPreferredSize(new Dimension(800,30));
+		messagePanel.add(messageTextField);		
 		
 		baseLayer.add(currentPlayerTradePanel, BorderLayout.WEST);
 		baseLayer.add(tradePartnerPanel, BorderLayout.EAST);
+		baseLayer.add(messagePanel, BorderLayout.SOUTH);
 		
 		layeredPane.add(baseLayer);
 		
 	}// End constructor.
-
 	
-	protected void selectTradePartnerComboBoxActionPerformed() {
+	protected void currentPlayerAgreeButtonActionPerformed() {
 		// TODO Auto-generated method stub
-		String selectedTradePartnersName = selectTradePartnerComboBoxModel.getElementAt(selectTradePartnerComboBox.getSelectedIndex()).toString();	
-		System.out.println("player selected" + selectedTradePartnersName);
-		for(int ii = 0; ii < playersNames.length; ii++)
-			if(playersNames[ii].equals(selectedTradePartnersName)){
-				tradePartner = players.get(ii);
-			}
-		System.out.println("trade partner"+ tradePartner.getName());	
-		//System.out.println("trade partner int"+ Integer.parseInt(selectedTradePartnersName));
+		if(currentPlayerAgreeButton.isOpaque())
+			currentPlayerAgreeButton.setOpaque(false);
+		else
+			currentPlayerAgreeButton.setOpaque(true);
 		
-		// Set trade partners's comboBox of districts to choose from.
-		tradePartnersDistricts = currentPlayer.getDistricts();
-		String[] tradePartnersDistrictsNames = new String[currentPlayer.getDistricts().size()+1];
-		tradePartnersDistrictsNames[0] = ""; // Forces player to have to select the district and not go with default.
-		for(int ii = 0; ii < tradePartner.getDistricts().size(); ii++){
-			tradePartnersDistrictsNames[ii+1] = tradePartnersDistricts.get(ii).getName();
+		if(tradePartnerAgreeButton.isOpaque()){
+			tradeAccepted();
 		}
-		tradePartnerDistrictsComboBoxModel = new DefaultComboBoxModel(tradePartnersDistrictsNames);
-		tradePartnerDistrictsComboBox.setModel(currentPlayerDistrictsComboBoxModel);
+	}
+
+	protected void currentPlayerCancelButtonActionPerformed() {
+		// TODO Auto-generated method stub
+		if(currentPlayerAgreeButton.isOpaque())
+			currentPlayerAgreeButton.setOpaque(false);
+		else{
+			if(!tradePartnerTradeListModel.isEmpty()){
+				tradePartnerTradeListModel.clear();
+				tradePartnerTradeList.setModel(tradePartnerTradeListModel);
+			}else
+				gameStateMachine.setState(gameStateMachine.getGamePlayState());
+		}
+	}
+
+	protected void currentPlayerDeleteButtonActionPerformed() {
+		// TODO Auto-generated method stub
+		currentPlayerTradeListModel.removeElementAt(currentPlayerTradeList.getSelectedIndex());
+		currentPlayerTradeList.setModel(currentPlayerTradeListModel);
 		
+	}
+
+	protected void currentPlayerAddButtonActionPerformed() {
+		//TODO;
+		System.out.println("index is " + currentPlayerDistrictsComboBox.getSelectedIndex());
+		if(currentPlayerDistrictsComboBox.getSelectedIndex()!= 0){
+			//currentPlayerSelectedDistrict = GameMaster.getInstance().getBoard().getDistrictByName(currentPlayerDistrictsComboBoxModel.getElementAt(currentPlayerDistrictsComboBox.getSelectedIndex()).toString());
+			if(!currentPlayerTradeListModel.contains(currentPlayerDistrictsComboBoxModel.getElementAt(currentPlayerDistrictsComboBox.getSelectedIndex()).toString())){
+				currentPlayerTradeListModel.addElement(currentPlayerDistrictsComboBoxModel.getElementAt(currentPlayerDistrictsComboBox.getSelectedIndex()).toString());
+				currentPlayerTradeList.setModel(currentPlayerTradeListModel);
+			}
+			else
+				messageTextField.setText("District already in list.");
+		}else
+			messageTextField.setText("Select a vaild district.");		
+	}
+
+	private void tradeAccepted() {
+		// TODO Auto-generated method stub
+		for(int ii = 0; ii<tradePartnerTradeListModel.size(); ii++){
+			currentPlayer.addDistrict(gameMaster.getBoard().getDistrictByName(tradePartnerTradeListModel.getElementAt(ii).toString()));
+		}
+		for(int ii = 0; ii<currentPlayerTradeListModel.size(); ii++){
+			tradePartner.addDistrict(gameMaster.getBoard().getDistrictByName(currentPlayerTradeListModel.getElementAt(ii).toString()));
+		}
+		if(tradePartner!= null){
+			if(!currentPlayerCashTextField.getText().equals(""))
+				currentPlayer.pay((double)((double)currentPlayerCashSlider.getValue()/(double)1000000), tradePartner);
+			if(!tradePartnerCashTextField.getText().equals(""))
+				tradePartner.pay((double)tradePartnerCashSlider.getValue()/(double)1000000,currentPlayer);
+			gameStateMachine.setState(gameStateMachine.getGamePlayState());
+		}
+	}
+
+	protected void tradePartnerAgreeButtonActionPerformed() {
+		// TODO Auto-generated method stub
+		System.out.println("moneyyy"+currentPlayerCashSlider.getValue());
+		if(tradePartnerAgreeButton.isOpaque())
+			tradePartnerAgreeButton.setOpaque(false);
+		else
+			tradePartnerAgreeButton.setOpaque(true);
+		
+		if(currentPlayerAgreeButton.isOpaque()){
+			tradeAccepted();
+		}
+	}
+	
+	protected void tradePartnerCancelButtonActionPerformed() {
+		// TODO Auto-generated method stub
+		if(tradePartnerAgreeButton.isOpaque())
+			tradePartnerAgreeButton.setOpaque(false);
+		else{
+			if(!tradePartnerTradeListModel.isEmpty()){
+				tradePartnerTradeListModel.clear();
+				tradePartnerTradeList.setModel(tradePartnerTradeListModel);
+			}else
+				gameStateMachine.setState(gameStateMachine.getGamePlayState());
+		}
+	}
+
+	protected void tradePartnerDeleteButtonActionPerformed() {
+		// TODO Auto-generated method stub
+		tradePartnerTradeListModel.removeElementAt(tradePartnerTradeList.getSelectedIndex());
+		tradePartnerTradeList.setModel(tradePartnerTradeListModel);
+		
+	}
+
+	protected void tradePartnerAddButtonActionPerformed() {
+		//TODO;
+		if(tradePartnerDistrictsComboBox.getSelectedIndex()!= 0){
+			//tradePartnerSelectedDistrict = GameMaster.getInstance().getBoard().getDistrictByName(tradePartnerDistrictsComboBoxModel.getElementAt(tradePartnerDistrictsComboBox.getSelectedIndex()).toString());
+			if(!tradePartnerTradeListModel.contains(tradePartnerDistrictsComboBoxModel.getElementAt(tradePartnerDistrictsComboBox.getSelectedIndex()).toString())){
+				tradePartnerTradeListModel.addElement(tradePartnerDistrictsComboBoxModel.getElementAt(tradePartnerDistrictsComboBox.getSelectedIndex()).toString());
+				tradePartnerTradeList.setModel(tradePartnerTradeListModel);
+			}
+			else
+				messageTextField.setText("District already in list.");
+		}else
+			messageTextField.setText("Select a vaild district.");		
+	}
+	protected void selectTradePartnerComboBoxActionPerformed() {
+		if(selectTradePartnerComboBox.getSelectedIndex()!= 0){
+			String selectedTradePartnersName = selectTradePartnerComboBoxModel.getElementAt(selectTradePartnerComboBox.getSelectedIndex()).toString();	
+			tradePartner = gameMaster.getPlayerByName(selectedTradePartnersName);
+			tradePartnerCash = tradePartner.getCash();
+			tradePartnerCashSlider.setMaximum((int)(tradePartnerCash*1000000));
+			System.out.println("trade partner"+ tradePartner.getName());	
+			
+			tradePartnersDistricts = tradePartner.getDistricts();
+			String[] tradePartnersDistrictsNames = new String[tradePartner.getDistricts().size()+1];
+			tradePartnersDistrictsNames[0] = ""; // Forces player to have to select the district and not go with default.
+			for(int ii = 0; ii < tradePartner.getDistricts().size(); ii++){
+				tradePartnersDistrictsNames[ii+1] = tradePartnersDistricts.get(ii).getName();
+			}
+			tradePartnerDistrictsComboBoxModel = new DefaultComboBoxModel(tradePartnersDistrictsNames);
+			tradePartnerDistrictsComboBox.setModel(tradePartnerDistrictsComboBoxModel);
+		}else
+			messageTextField.setText("Select a valid trade partner.");
 		
 	}
 
@@ -435,10 +597,22 @@ public class TradeState implements GameState{
 		System.out.println("This is the Trade State.");
 		currentPlayer = GameMaster.getInstance().getCurrentPlayer();
 		currentPlayerCash = GameMaster.getInstance().getCurrentPlayer().getCash();
+		currentPlayerCashSlider.setMaximum((int)(currentPlayerCash*1000000));
+		messageTextField.setText("");
 		// set current players name
 		currentPlayerNameTextField.setText("        "+currentPlayer.getName());
 		// set list of other players to trade with
 		players = gameMaster.getPlayers();
+		//set players lists models
+		currentPlayerTradeListModel = new DefaultListModel();
+		tradePartnerTradeListModel = new DefaultListModel();
+		//clear buttons
+		currentPlayerAgreeButton.setOpaque(false);
+		tradePartnerAgreeButton.setOpaque(false);
+		currentPlayerCashSlider.setMaximum((int)(currentPlayer.getCash()*1000000));
+		currentPlayerCashSlider.setValue(0);
+		tradePartnerCashSlider.setValue(0);
+
 		
 		// All players in game except for current
 		playersNames = new String[players.size()];
@@ -446,8 +620,10 @@ public class TradeState implements GameState{
 		int counter = 0;
 		for(int ii = 0; ii < players.size(); ii++){
 			if(!players.get(ii).getName().equals(currentPlayer.getName())){
-				playersNames[counter+1] = players.get(ii).getName();
-				counter = counter + 1;
+				//if(ii != 0){
+					playersNames[counter+1] = players.get(ii).getName();
+					counter = counter + 1;
+				//}
 			}
 		}
 		
