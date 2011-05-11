@@ -502,6 +502,7 @@ public class BuildState implements GameState{
 					if(playerSelectedDistrict.isStadiumed() == false){
 						if(StructureFactory.getInstance().stadiumCount != 0){
 							cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
+							buildList.setModel(cartListModel);
 							System.out.println("Build place: " + playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " added to cart.");
 							StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("stadium"));
 							System.out.println("Stadium count decreased by 1.");
@@ -522,6 +523,7 @@ public class BuildState implements GameState{
 					if(playerSelectedDistrict.isSkyScrapered() == false){
 						if(StructureFactory.getInstance().skyscraperCount != 0){
 							cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
+							buildList.setModel(cartListModel);
 							System.out.println("Build place: " + playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " added to cart.");
 							StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("skyscraper"));
 							System.out.println("Skyscraper count decreased by 1.");
@@ -541,6 +543,7 @@ public class BuildState implements GameState{
 				}else if (currentlySelectedRadioButton.compareToIgnoreCase("monopolyTower") == 0) {
 					if(StructureFactory.getInstance().monopolyTowerCount != 0){
 						cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
+						buildList.setModel(cartListModel);
 						System.out.println("Build place: " + playerSelectedDistrict.getName() + " Build Type: " + currentlySelectedRadioButton + " added to cart.");
 						StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("monopolyTower"));
 						System.out.println("Monopoly Tower count decreased by 1.");
@@ -556,6 +559,7 @@ public class BuildState implements GameState{
 			    // Remove hazards logic.
 				}else if (currentlySelectedRadioButton.compareToIgnoreCase("removeHazard") == 0) {
 					cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton + " " + playerSelectedDistrict.hazard.getBlockCount() + " blocks");
+					buildList.setModel(cartListModel);
 					System.out.println("Remove hazard from " + playerSelectedDistrict.getName() + " added to cart.");
 					m.put(playerSelectedDistrict, playerSelectedDistrict.hazard);
 					projectedCosts = projectedCosts + playerSelectedDistrict.hazard.getBlockCount()*.5;
