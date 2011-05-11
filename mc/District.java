@@ -23,8 +23,8 @@ public class District extends Square implements Comparable<District> {
 	int industrialBlockCount = 0;
 		
 	// STRUCTURES is an enum that stores type and block count
-	STRUCTURE bonus;	
-	STRUCTURE hazard;
+	STRUCTURE bonus = null;	
+	STRUCTURE hazard = null;
 		
 	boolean railroad = false;
 	boolean skyscraper = false;

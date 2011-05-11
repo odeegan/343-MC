@@ -56,6 +56,7 @@ class GamePane extends JLayeredPane {
 	private static CurrentPlayerPanel currentPlayerPanel;
 	private static DistrictsPanel districtsPanel;
 	private static DistrictElementsPanel districtElementsPanel;
+	private static StructureCountPanel	structureCountPanel;
 	
 	private static JButton rollDiceButton;
 	private static JButton buildButton;
@@ -166,6 +167,141 @@ class GamePane extends JLayeredPane {
 						}
 						add(railroad);
 					}
+					if (district.getResidentialBlockCount() > 0) {
+						JLabel residential = new JLabel();
+						residential.setIcon(new ImageIcon("images/house.png"));
+						residential.setVisible(true);
+						if (i > 0 && i < 10) {
+							residential.setBounds(district.getX(), district.getY()+28, 30, 30);
+						}
+						if (i > 10 && i < 20) {
+							residential.setBounds(district.getX(), district.getY()+30, 30, 30);
+						}
+						if (i > 20 && i < 30) {
+							residential.setBounds(district.getX(), district.getY()+30, 30, 30);
+						}
+						if (i > 30 && i <= 39) {
+							residential.setBounds(district.getX(), district.getY()+30, 30, 30);
+						}
+						add(residential);
+					}
+					if (district.getIndustrialBlockCount() > 0) {
+						JLabel industrial = new JLabel();
+						industrial.setIcon(new ImageIcon("images/factory.png"));
+						industrial.setVisible(true);
+						if (i > 0 && i < 10) {
+							industrial.setBounds(district.getX(), district.getY(), 30, 30);
+						}
+						if (i > 10 && i < 20) {
+							industrial.setBounds(district.getX(), district.getY(), 30, 30);
+						}
+						if (i > 20 && i < 30) {
+							industrial.setBounds(district.getX(), district.getY(), 30, 30);
+						}
+						if (i > 30 && i <= 39) {
+							industrial.setBounds(district.getX(), district.getY(), 30, 30);
+						}
+						add(industrial);
+					}
+					if (district.isHazarded()) {
+						JLabel hazard = new JLabel();
+						hazard.setIcon(new ImageIcon("images/hazard.png"));
+						hazard.setVisible(true);
+						if (i > 0 && i < 10) {
+							hazard.setBounds(district.getX()+32, district.getY(), 30, 30);
+						}
+						if (i > 10 && i < 20) {
+							hazard.setBounds(district.getX()+31, district.getY(), 30, 30);
+						}
+						if (i > 20 && i < 30) {
+							hazard.setBounds(district.getX()+31, district.getY(), 30, 30);
+						}
+						if (i > 30 && i <= 39) {
+							hazard.setBounds(district.getX()+32, district.getY(), 30, 30);
+						}
+						add(hazard);
+					}
+					if (district.isBonused()) {
+						JLabel bonus = new JLabel();
+						bonus.setIcon(new ImageIcon("images/heart.png"));
+						bonus.setVisible(true);
+						if (i > 0 && i < 10) {
+							bonus.setBounds(district.getX()+32, district.getY()+30, 30, 30);
+						}
+						if (i > 10 && i < 20) {
+							bonus.setBounds(district.getX()+31, district.getY()+30, 30, 30);
+						}
+						if (i > 20 && i < 30) {
+							bonus.setBounds(district.getX()+31, district.getY()+30, 30, 30);
+						}
+						if (i > 30 && i <= 39) {
+							bonus.setBounds(district.getX()+32, district.getY()+30, 30, 30);
+						}
+						add(bonus);
+					}
+				}
+			}
+		}
+	}
+	
+	public class StructureCountPanel extends JPanel {
+		
+		ArrayList<Square> squares;
+		
+		public StructureCountPanel() {
+			setLayout(null);
+			setOpaque(false);
+			setBounds(0, 0, 768, 768);
+		}
+		
+		public void update() {
+			
+			squares = GameMaster.getInstance().getBoard().getSquares();
+						
+			removeAll();
+			
+			for (int i=0; i < squares.size(); i++) {
+				if (squares.get(i).getType() == SQUARETYPE.DISTRICT) {
+					District district = (District)squares.get(i);
+					
+
+					if (district.getResidentialBlockCount() > 0) {
+						JLabel residential = new JLabel();
+						residential.setText(Integer.toString(district.getResidentialBlockCount()));
+						residential.setVisible(true);
+						if (i > 0 && i < 10) {
+							residential.setBounds(district.getX()+11, district.getY()+33, 30, 30);
+						}
+						if (i > 10 && i < 20) {
+							residential.setBounds(district.getX()+11, district.getY()+35, 30, 30);
+						}
+						if (i > 20 && i < 30) {
+							residential.setBounds(district.getX()+11, district.getY()+35, 30, 30);
+						}
+						if (i > 30 && i <= 39) {
+							residential.setBounds(district.getX()+11, district.getY()+35, 30, 30);
+						}
+						add(residential);
+					}
+					if (district.getIndustrialBlockCount() > 0) {
+						JLabel industrial = new JLabel();
+						industrial.setText(Integer.toString(district.getIndustrialBlockCount()));
+						industrial.setVisible(true);
+						if (i > 0 && i < 10) {
+							industrial.setBounds(district.getX()+17, district.getY()+3, 30, 30);
+						}
+						if (i > 10 && i < 20) {
+							industrial.setBounds(district.getX()+17, district.getY()+3, 30, 30);
+						}
+						if (i > 20 && i < 30) {
+							industrial.setBounds(district.getX()+17, district.getY()+3, 30, 30);
+						}
+						if (i > 30 && i <= 39) {
+							industrial.setBounds(district.getX()+17, district.getY()+3, 30, 30);
+						}
+						add(industrial);
+					}
+
 				}
 			}
 		}
@@ -712,13 +848,15 @@ class GamePane extends JLayeredPane {
 		
 		districtElementsPanel = new DistrictElementsPanel();
 		districtRollOverPanel = new DistrictRollOverPanel();
+		structureCountPanel = new StructureCountPanel();
 		
 		add(baseLayer, new Integer(0));
 		add(playerTokensLayer, new Integer(1));
 		add(messageLayer, new Integer(2));	
 		add(districtElementsPanel, new Integer(3));	
-		add(districtRollOverPanel, new Integer(4));
-		add(dicePanel, new Integer(5));
+		add(structureCountPanel, new Integer(4));
+		add(districtRollOverPanel, new Integer(5));
+		add(dicePanel, new Integer(6));
 		
 		//AwesomeSauce Feature X100
 		
@@ -837,6 +975,7 @@ class GamePane extends JLayeredPane {
 		districtsPanel.update();
 		playerTokensLayer.update();
 		districtElementsPanel.update();
+		structureCountPanel.update();
 		districtRollOverPanel.update();
 		networthPanel.update();
 		revalidate();
