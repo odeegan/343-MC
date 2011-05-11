@@ -973,9 +973,9 @@ class GamePane extends JLayeredPane {
 	public void update() {
 		currentPlayerPanel.update();
 		districtsPanel.update();
-		playerTokensLayer.update();
 		districtElementsPanel.update();
 		structureCountPanel.update();
+		playerTokensLayer.update();
 		districtRollOverPanel.update();
 		networthPanel.update();
 		revalidate();
