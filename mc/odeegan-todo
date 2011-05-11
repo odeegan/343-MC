@@ -1,27 +1,22 @@
-
-
+Final
+May 17
+scantron
+10am
+chpt 17, 12, 8
 	
 
 
 
-[]	CHANCE("Chance")
- 
-[X] owned district
-	[x] enable rent dodge card when someone lands on an owned district 
-[x]	unowned district
-[x]	FREEPARKING("Free Parking"),
-[x]	INDUSTRYTAX("Industry Tax"),
-[x]	GO("G0"), 
-[x]	GOTOJAIL("Go To Jail!"),
-[X]	JAIL("Jail");
-[x]	PLANNINGPERMISSION("Planning Permission")
-[x] get "select district" working
-[ ] display all players' networth
 
 
 [ ] bankruptcy
-[ ] pay method should determine if player has enough
-[ ] mortgage
-[ ] end turn should only be enabled after a roll is complete?
+[ ] pay method should trigger bankruptcy
+[ ] include taxi, tax dodge and get out of jail cards in the change deck
+[ ] SOUND
+[ ] don't allow people to roll or end turn their way out of game logic
+[ ] fix railroads
+[ ] trade
+[ ] resume turn properly from trade
+[ ] player token jitter
 
 

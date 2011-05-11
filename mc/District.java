@@ -1,5 +1,7 @@
 package mc;
 
+import java.text.DecimalFormat;
+
 
 public class District extends Square implements Comparable<District> {
 
@@ -46,14 +48,31 @@ public class District extends Square implements Comparable<District> {
 	}
 
 	public void reset() {
-		residentialBlockCount = 0;
-		industrialBlockCount = 0;
-		skyscraper = false;
-		stadium = false;
-		monopolyTower = false;
+		StructureFactory st = StructureFactory.getInstance();
+		if (residentialBlockCount > 0) {
+			for (int i = 0; i < residentialBlockCount; i++) {
+				st.scrap(STRUCTURE.RESIDENTIAL);
+			}
+		}
+		if (industrialBlockCount > 0) {
+			for (int i = 0; i < industrialBlockCount; i++) {
+				st.scrap(STRUCTURE.INDUSTRIAL);
+			}
+		}
+		if (skyscraper) {
+			st.scrap(STRUCTURE.SKYSCRAPER);
+		}
+		if (monopolyTower) {
+			st.scrap(STRUCTURE.MONOPOLYTOWER);
+		}
+		if (railroad) {
+			st.scrap(STRUCTURE.RAILROAD);
+		}
+		if (stadium) {
+			st.scrap(STRUCTURE.STADIUM);
+		}
 		owner = null;
 		squareBehavior = new UnownedDistrictBehavior();
-		railroad = false;
 	}
 	
 	public String getColor() {
@@ -186,21 +205,25 @@ public class District extends Square implements Comparable<District> {
 */
 	
 	public double getRent() {
-		// calculate rent based on buildings, hazards, etc.
+		
 		if (isMortgaged) {
 			return 0.0;
 		}
 		
 		if (hazard != null) {
-			return new Double(rents[industrialBlockCount]);
+			return rents[industrialBlockCount];
 		} else {
-			return new Double(rents[residentialBlockCount + industrialBlockCount]);
+			return rents[residentialBlockCount + industrialBlockCount];
 		}
-
 	}	
 	
 	public double getMortgageValue() {
-		return getRent();
+
+		if (hazard != null) {
+			return rents[industrialBlockCount];
+		} else {
+			return rents[residentialBlockCount + industrialBlockCount];
+		}
 	}
 	
 	public boolean isOwned() {

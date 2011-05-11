@@ -480,39 +480,62 @@ class GamePane extends JLayeredPane {
 	
 	public class DistrictsPanel extends JPanel {
 		
+		JLabel text;
 		
 		public DistrictsPanel() {
 			setLayout(new MigLayout("wrap"));
+			text = new JLabel();
+			text.setPreferredSize(new Dimension(50, 400));
+			text.setOpaque(false);
+		}
+		
+		public void setMessageText(String str) {
+			String newString = "<html>" + str + "</br></html>";
+			text = new JLabel(newString);
+			add(text);
+			repaint();
+			revalidate();
 		}
 		
 		public void update() {
 			removeAll();
 			final Player currentPlayer = GameMaster.getInstance().getCurrentPlayer();
+			setMessageText("CLICK to Mortgage a district");
 			ArrayList<District> districts = currentPlayer.getDistricts();
 			Collections.sort(districts);
 			for (District district: districts) {
 				final District fDistrict = district;
 				if (fDistrict.isMortgaged == true) {
-					JToggleButton button = new JToggleButton(fDistrict.getName() + "  [Mortgaged]");
+					JToggleButton button = new JToggleButton(fDistrict.getName() + "  [ Pay " + fDistrict.getMortgageValue() + " to unmortgage ]");
 					button.addItemListener(
 							new ItemListener() {
 						      public void itemStateChanged(ItemEvent itemEvent) {
-						    	  fDistrict.isMortgaged = false;
-						    	  //should be in GameMaster
-						    	  currentPlayer.pay(fDistrict.getRent());
-						    	  GamePane.getInstance().update();
+						    	  System.out.println("checking if player has enough cash to mortgage");
+						    	  if (currentPlayer.getCash() > fDistrict.getMortgageValue()) {
+						    		  System.out.println("unmortgage district");
+						    		  //should be in GameMaster
+						    		  currentPlayer.pay(fDistrict.getMortgageValue());
+							    	  System.out.println(Double.toString(currentPlayer.getCash()));
+						    		  fDistrict.isMortgaged = false;
+						    		  GamePane.getInstance().update();
+
+						    	  } else {
+						    		  districtsPanel.setMessageText("You cannot afford to unmortgage " + fDistrict.getName());
+						    	  }
 						      }
 						    });
 					button.getModel().isSelected();
 					add(button);
 				} else {
-					JToggleButton button = new JToggleButton(fDistrict.getName());
+					JToggleButton button = new JToggleButton(fDistrict.getName() + "  [ Mortgage for " + Double.toString(fDistrict.getMortgageValue()) + " ]");
 					button.addItemListener(
 							new ItemListener() {
 						      public void itemStateChanged(ItemEvent itemEvent) {
-						    	  fDistrict.isMortgaged = true;
 						    	  //should be in GameMaster
-						    	  currentPlayer.collect(fDistrict.getRent());
+					    		  System.out.println("mortgage district");
+						    	  currentPlayer.collect(fDistrict.getMortgageValue());
+						    	  System.out.println(Double.toString(currentPlayer.getCash()));
+						    	  fDistrict.isMortgaged = true;
 						    	  GamePane.getInstance().update();
 						      }
 						    });	
@@ -520,12 +543,7 @@ class GamePane extends JLayeredPane {
 					add(button);
 					}
 			}
-			
-			
-			revalidate();
-			repaint();
 		}
-		
 	}
 	
 	public class MessagePanel extends JPanel {

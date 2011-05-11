@@ -28,8 +28,7 @@ public class ChanceCardEasyMoney extends ChanceCard{
 		// where the player has insufficient cash
 		gm = GameMaster.getInstance();
 		gp = GamePane.getInstance();
-		gm.getNextPlayer().pay(1);
-		gm.getCurrentPlayer().collect(1);
+		gm.getNextPlayer().pay(1, gm.getCurrentPlayer());
 		gp.addMessagePanelText("You drew " + this.name + "!");
 		gp.addMessagePanelText(gm.getNextPlayer().getName() +" has paid you 1m!");
 		gp.update();

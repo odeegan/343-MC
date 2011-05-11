@@ -12,12 +12,14 @@ public class Player {
 	
 	String tokenFile;
 	
-	double cash = 37.7;
+//	double cash = 37.7;
+	double cash = 0;
 	int position = 0;
 	int previousPosition;
 	int numDoubles = 0;
 	int turnsInJail = 0;
 
+	boolean isBankrupt = false;
 	boolean rolledDoubles = false;
 	boolean isInJail = false;
 	boolean hasGetOutOfJailCard = false;
@@ -36,6 +38,11 @@ public class Player {
 	public void addDistrict(District district) {
 		districts.add(district);
 		district.setOwner(this);
+	}
+	
+	public void removeDistrict(District district) {
+		districts.remove(district);
+		district.setOwner(null);
 	}
 	
 	public double getCash() {
@@ -75,13 +82,52 @@ public class Player {
 	}
 	
 	public void pay(double amount) {
-		cash = cash - amount;
-		
-		// insert logic to check for bankruptcy or
-		// figure out when to check if a player can't afford something
-		// do we put it here, or in the logic before this method gets called?
+		// UGLY HACK
+		if (cash < amount) {
+			isBankrupt = true;
+			GamePane.getInstance().setMessagePanelText(getName() + " went BANKRUPT owing the Bank!!!");
+			GameMaster.getInstance().getPlayers().remove(index);
+		} else {
+			cash = cash - amount;			
+		}
 	}
 		
+	public void pay(double amount, Player player) {
+		if (cash < amount) {
+			isBankrupt = true;
+			for (District district:districts) {
+				player.addDistrict(district);
+			}
+			//empty districts list
+			// transfer cash to player
+			player.collect(cash);
+			if (hasGetOutOfJailCard) {
+				player.hasGetOutOfJailCard = true;
+			}
+			
+			if (hasRentDodgeCard) {
+				player.hasRentDodgeCard = true;
+			}
+			
+			if (hasTaxiCard) {
+				player.hasTaxiCard = true;
+			}
+			
+			if (hasTaxDodgeCard) {
+				player.hasTaxDodgeCard = true;
+			}
+			
+			GamePane.getInstance().setMessagePanelText(getName() 
+					+ " went BANKRUPT owing " + player.getName() + " money."
+					+ " All property will be transfered.");
+			GameMaster.getInstance().getPlayers().remove(index);
+			
+		} else {
+			cash = cash - amount;
+			player.collect(amount);
+		}
+	}
+	
 	public void collect(double amount) {
 		cash = cash  + amount;
 	}

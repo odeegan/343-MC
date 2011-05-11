@@ -151,6 +151,10 @@ public class StructureFactory {
 			skyscraperCount++;
 		} else if (st == STRUCTURE.STADIUM){
 			stadiumCount++;
+		} else if (st == STRUCTURE.INDUSTRIAL){
+			industrialCount++;
+		} else if (st == STRUCTURE.RESIDENTIAL){
+			residentialCount++;
 		}
 	}
 }
