@@ -21,12 +21,12 @@ public class GameMaster {
 	private static Board board;
 	private static Player currentPlayer;
 	private static ChanceDeck chanceDeck;
+	private static int counter;
 	
 	private boolean isPaused = false;
 	private boolean isBuilding = false;
 	private boolean hasRolled = false;
 	private boolean hasPerformed = false;	
-	
 	
 	//this should be in gamepane but I had to modify it to work properly
 	private JButton railButton;
@@ -65,6 +65,9 @@ public class GameMaster {
 	}
 	
 	public void startTurn() {
+		hasPerformed = false;
+		hasRolled = false;
+		counter = 0;
 //		if (isPaused || currentPlayer.rolledDoubles || isBuilding || isTrading) {
 			resumeTurn();
 //			isPaused = false;
@@ -90,8 +93,26 @@ public class GameMaster {
 		//have they rolled?
 		//no
 		//ROLL PUNK
-		if(isPaused) isPaused = false;
+		if(isPaused){
+			isPaused = false;
+		}
+		if(currentPlayer.rolledDoubles && hasPerformed){
+			if(counter == currentPlayer.numDoubles)
+				return;
+			counter++;
+		}
 		
+		if(isBuilding){
+			isBuilding = false;
+			setPerformed(true);
+			if(currentPlayer.rolledDoubles){
+				hasPerformed = false;
+				gamePane.enableButton(gamePane.getRollDiceButton());
+				gamePane.disableButton(gamePane.getBuildButton());
+				gamePane.disableButton(gamePane.getEndTurnButton());
+				return;
+			}
+		}
 		
 		if(!hasRolled){
 			gamePane.enableButton(gamePane.getRollDiceButton());
@@ -374,8 +395,8 @@ public class GameMaster {
 		dice[0] = generator.nextInt(6) + 1;
 		dice[1] = generator.nextInt(6) + 1;
 		
-//		dice[0] = 5;
-//		dice[1] = 5;
+		dice[0] = 4;
+		dice[1] = 4;
 		
 		JPanel diceBox = new JPanel();
 		diceBox.setOpaque(false);
