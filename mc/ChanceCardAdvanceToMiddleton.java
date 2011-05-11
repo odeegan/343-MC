@@ -31,10 +31,12 @@ public class ChanceCardAdvanceToMiddleton extends ChanceCard {
 	protected void advanceToMiddletonButtonPerformed() {
 		Player currentPlayer = gameMaster.getCurrentPlayer();
 		int currentPosition = currentPlayer.getPosition();
-		if(currentPosition > 24)
+		if(currentPosition > 24){
 			gameMaster.checkSquare((40 - currentPosition) + 24 );
-		else
+		}
+		else{
 			gameMaster.checkSquare(24 - currentPosition);
+		}
 	}
 	
 }

@@ -34,6 +34,7 @@ public class ChanceCardFreeBuild extends ChanceCard {
 		if(currentPlayer.getDistricts().size() == 0){
 			gamePane.setMessagePanelText("You drew the Free Build card but own no Districts!");
 			gamePane.addMessagePanelText("You gained M500k");
+			GameMaster.getInstance().setPerformed(true);
 			currentPlayer.collect(0.5);
 			gamePane.update();
 		}
@@ -62,6 +63,7 @@ public class ChanceCardFreeBuild extends ChanceCard {
 						gamePane.clearMessageLayer();
 						gamePane.clearSelectedDistrict();
 						gamePane.setMessagePanelText(district.getName() +" has gained a residential");
+						GameMaster.getInstance().setPerformed(true);
 						gamePane.update();
 						return;
 					}else failed = true;

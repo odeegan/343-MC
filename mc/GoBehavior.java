@@ -9,6 +9,7 @@ public class GoBehavior implements SquareBehavior {
 	 */
 	@Override
 	public void execute() {
+		GameMaster.getInstance().setPerformed(true);
 	}
 
 }

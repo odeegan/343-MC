@@ -12,8 +12,8 @@ public class Player {
 	
 	String tokenFile;
 	
-//	double cash = 37.7;
-	double cash = 0;
+	double cash = 37.7;
+	//double cash = 0;
 	int position = 0;
 	int previousPosition;
 	int numDoubles = 0;

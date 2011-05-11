@@ -25,6 +25,10 @@ public class GameMaster {
 	private boolean isPaused = false;
 	private boolean isBuilding = false;
 	private boolean isTrading = false;
+	private boolean hasRolled = false;
+	private boolean hasPerformed = false;	
+	
+	
 	//this should be in gamepane but I had to modify it to work properly
 	private JButton railButton;
 		
@@ -63,17 +67,17 @@ public class GameMaster {
 	}
 	
 	public void startTurn() {
-		if (isPaused || currentPlayer.rolledDoubles || isBuilding || isTrading) {
+//		if (isPaused || currentPlayer.rolledDoubles || isBuilding || isTrading) {
 			resumeTurn();
-			isPaused = false;
-			isBuilding = false;
-		}
-		else{
-			gamePane.enableButton(gamePane.getRollDiceButton());
-			isPaused = false;
-			isBuilding = false;
-			gamePane.disableButton(gamePane.getEndTurnButton());
-		}
+//			isPaused = false;
+//			isBuilding = false;
+//		}
+//		else{
+//			gamePane.enableButton(gamePane.getRollDiceButton());
+//			isPaused = false;
+//			isBuilding = false;
+//			gamePane.disableButton(gamePane.getEndTurnButton());
+//		}
 		gamePane.update();
 		displayPlayerChanceCards();
 		System.out.println("--------------------------------");
@@ -85,36 +89,76 @@ public class GameMaster {
 	}
 	
 	public void resumeTurn() {
-	//TODO: resume the players turn after the GameState is handed back to us
-		if(!currentPlayer.rolledDoubles){
-			if(!isBuilding){
-				gamePane.disableButton(gamePane.getRollDiceButton());
-				gamePane.enableButton(gamePane.getBuildButton());
-				gamePane.enableButton(gamePane.getEndTurnButton());
-				}
-			else{
-				gamePane.disableButton(gamePane.getRollDiceButton());
-				gamePane.disableButton(gamePane.getBuildButton());
-				gamePane.enableButton(gamePane.getEndTurnButton());
-			}
+		//have they rolled?
+		//no
+		//ROLL PUNK
+		if(isPaused) isPaused = false;
+		if(isTrading) isTrading = false;
+		
+		
+		if(!hasRolled){
+			gamePane.enableButton(gamePane.getRollDiceButton());
+			gamePane.disableButton(gamePane.getBuildButton());
+			gamePane.disableButton(gamePane.getEndTurnButton());
 		}
-		else{
-			if(isBuilding){
-				gamePane.disableButton(gamePane.getRollDiceButton());
-				gamePane.disableButton(gamePane.getBuildButton());
-				gamePane.enableButton(gamePane.getEndTurnButton());
-				}
-			else{
+		//they have rolled
+		//but have they performed?
+		//no they haven't performed
+		else if(!hasPerformed){
+			gamePane.disableButton(gamePane.getRollDiceButton());
+			gamePane.disableButton(gamePane.getBuildButton());
+			gamePane.disableButton(gamePane.getEndTurnButton());
+		}else{
+		//if they did perform did they roll dubs?
+		//dubs have been rolled!
+			if(currentPlayer.rolledDoubles){
+				hasPerformed = false;
 				gamePane.enableButton(gamePane.getRollDiceButton());
 				gamePane.enableButton(gamePane.getBuildButton());
 				gamePane.disableButton(gamePane.getEndTurnButton());
 			}
+		//no dubs?
+		//they can still build!
+			else if(!isBuilding){
+				gamePane.disableButton(gamePane.getRollDiceButton());
+				gamePane.enableButton(gamePane.getBuildButton());
+				gamePane.enableButton(gamePane.getEndTurnButton());
+			}else{
+				gamePane.disableButton(gamePane.getRollDiceButton());
+				gamePane.disableButton(gamePane.getBuildButton());
+				gamePane.enableButton(gamePane.getEndTurnButton());
+			}
 		}
-		if (currentPlayer.getNumDoubles() > 2) {
-			gamePane.disableButton(gamePane.getBuildButton());
-			gamePane.disableButton(gamePane.getRollDiceButton());
-			gamePane.enableButton(gamePane.getEndTurnButton());
-		}
+		
+//		if(!currentPlayer.rolledDoubles){
+//			if(!isBuilding){
+//				gamePane.disableButton(gamePane.getRollDiceButton());
+//				gamePane.enableButton(gamePane.getBuildButton());
+//				gamePane.enableButton(gamePane.getEndTurnButton());
+//				}
+//			else{
+//				gamePane.disableButton(gamePane.getRollDiceButton());
+//				gamePane.disableButton(gamePane.getBuildButton());
+//				gamePane.enableButton(gamePane.getEndTurnButton());
+//			}
+//		}
+//		else{
+//			if(isBuilding){
+//				gamePane.disableButton(gamePane.getRollDiceButton());
+//				gamePane.disableButton(gamePane.getBuildButton());
+//				gamePane.enableButton(gamePane.getEndTurnButton());
+//				}
+//			else{
+//				gamePane.enableButton(gamePane.getRollDiceButton());
+//				gamePane.enableButton(gamePane.getBuildButton());
+//				gamePane.disableButton(gamePane.getEndTurnButton());
+//			}
+//		}
+//		if (currentPlayer.getNumDoubles() > 2) {
+//			gamePane.disableButton(gamePane.getBuildButton());
+//			gamePane.disableButton(gamePane.getRollDiceButton());
+//			gamePane.enableButton(gamePane.getEndTurnButton());
+//		}
 	}
 	
 	
@@ -127,6 +171,14 @@ public class GameMaster {
 		// use mod math to loop back to the first player
 		index = (currentPlayer.getIndex() + 1) % players.size();
 		return players.get(index);
+	}
+	
+	public boolean getPerformed(){
+		return hasPerformed;
+	}
+	
+	public void setPerformed(boolean arg){
+		this.hasPerformed = arg;
 	}
 	
 	public int getNumPlayers() {
@@ -167,6 +219,7 @@ public class GameMaster {
 							currentPlayer.doMove();
 							gamePane.disableButton(gamePane.getTaxiButton());
 							newSquare.performBehavior();
+							//resumeTurn();
 							gamePane.update();
 						}
 					});
@@ -175,6 +228,7 @@ public class GameMaster {
 		} else {
 			currentPlayer.doMove();
 			newSquare.performBehavior();
+			//resumeTurn();
 			gamePane.update();	
 		}
 	}
@@ -189,6 +243,7 @@ public class GameMaster {
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {						
 							gamePane.clearMessageLayer();
+							setPerformed(true);
 							useRailroad();
 						}
 					});	
@@ -200,6 +255,7 @@ public class GameMaster {
 					new ActionListener() {
 						public void actionPerformed(ActionEvent event) {						
 							gamePane.clearMessageLayer();
+							setPerformed(true);
 							gamePane.update();
 						}
 					});
@@ -265,6 +321,7 @@ public class GameMaster {
 		gamePane.enableButton(gamePane.getEndTurnButton());
 		int[] dice = rollDice();
 		
+		hasRolled = true;
 		System.out.println("Player rolled " 
 				+ Integer.toString(dice[0]) 
 				+ " " + Integer.toString(dice[1]));
@@ -368,6 +425,8 @@ public class GameMaster {
 	
 	
 	public void endTurn() {
+		hasRolled = false;
+		hasPerformed = false;
 		currentPlayer = getNextPlayer();
 		gamePane.clearMessageLayer();
 		gamePane.clearDice();
@@ -393,6 +452,15 @@ public class GameMaster {
 		System.out.println("setting current player to 0");
 		currentPlayer = players.get(0);
 	}
+	
+	public Player getPlayerByName(String str){
+		 Player player = null;
+		 for(int ii = 0; ii < players.size(); ii++)
+		 if(players.get(ii).getName().equals(str))
+		 player = players.get(ii);
+
+		 return player;
+		 }
 	
 	public ArrayList<Player> getPlayers() {
 		return players;

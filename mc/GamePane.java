@@ -80,6 +80,7 @@ class GamePane extends JLayeredPane {
 		}
 		
 		public void update() {
+			GameMaster.getInstance().resumeTurn();
 			removeAll();
 			setBorder(BorderFactory.createTitledBorder("Networth"));
 			ArrayList<Player> players = GameMaster.getInstance().getPlayers();

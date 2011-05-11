@@ -21,6 +21,7 @@ public class OwnedDistrictBehavior implements SquareBehavior {
 					public void actionPerformed(ActionEvent event) {
 						currentPlayer.pay(district.getRent(), district.getOwner());
 						gamePane.clearMessageLayer();
+						GameMaster.getInstance().setPerformed(true);
 						gamePane.update();
 						GameMaster.getInstance().checkForRailroad();
 					}
