@@ -12,7 +12,8 @@ public class Player {
 	
 	String tokenFile;
 	
-	double cash = 37.7;
+//	double cash = 37.7;
+	double cash = 0;
 	int position = 0;
 	int previousPosition;
 	int numDoubles = 0;
@@ -37,6 +38,11 @@ public class Player {
 	public void addDistrict(District district) {
 		districts.add(district);
 		district.setOwner(this);
+	}
+	
+	public void removeDistrict(District district) {
+		districts.remove(district);
+		district.setOwner(null);
 	}
 	
 	public double getCash() {

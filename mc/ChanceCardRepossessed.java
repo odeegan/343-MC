@@ -58,8 +58,7 @@ protected void repossessedButtonPerformed() {
 			
 			for(District district2 : currentPlayer.getDistricts())
 				if(district2.getName() == district.getName()){
-					boolean success = currentPlayer.districts.remove(district);
-					System.out.println("success is "+ success);
+					currentPlayer.removeDistrict(district);
 					currentPlayer.collect(1);
 					district.reset();
 					failed = false;

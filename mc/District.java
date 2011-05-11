@@ -48,14 +48,31 @@ public class District extends Square implements Comparable<District> {
 	}
 
 	public void reset() {
-		residentialBlockCount = 0;
-		industrialBlockCount = 0;
-		skyscraper = false;
-		stadium = false;
-		monopolyTower = false;
+		StructureFactory st = StructureFactory.getInstance();
+		if (residentialBlockCount > 0) {
+			for (int i = 0; i < residentialBlockCount; i++) {
+				st.scrap(STRUCTURE.RESIDENTIAL);
+			}
+		}
+		if (industrialBlockCount > 0) {
+			for (int i = 0; i < industrialBlockCount; i++) {
+				st.scrap(STRUCTURE.INDUSTRIAL);
+			}
+		}
+		if (skyscraper) {
+			st.scrap(STRUCTURE.SKYSCRAPER);
+		}
+		if (monopolyTower) {
+			st.scrap(STRUCTURE.MONOPOLYTOWER);
+		}
+		if (railroad) {
+			st.scrap(STRUCTURE.RAILROAD);
+		}
+		if (stadium) {
+			st.scrap(STRUCTURE.STADIUM);
+		}
 		owner = null;
 		squareBehavior = new UnownedDistrictBehavior();
-		railroad = false;
 	}
 	
 	public String getColor() {
