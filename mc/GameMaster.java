@@ -24,7 +24,6 @@ public class GameMaster {
 	
 	private boolean isPaused = false;
 	private boolean isBuilding = false;
-	private boolean isTrading = false;
 	private boolean hasRolled = false;
 	private boolean hasPerformed = false;	
 	
@@ -62,7 +61,6 @@ public class GameMaster {
 	}
 	
 	public void startTrade() {
-		isTrading = true;
 		gameStateMachine.setState(gameStateMachine.getTradeState());
 	}
 	
@@ -93,7 +91,6 @@ public class GameMaster {
 		//no
 		//ROLL PUNK
 		if(isPaused) isPaused = false;
-		if(isTrading) isTrading = false;
 		
 		
 		if(!hasRolled){
