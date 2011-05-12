@@ -49,6 +49,7 @@ public class ChanceCardPrisonOvercrowding extends ChanceCard {
 					failed = false;
 					GameMaster.getInstance().setPerformed(true);
 					prisonOvercrowdingButton.setVisible(false);
+					gamePane.update();
 				}else{
 					failed = true;
 					performCard();
