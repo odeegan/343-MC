@@ -464,24 +464,25 @@ public class TradeState implements GameState{
 	
 	protected void currentPlayerAgreeButtonActionPerformed() {
 		// TODO Auto-generated method stub
-		if(currentPlayerAgreeButton.isOpaque())
-			currentPlayerAgreeButton.setOpaque(false);
+		if(currentPlayerAgreeButton.getText().equals("Agreed!"))
+			currentPlayerAgreeButton.setText("Agree?");
 		else
-			currentPlayerAgreeButton.setOpaque(true);
+			currentPlayerAgreeButton.setText("Agreed!");
 		
-		if(tradePartnerAgreeButton.isOpaque()){
+		if(tradePartnerAgreeButton.getText().equals("Agreed!")){
 			tradeAccepted();
 		}
 	}
 
 	protected void currentPlayerCancelButtonActionPerformed() {
 		// TODO Auto-generated method stub
-		if(currentPlayerAgreeButton.isOpaque())
-			currentPlayerAgreeButton.setOpaque(false);
+		if(currentPlayerAgreeButton.getText().equals("Agreed!"))
+			currentPlayerAgreeButton.setText("Agree?");
 		else{
-			if(!tradePartnerTradeListModel.isEmpty()){
-				tradePartnerTradeListModel.clear();
-				tradePartnerTradeList.setModel(tradePartnerTradeListModel);
+			if(!currentPlayerTradeListModel.isEmpty()){
+				currentPlayerTradeListModel.clear();
+				currentPlayerTradeList.setModel(currentPlayerTradeListModel);
+				currentPlayerDistrictsComboBox.setSelectedIndex(-1);
 			}else
 				gameStateMachine.setState(gameStateMachine.getGamePlayState());
 		}
@@ -502,6 +503,7 @@ public class TradeState implements GameState{
 			if(!currentPlayerTradeListModel.contains(currentPlayerDistrictsComboBoxModel.getElementAt(currentPlayerDistrictsComboBox.getSelectedIndex()).toString())){
 				currentPlayerTradeListModel.addElement(currentPlayerDistrictsComboBoxModel.getElementAt(currentPlayerDistrictsComboBox.getSelectedIndex()).toString());
 				currentPlayerTradeList.setModel(currentPlayerTradeListModel);
+				currentPlayerDistrictsComboBox.setSelectedIndex(-1);
 			}
 			else
 				messageTextField.setText("District already in list.");
@@ -523,30 +525,35 @@ public class TradeState implements GameState{
 			if(!tradePartnerCashTextField.getText().equals(""))
 				tradePartner.pay((double)tradePartnerCashSlider.getValue()/(double)1000000,currentPlayer);
 			gameStateMachine.setState(gameStateMachine.getGamePlayState());
+			currentPlayerAgreeButton.setText("Agree?");
+			tradePartnerAgreeButton.setText("Agree?");
+			currentPlayerAgreeButton.setSelected(false);
+			tradePartnerAgreeButton.setSelected(false);
 		}
 	}
 
 	protected void tradePartnerAgreeButtonActionPerformed() {
 		// TODO Auto-generated method stub
-		System.out.println("moneyyy"+currentPlayerCashSlider.getValue());
-		if(tradePartnerAgreeButton.isOpaque())
-			tradePartnerAgreeButton.setOpaque(false);
+		if(tradePartnerAgreeButton.getText().equals("Agreed!"))
+			tradePartnerAgreeButton.setText("Agree?");
 		else
-			tradePartnerAgreeButton.setOpaque(true);
+			tradePartnerAgreeButton.setText("Agreed!");
 		
-		if(currentPlayerAgreeButton.isOpaque()){
+		if(currentPlayerAgreeButton.getText().equals("Agreed!")){
 			tradeAccepted();
 		}
 	}
 	
 	protected void tradePartnerCancelButtonActionPerformed() {
 		// TODO Auto-generated method stub
-		if(tradePartnerAgreeButton.isOpaque())
-			tradePartnerAgreeButton.setOpaque(false);
+		if(tradePartnerAgreeButton.getText().equals("Agreed!"))
+			tradePartnerAgreeButton.setText("Agree?");
 		else{
 			if(!tradePartnerTradeListModel.isEmpty()){
 				tradePartnerTradeListModel.clear();
 				tradePartnerTradeList.setModel(tradePartnerTradeListModel);
+				tradePartnerDistrictsComboBox.setSelectedIndex(-1);
+
 			}else
 				gameStateMachine.setState(gameStateMachine.getGamePlayState());
 		}
@@ -566,6 +573,8 @@ public class TradeState implements GameState{
 			if(!tradePartnerTradeListModel.contains(tradePartnerDistrictsComboBoxModel.getElementAt(tradePartnerDistrictsComboBox.getSelectedIndex()).toString())){
 				tradePartnerTradeListModel.addElement(tradePartnerDistrictsComboBoxModel.getElementAt(tradePartnerDistrictsComboBox.getSelectedIndex()).toString());
 				tradePartnerTradeList.setModel(tradePartnerTradeListModel);
+				tradePartnerDistrictsComboBox.setSelectedIndex(-1);
+
 			}
 			else
 				messageTextField.setText("District already in list.");
@@ -607,11 +616,17 @@ public class TradeState implements GameState{
 		currentPlayerTradeListModel = new DefaultListModel();
 		tradePartnerTradeListModel = new DefaultListModel();
 		//clear buttons
-		currentPlayerAgreeButton.setOpaque(false);
-		tradePartnerAgreeButton.setOpaque(false);
+		currentPlayerAgreeButton.setText("Agree?");
+		tradePartnerAgreeButton.setText("Agree?");
 		currentPlayerCashSlider.setMaximum((int)(currentPlayer.getCash()*1000000));
 		currentPlayerCashSlider.setValue(0);
 		tradePartnerCashSlider.setValue(0);
+		selectTradePartnerComboBox.setSelectedIndex(-1);
+		tradePartnerTradeList.setSelectedIndex(-1);
+		tradePartnerDistrictsComboBox.setSelectedIndex(-1);
+		currentPlayerDistrictsComboBox.setSelectedIndex(-1);
+		currentPlayerAgreeButton.setSelected(false);
+		tradePartnerAgreeButton.setSelected(false);
 
 		
 		// All players in game except for current
@@ -630,6 +645,7 @@ public class TradeState implements GameState{
 		// Set combo box of players to choose from
 		selectTradePartnerComboBoxModel = new DefaultComboBoxModel(playersNames);
 		selectTradePartnerComboBox.setModel(selectTradePartnerComboBoxModel);
+		
 		
 		// Set current player's comboBox of districts to choose from.
 		currentPlayersDistricts = currentPlayer.getDistricts();
