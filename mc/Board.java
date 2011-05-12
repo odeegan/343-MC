@@ -571,7 +571,7 @@ public class Board {
 	public ArrayList<District> getDistricts() {
 		ArrayList<District> districtList = new ArrayList<District>();
 		for (int i=0; i < squares.size(); i++) {
-			if (getSquare(i).getType() == null) {
+			if (getSquare(i).getType() == SQUARETYPE.DISTRICT) {
 				districtList.add(getDistrict(i));
 			}
 		}
