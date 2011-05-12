@@ -275,7 +275,7 @@ public class BuildState implements GameState{
 			industrialRadioButton.setEnabled(true);
 		
 		// Railroad logic
-		if(playerAllowance == -1 && playerSelectedDistrict.isRailRoaded() == false && StructureFactory.getInstance().railroadCount>0)
+		if(playerAllowance == -1 && playerSelectedDistrict.isRailroaded() == false && StructureFactory.getInstance().railroadCount>0)
 			railroadRadioButton.setEnabled(true);
 
 		// Skyscraper logic
@@ -520,7 +520,7 @@ public class BuildState implements GameState{
 					
 				// Skyscraper logic.
 				}else if (currentlySelectedRadioButton.compareToIgnoreCase("skyscraper") == 0){
-					if(playerSelectedDistrict.isSkyScrapered() == false){
+					if(playerSelectedDistrict.isSkyscrapered() == false){
 						if(StructureFactory.getInstance().skyscraperCount != 0){
 							cartListModel.addElement(playerSelectedDistrict.getName() + " " + currentlySelectedRadioButton);
 							buildList.setModel(cartListModel);

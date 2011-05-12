@@ -47,7 +47,7 @@ public class ChanceCardRailroad extends ChanceCard {
 			District district;
 			if(selectedSquare.getType() == SQUARETYPE.DISTRICT){
 				district = (District)selectedSquare;
-				if(!district.isRailRoaded() && StructureFactory.getInstance().railroadCount > 0 ){
+				if(!district.isRailroaded() && StructureFactory.getInstance().railroadCount > 0 ){
 					district.addRailroad();
 					StructureFactory.getInstance().get(StructureFactory.getInstance().getStructureByName("railroad"));
 					GameMaster.getInstance().setPerformed(true);

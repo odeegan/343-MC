@@ -242,11 +242,11 @@ public class District extends Square implements Comparable<District> {
 		return hazard != null;
 	}
 
-	public boolean isRailRoaded() {
+	public boolean isRailroaded() {
 		return railroad;
 	}
 
-	public boolean isSkyScrapered() {
+	public boolean isSkyscrapered() {
 		return skyscraper;
 	}
 	

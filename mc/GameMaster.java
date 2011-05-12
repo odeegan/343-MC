@@ -254,7 +254,7 @@ public class GameMaster {
 	public void checkForRailroad() {
 		District district = board.getDistrict(currentPlayer.getPosition());
 		
-		if (district.isRailRoaded()) {
+		if (district.isRailroaded()) {
 			gamePane.setMessagePanelText(district.getName() +  " has a railroad.");
 			JButton railroadButton = new JButton("Use the RailRoad");
 			railroadButton.addActionListener(
@@ -267,7 +267,7 @@ public class GameMaster {
 					});	
 			gamePane.addMessagePanelButton(railroadButton);
 		}
-		if (district.isRailRoaded()) {
+		if (district.isRailroaded()) {
 			JButton railroadButton = new JButton("Stay Put");
 			railroadButton.addActionListener(
 					new ActionListener() {
@@ -301,7 +301,7 @@ public class GameMaster {
 		if (gamePane.getSelectedDistrict() == -1) {
 			gamePane.addMessagePanelText("Please selected a district");
 		}
-		if (board.getDistrict(gamePane.getSelectedDistrict()).isRailRoaded() == true) {
+		if (board.getDistrict(gamePane.getSelectedDistrict()).isRailroaded() == true) {
 			int delta = gamePane.getSelectedDistrict() - currentPlayer.getPosition();
 			System.out.println("take railroad");
 			currentPlayer.testMove(delta);

@@ -149,7 +149,7 @@ class GamePane extends JLayeredPane {
 						add(ownerLabel);
 					}
 					
-					if (district.isRailRoaded()) {
+					if (district.isRailroaded()) {
 						JLabel railroad = new JLabel();
 						railroad.setIcon(new ImageIcon("images/train.png"));
 						railroad.setVisible(true);
@@ -239,6 +239,46 @@ class GamePane extends JLayeredPane {
 						}
 						add(bonus);
 					}
+					
+					//TODO: Here you go Nick
+					
+/*					if (district.isSkyscrapered()) {
+						JLabel skyscraper = new JLabel();
+						skyscraper.setIcon(new ImageIcon("images/skyscraper.png"));
+						skyscraper.setVisible(true);
+						if (i > 0 && i < 10) {
+							skyscraper.setBounds(district.getX()+4, district.getY()-80, 30, 30);
+						}
+						if (i > 10 && i < 20) {
+							skyscraper.setBounds(district.getX()+108, district.getY()+16, 30, 30);
+						}
+						if (i > 20 && i < 30) {
+							skyscraper.setBounds(district.getX()+18, district.getY()+100, 30, 30);
+						}
+						if (i > 30 && i <= 39) {
+							skyscraper.setBounds(district.getX()-80, district.getY()+16, 30, 30);
+						}
+						add(skyscraper);
+					}
+					if (district.isMonopolyTowered()) {
+						JLabel monopolyTower = new JLabel();
+						monopolyTower.setIcon(new ImageIcon("images/skyscraper.png"));
+						monopolyTower.setVisible(true);
+						if (i > 0 && i < 10) {
+							monopolyTower.setBounds(district.getX()+4, district.getY()-80, 30, 30);
+						}
+						if (i > 10 && i < 20) {
+							monopolyTower.setBounds(district.getX()+108, district.getY()+16, 30, 30);
+						}
+						if (i > 20 && i < 30) {
+							monopolyTower.setBounds(district.getX()+18, district.getY()+100, 30, 30);
+						}
+						if (i > 30 && i <= 39) {
+							monopolyTower.setBounds(district.getX()-80, district.getY()+16, 30, 30);
+						}
+						add(monopolyTower);
+					}
+*/
 				}
 			}
 		}
