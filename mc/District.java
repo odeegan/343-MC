@@ -199,10 +199,14 @@ public class District extends Square implements Comparable<District> {
 		railroad = false;
 	}
 	
-/*	public void removeHazard(STRUCTURE str) {
-		hazard = str;
+	public void removeHazard() {
+		hazard = null;
 	}
-*/
+	
+	public void removeBonus() {
+		bonus = null;
+	}
+
 	
 	public double getRent() {
 		
