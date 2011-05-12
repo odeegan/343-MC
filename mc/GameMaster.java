@@ -87,7 +87,8 @@ public class GameMaster {
 		//have they rolled?
 		//no
 		//ROLL PUNK
-		
+		//CHARLIE BIT MY FINGER
+		//RESUB CHECK CHECK.
 		if(currentPlayer.rolledDoubles && hasPerformed){
 			if(counter == currentPlayer.numDoubles){
 				return;
