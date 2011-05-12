@@ -65,11 +65,14 @@ public class GameMaster {
 	}
 	
 	public void startTurn() {
+		if(!isPaused){
 		hasPerformed = false;
 		hasRolled = false;
 		isPaused = false;
 		isBuilding = false;
 		counter = 0;
+		}
+		
 		resumeTurn();
 		gamePane.update();
 		displayPlayerChanceCards();
@@ -85,9 +88,6 @@ public class GameMaster {
 		//have they rolled?
 		//no
 		//ROLL PUNK
-		if(isPaused){
-			isPaused = false;
-		}
 		if(currentPlayer.rolledDoubles && hasPerformed){
 			if(counter == currentPlayer.numDoubles){
 				return;
@@ -99,7 +99,6 @@ public class GameMaster {
 				gamePane.enableButton(gamePane.getEndTurnButton());
 				return;
 			}
-				
 		}
 		
 		if(isBuilding){
@@ -144,6 +143,9 @@ public class GameMaster {
 				gamePane.disableButton(gamePane.getBuildButton());
 				gamePane.enableButton(gamePane.getEndTurnButton());
 			}
+		}
+		if(isPaused){
+			gamePane.enableButton(gamePane.getBuildButton());
 		}
 	}
 	
@@ -361,11 +363,11 @@ public class GameMaster {
 		
 		Random generator = new Random();
 		int[] dice = new int[2];
-//		dice[0] = generator.nextInt(6) + 1;
-//		dice[1] = generator.nextInt(6) + 1;
+		dice[0] = generator.nextInt(6) + 1;
+		dice[1] = generator.nextInt(6) + 1;
 		
-		dice[0] = 2;
-		dice[1] = 2;
+//		dice[0] = 2;
+//		dice[1] = 2;
 		
 		JPanel diceBox = new JPanel();
 		diceBox.setOpaque(false);
@@ -414,6 +416,7 @@ public class GameMaster {
 	public void endTurn() {
 		hasRolled = false;
 		hasPerformed = false;
+		isPaused = false;
 		currentPlayer = getNextPlayer();
 		gamePane.clearMessageLayer();
 		gamePane.clearDice();
