@@ -373,7 +373,7 @@ public class AuctionState implements GameState {
 			bidArray[ii] = 0;
 
 		//timerValue = (int)((Math.random()*100)%40 + 10);
-		timerValue = 3;
+		timerValue = 15;
 
 		mainFrame.setContentPane(layeredPane);
 		layeredPane.revalidate();
