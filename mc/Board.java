@@ -432,9 +432,9 @@ public class Board {
 				3);
 
 		royalCourt.setRents(.26, 1.3, 2.6, 4.4, 5.3, 6.5, 8.5, 11, 15.5);
-		westlands.setResidentialCost(.5);
-		westlands.setIndustrialCost(1);
-		westlands.setSkyScraperCost(2);
+		royalCourt.setResidentialCost(.5);
+		royalCourt.setIndustrialCost(1);
+		royalCourt.setSkyScraperCost(2);
 		royalCourt.setSquareBehavior(new UnownedDistrictBehavior());
 		royalCourt.setX(708);		
 		royalCourt.setY(104);
