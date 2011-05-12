@@ -26,7 +26,7 @@ public class District extends Square implements Comparable<District> {
 	STRUCTURE bonus = null;	
 	STRUCTURE hazard = null;
 		
-	boolean railroad = true;
+	boolean railroad = false;
 	boolean skyscraper = false;
 	boolean stadium = false;
 	boolean monopolyTower = false;

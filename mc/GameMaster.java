@@ -338,12 +338,9 @@ public class GameMaster {
 		}}
 	
 	public void roll() {
-<<<<<<< HEAD
 		//gamePane.enableButton(gamePane.getEndTurnButton());
-=======
 		currentPlayer.hasUsedRailroad = false;
 		gamePane.enableButton(gamePane.getEndTurnButton());
->>>>>>> origin/master
 		int[] dice = rollDice();
 		hasRolled = true;
 		System.out.println("Player rolled " 
