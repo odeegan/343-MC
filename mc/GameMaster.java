@@ -87,7 +87,8 @@ public class GameMaster {
 		//have they rolled?
 		//no
 		//ROLL PUNK
-		
+		//CHARLIE BIT MY FINGER
+		//RESUB CHECK CHECK.
 		if(currentPlayer.rolledDoubles && hasPerformed){
 			if(counter == currentPlayer.numDoubles){
 				return;
@@ -242,32 +243,42 @@ public class GameMaster {
 	}
 	
 	public void checkForRailroad() {
-		District district = board.getDistrict(currentPlayer.getPosition());
-		
-		if (district.isRailroaded()) {
-			gamePane.setMessagePanelText(district.getName() +  " has a railroad.");
-			JButton railroadButton = new JButton("Use the RailRoad");
-			railroadButton.addActionListener(
-					new ActionListener() {
-						public void actionPerformed(ActionEvent event) {						
-							gamePane.clearMessageLayer();
-							setPerformed(true);
-							useRailroad();
-						}
-					});	
-			gamePane.addMessagePanelButton(railroadButton);
+		int railroadCount = 0;
+		for (District district: board.getDistricts()) {
+			if (district.isRailroaded()) {
+				railroadCount++;
+			}
 		}
-		if (district.isRailroaded()) {
-			JButton railroadButton = new JButton("Stay Put");
-			railroadButton.addActionListener(
-					new ActionListener() {
-						public void actionPerformed(ActionEvent event) {						
-							gamePane.clearMessageLayer();
-							setPerformed(true);
-							gamePane.update();
-						}
-					});
-			gamePane.addMessagePanelButton(railroadButton);
+		
+		if (railroadCount > 1 && currentPlayer.hasUsedRailroad == false) {
+			District district = board.getDistrict(currentPlayer.getPosition());
+			
+			if (district.isRailroaded()) {
+				gamePane.setMessagePanelText(district.getName() +  " has a railroad.");
+				JButton railroadButton = new JButton("Use it");
+				railroadButton.addActionListener(
+						new ActionListener() {
+							public void actionPerformed(ActionEvent event) {						
+								gamePane.clearMessageLayer();
+								setPerformed(true);
+								useRailroad();
+							}
+						});	
+				gamePane.addMessagePanelButton(railroadButton);
+			}
+			if (district.isRailroaded()) {
+				JButton railroadButton = new JButton("Stay Put");
+				railroadButton.addActionListener(
+						new ActionListener() {
+							public void actionPerformed(ActionEvent event) {						
+								gamePane.clearMessageLayer();
+								setPerformed(true);
+								gamePane.update();
+							}
+						});
+				gamePane.addMessagePanelButton(railroadButton);
+			}
+			currentPlayer.hasUsedRailroad = true;
 		}
 	}
 	
@@ -296,6 +307,7 @@ public class GameMaster {
 			System.out.println("take railroad");
 			currentPlayer.testMove(delta);
 			currentPlayer.doMove();
+			board.getSquare(currentPlayer.getPosition()).performBehavior();
 			railButton.setVisible(false);
 			gamePane.update();
 		}
@@ -326,7 +338,12 @@ public class GameMaster {
 		}}
 	
 	public void roll() {
+<<<<<<< HEAD
 		//gamePane.enableButton(gamePane.getEndTurnButton());
+=======
+		currentPlayer.hasUsedRailroad = false;
+		gamePane.enableButton(gamePane.getEndTurnButton());
+>>>>>>> origin/master
 		int[] dice = rollDice();
 		hasRolled = true;
 		System.out.println("Player rolled " 

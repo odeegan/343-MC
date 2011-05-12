@@ -26,6 +26,7 @@ public class Player {
 	boolean hasRentDodgeCard = false;
 	boolean hasTaxiCard = false;
 	boolean hasTaxDodgeCard = false;
+	boolean hasUsedRailroad = false;
 	
 	ArrayList<District> districts;
 	
