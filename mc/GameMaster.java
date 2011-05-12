@@ -67,18 +67,10 @@ public class GameMaster {
 	public void startTurn() {
 		hasPerformed = false;
 		hasRolled = false;
+		isPaused = false;
+		isBuilding = false;
 		counter = 0;
-//		if (isPaused || currentPlayer.rolledDoubles || isBuilding || isTrading) {
-			resumeTurn();
-//			isPaused = false;
-//			isBuilding = false;
-//		}
-//		else{
-//			gamePane.enableButton(gamePane.getRollDiceButton());
-//			isPaused = false;
-//			isBuilding = false;
-//			gamePane.disableButton(gamePane.getEndTurnButton());
-//		}
+		resumeTurn();
 		gamePane.update();
 		displayPlayerChanceCards();
 		System.out.println("--------------------------------");
@@ -97,16 +89,23 @@ public class GameMaster {
 			isPaused = false;
 		}
 		if(currentPlayer.rolledDoubles && hasPerformed){
-			if(counter == currentPlayer.numDoubles)
+			if(counter == currentPlayer.numDoubles){
 				return;
+			}
 			counter++;
+			if(currentPlayer.numDoubles == 3){
+				gamePane.disableButton(gamePane.getRollDiceButton());
+				gamePane.disableButton(gamePane.getBuildButton());
+				gamePane.enableButton(gamePane.getEndTurnButton());
+				return;
+			}
+				
 		}
 		
 		if(isBuilding){
 			isBuilding = false;
 			setPerformed(true);
 			if(currentPlayer.rolledDoubles){
-				hasPerformed = false;
 				gamePane.enableButton(gamePane.getRollDiceButton());
 				gamePane.disableButton(gamePane.getBuildButton());
 				gamePane.disableButton(gamePane.getEndTurnButton());
@@ -130,7 +129,6 @@ public class GameMaster {
 		//if they did perform did they roll dubs?
 		//dubs have been rolled!
 			if(currentPlayer.rolledDoubles){
-				hasPerformed = false;
 				gamePane.enableButton(gamePane.getRollDiceButton());
 				gamePane.enableButton(gamePane.getBuildButton());
 				gamePane.disableButton(gamePane.getEndTurnButton());
@@ -147,36 +145,6 @@ public class GameMaster {
 				gamePane.enableButton(gamePane.getEndTurnButton());
 			}
 		}
-		
-//		if(!currentPlayer.rolledDoubles){
-//			if(!isBuilding){
-//				gamePane.disableButton(gamePane.getRollDiceButton());
-//				gamePane.enableButton(gamePane.getBuildButton());
-//				gamePane.enableButton(gamePane.getEndTurnButton());
-//				}
-//			else{
-//				gamePane.disableButton(gamePane.getRollDiceButton());
-//				gamePane.disableButton(gamePane.getBuildButton());
-//				gamePane.enableButton(gamePane.getEndTurnButton());
-//			}
-//		}
-//		else{
-//			if(isBuilding){
-//				gamePane.disableButton(gamePane.getRollDiceButton());
-//				gamePane.disableButton(gamePane.getBuildButton());
-//				gamePane.enableButton(gamePane.getEndTurnButton());
-//				}
-//			else{
-//				gamePane.enableButton(gamePane.getRollDiceButton());
-//				gamePane.enableButton(gamePane.getBuildButton());
-//				gamePane.disableButton(gamePane.getEndTurnButton());
-//			}
-//		}
-//		if (currentPlayer.getNumDoubles() > 2) {
-//			gamePane.disableButton(gamePane.getBuildButton());
-//			gamePane.disableButton(gamePane.getRollDiceButton());
-//			gamePane.enableButton(gamePane.getEndTurnButton());
-//		}
 	}
 	
 	
@@ -220,6 +188,7 @@ public class GameMaster {
 		currentPlayer.testMove(roll);
 		
 		final Square newSquare = board.getSquare(currentPlayer.getPosition());
+		hasPerformed = false;
 			
 		if (currentPlayer.hasTaxiCard) {
 			gamePane.enableButton(gamePane.getTaxiButton());
@@ -237,7 +206,7 @@ public class GameMaster {
 							currentPlayer.doMove();
 							gamePane.disableButton(gamePane.getTaxiButton());
 							newSquare.performBehavior();
-							//resumeTurn();
+							resumeTurn();
 							gamePane.update();
 						}
 					});
@@ -246,7 +215,7 @@ public class GameMaster {
 		} else {
 			currentPlayer.doMove();
 			newSquare.performBehavior();
-			//resumeTurn();
+			resumeTurn();
 			gamePane.update();	
 		}
 	}
@@ -392,11 +361,11 @@ public class GameMaster {
 		
 		Random generator = new Random();
 		int[] dice = new int[2];
-		dice[0] = generator.nextInt(6) + 1;
-		dice[1] = generator.nextInt(6) + 1;
+//		dice[0] = generator.nextInt(6) + 1;
+//		dice[1] = generator.nextInt(6) + 1;
 		
-		dice[0] = 4;
-		dice[1] = 4;
+		dice[0] = 2;
+		dice[1] = 2;
 		
 		JPanel diceBox = new JPanel();
 		diceBox.setOpaque(false);
